@@ -8,6 +8,7 @@
     - Kotlin Spring Boot Projekt anlegen
 - Anforderungen
     - Bestehende Anforderungen einschränken
+    - User Management finale Idee festlegen
     - Finale Anforderungen strukturieren
         - in Backlog-Pakete umwandeln
 - Backend 
