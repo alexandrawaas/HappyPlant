@@ -2,8 +2,8 @@
 
 ## User Management
 - // TODO
-- Machen wir einen Account mit Authentifizierung oder speichern wir alles Lokal und lassen es über ID / Token übertragen
-    - Account wäre realsitischer
+    - Account mit Authentifizierung vs. Identifikation nur über Id
+    - Account geräteübergreifend teilbar ohne Benachrichtigungen vs. Benachrichtigung wenn anderes Gerät Todo erfüllt hat 
 ## Spezies (Lexikon)
 ### Übersicht
 - alle bestehenden Pflanzenarten anzeigen (Name und Bild)
