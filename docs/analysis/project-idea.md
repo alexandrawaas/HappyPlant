@@ -10,8 +10,8 @@
 - User kann neue Pflanzenarten hinzufügen
 - ~~opt: filtern~~
 ### Einzelansicht
-- alle Infos zu Pflanze (Name, Bild, Licht-Gieß-Umtopf-Schnitt-Düng-OptimalTemperatur-TemperaturToleranz)
-- Funktion "Diese Pflanze zu meinem Haushalt hinzufügen" > Welcher Raum > normales Drag and Drop Interface
+- alle Infos zu Pflanze (Name, Bild, Licht-Gieß-Umtopf-Schnitt-Düng~~-OptimalTemperatur-TemperaturToleranz~~)
+- Funktion "Pflanze dieser Art zu meinem Haushalt hinzufügen" > Welcher Raum > normales Drag and Drop Interface
 ### Backendfunktionalität
 - Pflanzendatenbank mit ca 30 Pflanzen mit je einem Default Bild und deren Daten vorkonfigurieren
 - Controller
@@ -25,7 +25,7 @@
 - Erstellen eines neuen Raumes:
     - Name
     - Seitenverhältnis (Es gibt nur rechteckige Räume)
-    - Fenster platzieren (Skala erscheint erst, wenn das Fenster final platziert wurde)
+    - Fenster platzieren (Lichtskala erscheint erst, wenn das Fenster final platziert wurde)
     - ~~Luftfeuchtigkeit~~
     - ~~Temperatur normalwert und toleranz~~
     - ~~Himmelsrichtung: Der Raum wird immer mit der kürzeren Seite nach oben auf dem Bildschirm angezeigt. Der User wählt aus, welche Himmelsrichtung da oben ist (mit einem Scrollrad N, NO, O, SO, ...) und die anderen werden dementsprechend berechnet~~
@@ -37,7 +37,7 @@
         - Symbol bei fehlerhafter Platzierung oder Todo
     - ~~wenn mehr Pflanzen auf einer Position, Pop Up zur direkteren Auswahl für mehr Usability~~
     - Lichtverhältnisse abbilden
-    - per Drag and Drop Pflanzen verschiebbar
+    - per Drag and Drop Pflanzen (ins Inventar oder innerhalb des Raums) verschiebbar
 - Neue Pflanze zu Raum hinzufügen (landet nach Erstellung in Inventar)
     - Auswahl aus allen bestehenden Spezies im Lexikon
         - ~~opt: ggf. nur Vorschläge basierend auf Luftfeuchtigkeit und Temperatur~~

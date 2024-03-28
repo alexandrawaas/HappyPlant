@@ -8,8 +8,8 @@
     - Pflanzendatenbank mit ca 30 Pflanzen mit je einem Default Bild und deren Daten vorkonfigurieren
 - User kann neue Pflanzenarten hinzufügen
 ### Einzelansicht
-- alle Infos zu Pflanze (Name, Bild, Licht-Gieß-Umtopf-Schnitt-Düng-OptimalTemperatur-TemperaturToleranz)
-- Funktion "Diese Pflanze zu meinem Haushalt hinzufügen" > Welcher Raum > normales Drag and Drop Interface
+- alle Infos zu Spezies (Name, Bild, Licht-Gieß-Umtopf-Schnitt-Düng)
+- Funktion "Pflanze dieser Art zu meinem Haushalt hinzufügen" > Welcher Raum > normales Drag and Drop Interface
 ## Räume
 ### Übersicht
 - alle angelegten Räume in Liste mit Kacheln, die sich automatisch schön platzieren :),
@@ -17,7 +17,7 @@
 - Erstellen eines neuen Raumes:
     - Name
     - Seitenverhältnis (Es gibt nur rechteckige Räume)
-    - Fenster platzieren (Skala erscheint erst, wenn das Fenster final platziert wurde)
+    - Fenster platzieren (Lichtskala erscheint erst, wenn das Fenster final platziert wurde)
 ### Einzelansicht
 - Draufsicht auf Raum
     - Platzierte Pflanzen sichtbar
@@ -25,7 +25,7 @@
         - long touch > Name
         - Symbol bei fehlerhafter Platzierung oder Todo
     - Lichtverhältnisse abbilden
-    - per Drag and Drop Pflanzen verschiebbar
+    - per Drag and Drop Pflanzen (ins Inventar oder innerhalb des Raums) verschiebbar
 - Neue Pflanze zu Raum hinzufügen (landet nach Erstellung in Inventar)
     - Auswahl aus allen bestehenden Spezies im Lexikon
     - Konfiguration der Properties (s.u.)
