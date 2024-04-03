@@ -1,9 +1,8 @@
 # Projekt Idee
 
 ## User Management
-- // TODO
-    - Account mit Authentifizierung vs. Identifikation nur über Id
-    - Account geräteübergreifend teilbar ohne Benachrichtigungen vs. Benachrichtigung wenn anderes Gerät Todo erfüllt hat 
+- Account mit Authentifizierung ~~vs. Identifikation nur über Id~~
+- opt: Account geräteübergreifend teilbar ohne Benachrichtigungen ~~vs. Benachrichtigung wenn anderes Gerät Todo erfüllt hat ~~
 ## Spezies (Lexikon)
 ### Übersicht
 - alle bestehenden Pflanzenarten anzeigen (Name und Bild)
