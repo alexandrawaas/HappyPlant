@@ -3,10 +3,12 @@ info:
   title: API documentation
   version: 1.0.0
 tags:
-  - name: Plant
+  - name: plant
 paths:
   /plant/:
     post:
+      tags:
+        - plant
       requestBody:
         $ref: '#/components/schemas/Plant'
       responses:
