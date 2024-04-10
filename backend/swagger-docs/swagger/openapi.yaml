@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  title: API documentation
+  version: 1.0.0
+tags:
+  - name: plant
+paths:
+  /plant/:
+    post:
+      tags:
+        - plant
+      requestBody:
+        $ref: '#/components/schemas/Plant'
+      responses:
+        '201':
+          description: Created
+
+components:
+  schemas:
+    Plant:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 0
+        name:
+          type: string
+          minLength: 1
+          maxLength: 300
