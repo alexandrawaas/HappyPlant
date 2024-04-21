@@ -1,4 +1,4 @@
-package com.happyplant.backend.model
+package com.happyplant.backend.model.types
 
 enum class AssignmentType {
     WATERING,
