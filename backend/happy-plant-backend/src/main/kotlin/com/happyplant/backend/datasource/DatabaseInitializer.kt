@@ -1,4 +1,4 @@
-package com.happyplant.backend
+package com.happyplant.backend.datasource
 
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
