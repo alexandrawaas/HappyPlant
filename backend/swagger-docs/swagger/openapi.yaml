@@ -31,6 +31,13 @@ paths:
         - plant
       summary: Get a list of all the user's plants
       operationId: getPlants
+      parameters:
+        - name: search
+          in: query
+          description: String from search bar
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: Successful operation
@@ -40,10 +47,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Plant'
+        '204':
+          description: No content
         '400':
           description: Bad Request
+        '401':
+          description: Not authorized
         '404':
-          description: No Plants found
+          description: Plants not found
     post:
       tags:
         - plant
@@ -71,6 +82,8 @@ paths:
                 $ref: '#/components/schemas/Plant'
         '400':
           description: Invalid input
+        '401':
+          description: Not authorized
         '422':
           description: Validation exception
 
@@ -78,7 +91,7 @@ paths:
     get:
       tags:
         - plant
-      summary: Find plant by ID
+      summary: Find a plant by ID
       description: Returns a single plant, including needs and assignments
       operationId: getPlantById
       parameters:
@@ -101,12 +114,14 @@ paths:
                 $ref: '#/components/schemas/Plant'
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Plant not found
     put:
       tags:
         - plant
-      summary: Update plant
+      summary: Update a plant
       description: Change the plant's name, species etc.
       operationId: updatePlant
       parameters:
@@ -131,12 +146,14 @@ paths:
           description: plant successfully updated
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Plant not found
     delete:
       tags:
         - plant
-      summary: Deletes a plant
+      summary: Delete a plant
       description: delete a plant
       operationId: deletePlant
       parameters:
@@ -152,14 +169,16 @@ paths:
           description: plant successfully deleted
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Plant not found
 
   /plants/{plantId}/assignments/{assignmentId}:
-    put:
+    patch:
       tags:
         - plant
-      summary: Update plant assignment "last done" date
+      summary: Update a plant assignment's "last done" date
       description: Specify when an assignment was done the last time
       operationId: updatePlantAssignment
       parameters:
@@ -182,15 +201,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Assignment'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Assignment'
+              $ref: '#/components/schemas/AssignmentDate'
       responses:
         '200':
           description: plant assignment successfully updated
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Plant assignment not found
 
@@ -198,9 +216,16 @@ paths:
     get:
       tags:
         - inventory
-      summary: Returns a list of non-placed plants
+      summary: Get a list of all non-placed plants
       description: Returns a list of all plants not yet placed in a room
       operationId: getInventory
+      parameters:
+        - name: search
+          in: query
+          description: String from search bar
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: successful operation
@@ -210,6 +235,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Plant'
+        '204':
+          description: No content
+        '401':
+          description: Not authorized
 
   /species:
     get:
@@ -218,6 +247,13 @@ paths:
       summary: Get all species
       description: Get a list of all plant species
       operationId: getSpecies
+      parameters:
+        - name: search
+          in: query
+          description: String from search bar
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: successful operation
@@ -227,6 +263,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Species'
+        '204':
+          description: No content
         '404':
           description: Not found
 
@@ -234,8 +272,8 @@ paths:
     get:
       tags:
         - species
-      summary: Get species by id
-      description: Find a plant species by its id
+      summary: Get a species by ID
+      description: Find a plant species by its ID
       operationId: getSpeciesById
       parameters:
         - name: speciesId
@@ -257,6 +295,8 @@ paths:
                 $ref: '#/components/schemas/Species'
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Species not found
 
@@ -266,6 +306,13 @@ paths:
         - room
       summary: Get a list of all the user's rooms
       operationId: getRooms
+      parameters:
+        - name: search
+          in: query
+          description: String from search bar
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: Successful operation
@@ -275,6 +322,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Room'
+        '204':
+          description: No content
         '400':
           description: Bad Request
         '404':
@@ -306,6 +355,8 @@ paths:
                 $ref: '#/components/schemas/Room'
         '400':
           description: Invalid input
+        '401':
+          description: Not authorized
         '422':
           description: Validation exception
 
@@ -314,7 +365,7 @@ paths:
     get:
       tags:
         - room
-      summary: Find room by ID
+      summary: Find a room by ID
       description: Returns a single room
       operationId: getRoomById
       parameters:
@@ -337,12 +388,14 @@ paths:
                 $ref: '#/components/schemas/Room'
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Room not found
     delete:
       tags:
         - room
-      summary: Deletes a room
+      summary: Delete a room
       description: delete a room
       operationId: deleteRoom
       parameters:
@@ -358,6 +411,8 @@ paths:
           description: Room successfully deleted
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Room not found
 
@@ -408,15 +463,17 @@ paths:
                 $ref: '#/components/schemas/Plant'
         '400':
           description: Invalid input
+        '401':
+          description: Not authorized
         '422':
           description: Validation exception
 
 
   /rooms/{roomId}/plants/{plantId}:
-    put:
+    patch:
       tags:
         - room
-      summary: Update place of a plant in a room
+      summary: Update the place of a plant in a room
       description: Move a plant's spot inside of a room
       operationId: updatePlantInRoom
       parameters:
@@ -439,19 +496,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Pixel'
+              $ref: '#/components/schemas/Coordinate'
       responses:
         '200':
           description: plant placement successfully updated
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Not found
 
     delete:
       tags:
         - room
-      summary: Removes a plant from a room
+      summary: Remove a plant from a room
       description: Remove a plant from a room
       operationId: deletePlantFromRoom
       parameters:
@@ -474,6 +533,8 @@ paths:
           description: Plant successfully deleted from the room
         '400':
           description: Invalid ID supplied
+        '401':
+          description: Not authorized
         '404':
           description: Plant not found
 
@@ -481,9 +542,16 @@ paths:
     get:
       tags:
         - assignment
-      summary: Gets all active assignments
+      summary: Get all active assignments with their plant IDs
       description: Returns a list of all assignments that are active / due
       operationId: getAssignments
+      parameters:
+        - name: search
+          in: query
+          description: String from search bar
+          schema:
+            type: string
+          required: false
       responses:
         '200':
           description: successful operation
@@ -492,105 +560,138 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Assignment'
+                  $ref: '#/components/schemas/AssignmentListObject'
+        '204':
+          description: No content
+        '401':
+          description: Not authorized
         '404':
           description: No assignments found
 
-
-  /user/logout:
-    get:
+  /user:
+    patch:
       tags:
         - user
-      summary: Logs out current logged in user session
-      description: ''
-      operationId: logoutUser
-      parameters: []
-      responses:
-        default:
-          description: successful operation
-  /user/{username}:
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      description: ''
-      operationId: getUserByName
-      parameters:
-        - name: username
-          in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-    put:
-      tags:
-        - user
-      summary: Update user
-      description: This can only be done by the logged in user.
+      summary: Update a user's settings
+      description: Change e.g. notifications settings of user
       operationId: updateUser
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be deleted
-          required: true
-          schema:
-            type: string
       requestBody:
-        description: Update an existent user in the store
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserSettings'
       responses:
-        default:
-          description: successful operation
+        '200':
+          description: User settings successfully updated
+        '400':
+          description: Invalid Token supplied
+        '401':
+          description: Not authorized
+        '404':
+          description: Not found
     delete:
       tags:
         - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
+      summary: Delete a user's account
+      description: Deletes the current user's account
       operationId: deleteUser
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be deleted
-          required: true
-          schema:
-            type: string
       responses:
+        '200':
+          description: Account successfully deleted
         '400':
-          description: Invalid username supplied
+          description: Invalid Token supplied
+        '401':
+          description: Not authorized
         '404':
           description: User not found
+
+  /register:
+    post:
+      tags:
+        - user
+      summary: Register a new user
+      description: Creates a new user account
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginObject'
+        required: true
+      responses:
+        '201':
+          description: Account created successfully
+          headers:
+            authToken:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+
+  /login:
+    post:
+      tags:
+        - user
+      summary: Log in a user
+      description: Creates a new session token to log in a user
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginObject'
+        required: true
+      responses:
+        '201':
+          description: Logged in successfully
+          headers:
+            authToken:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+
+  /logout:
+    post:
+      tags:
+        - user
+      summary: Log out a user
+      description: Deletes an existing session token to log out a user
+      operationId: logoutUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      responses:
+        '200':
+          description: Logged out successfully
+        '401':
+          description: Not authorized
+        '404':
+          description: User not found
+
+
+
+
+
+
+
 components:
   schemas:
+
     Species:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          example: 100000
+          example: 10
         name:
           type: string
           example: butterfly orchid
@@ -608,6 +709,7 @@ components:
           example: lorem ipsum
         needs:
           $ref: '#/components/schemas/Needs'
+
     Needs:
       type: object
       properties:
@@ -630,6 +732,7 @@ components:
             repositioning:
               type: integer
               example: 150
+
     Assignment:
       type: object
       properties:
@@ -643,20 +746,45 @@ components:
           type: string
           format: date-time
           example: 2024-03-20T09:12:28Z
+
+    AssignmentListObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        plantId:
+          type: integer
+          format: int64
+          example: 3
+        plantName:
+          type: string
+          example: Bob
+        assignmentType:
+          $ref: '#/components/schemas/AssignmentType'
+        lastDone:
+          type: string
+          format: date-time
+          example: 2024-03-20T09:12:28Z
+
     Room:
       type: object
       properties:
         id:
           type: integer
           format: int64
+          example: 10
         name:
           type: string
+          example: living room
         grid:
           type: array
           items:
             type: array
             items:
-              type: integer
+              $ref: '#/components/schemas/Pixel'
+
     Plant:
       required:
         - name
@@ -671,6 +799,11 @@ components:
           example: Bob
         species:
           $ref: '#/components/schemas/Species'
+        notes:
+          type: string
+          example: Present from my grandma, lost many leaves due to cold
+        needs:
+          $ref: '#/components/schemas/Needs'
         assignments:
           type: array
           items:
@@ -678,6 +811,7 @@ components:
         picturePath:
           type: string
           example: /assets/pictures/abcdefg.jpg
+
     AssignmentType:
       type: string
       enum:
@@ -686,6 +820,7 @@ components:
         - fertilizing
         - repotting
         - repositioning
+
     Pixel:
       type: object
       properties:
@@ -693,3 +828,50 @@ components:
           type: integer
         y:
           type: integer
+        isWindow:
+          type: boolean
+          example: false
+        lightingType:
+          type: string
+          example: sun
+        lightingTypeValue:
+          type: integer
+          example: 2
+
+    Coordinate:
+      type: object
+      properties:
+        x:
+          type: integer
+        y:
+          type: integer
+
+    AssignmentDate:
+      type: string
+      format: date-time
+      example: 2024-03-17T12:02:15Z
+
+    AuthToken:
+      type: string
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+    UserLoginObject:
+      type: object
+      properties:
+        email:
+          type: string
+          example: m.mustermann@test.com
+        passwordHash:
+          type: string
+          example: 3d180ab86e
+
+    UserSettings:
+      type: object
+      properties:
+        receivePushNotifications:
+          type: boolean
+          example: true
+        pushNotificationsTime:
+          type: string
+          format: time
+          example: 09:00:00
