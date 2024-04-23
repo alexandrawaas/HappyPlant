@@ -29,4 +29,23 @@ data class Assignment(
         fun getPlant(): Plant {
                 return plant
         }
+
+
+        // Methods
+
+        fun completeAssignment()
+        {
+                //TODO: Implement
+        }
+
+        fun completeAssignment(date: LocalDateTime)
+        {
+                //TODO: Implement
+        }
+
+        fun isActive(interval: Int): Boolean
+        {
+                //TODO: Implement
+                return false
+        }
 }

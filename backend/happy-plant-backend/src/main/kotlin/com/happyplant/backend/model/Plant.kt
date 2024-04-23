@@ -1,6 +1,7 @@
 package com.happyplant.backend.model
 
 import com.happyplant.backend.model.types.AssignmentType
+import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.util.*
@@ -68,5 +69,38 @@ data class Plant(
 
         fun setNeeds(needs: Needs) {
                 this.needs = needs
+        }
+
+
+        // Methods
+
+        fun getNeedInterval(assignmentType: AssignmentType): Int?
+        {
+                //TODO: Implement
+                return needs.getIntervals().get(assignmentType)
+        }
+
+        fun getLightingType(): LightingType?
+        {
+                //TODO: Implement
+                return needs.getLightingType() ?: species.needs.lightingType
+        }
+
+        fun getActiveAssignments(): List<Assignment>
+        {
+                //TODO: Implement
+                return ArrayList<Assignment>()
+        }
+
+        fun getAllAssignments(): List<Assignment>
+        {
+                //TODO: Implement
+                return ArrayList<Assignment>()
+        }
+
+        fun isPlaced(): Boolean
+        {
+                //TODO: Implement
+                return false
         }
 }

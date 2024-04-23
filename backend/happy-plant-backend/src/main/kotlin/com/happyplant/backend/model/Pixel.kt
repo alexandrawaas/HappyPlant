@@ -32,9 +32,23 @@ data class Pixel(
 
         fun setWindow(window: Boolean) {
                 this.isWindow = window
+                //TODO: Implement
         }
 
         fun getRoom(): Room {
                 return room
+        }
+
+
+        // Methods
+
+        fun placePlant(plant: Plant)
+        {
+                //TODO: Implement
+        }
+
+        fun removePlant(plant: Plant)
+        {
+                //TODO: Implement
         }
 }

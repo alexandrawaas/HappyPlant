@@ -24,4 +24,16 @@ data class Room(
         fun getGrid(): ArrayList<Pixel> {
                 return grid
         }
+
+
+        // Methods
+
+        fun placePlant(plant: Plant, x: Int, y : Int)
+        {
+                //TODO: Implement
+        }
+
+        fun Room(x: Int, y: Int) {
+                //TODO: Implement
+        }
 }
