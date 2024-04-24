@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("species")
 class SpeciesController (private val service: SpeciesService){
     @GetMapping
+    @ResponseBody
     fun getSpecies(): List<Species> = service.getSpecies()
 
     @GetMapping("/{speciesId}")
+    @ResponseBody
     fun getPlant(@PathVariable speciesId: Long): Species = service.getSpecies(speciesId)
 }

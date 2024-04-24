@@ -18,26 +18,38 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("rooms")
 class RoomsController (private val service: RoomsService){
     @GetMapping
-    fun getRooms(): List<Room> = service.getRooms()
+    @ResponseBody
+    fun getRooms(@RequestHeader(name = "search") search: String?): List<Room>{
+        if(search == null){
+            return service.getRooms()
+        }
+        else{
+            return service.getRoomsFiltered(search)
+        }
+    }
 
     @PostMapping
-    fun addRoom(@RequestBody newRoom: Room) = service.addRoom(newRoom)
+    fun addRoom(@RequestBody newRoom: Room): Unit = service.addRoom(newRoom)
 
     @GetMapping("/{roomId}")
+    @ResponseBody
     fun getRoom(@PathVariable roomId: Long): Room = service.getRoom(roomId)
 
     @DeleteMapping("/{roomId}")
-    fun deleteRoom(@PathVariable roomId: Long) = service.deleteRoom(roomId)
+    fun deleteRoom(@PathVariable roomId: Long): Unit = service.deleteRoom(roomId)
 
     @GetMapping("/{roomId}/plants")
+    @ResponseBody
     fun getPlantsInRoom(@PathVariable roomId: Long): List<Plant> = service.getPlantsInRoom(roomId)
 
     @PostMapping("/{roomId}/plants")
-    fun addPlantToRoom(@PathVariable roomId: Long, @RequestBody plant: Plant) = service.addPlantsToRoom(roomId, plant)
+    fun addPlantToRoom(@PathVariable roomId: Long, @RequestBody plant: Plant): Unit = service.addPlantsToRoom(roomId, plant)
 
     @PatchMapping("/{roomId}/plants/{plantId}")
-    fun repositionPlantInRoom(@PathVariable roomId: Long, @PathVariable plantId: Long, @RequestBody coords: Coordinates) = service.repositionPlantInRoom(roomId, plantId, coords)
+    fun repositionPlantInRoom(@PathVariable roomId: Long, @PathVariable plantId: Long, @RequestBody coords: Coordinates): Unit
+        = service.repositionPlantInRoom(roomId, plantId, coords)
 
     @DeleteMapping("/{roomId}/plants/{plantId}")
-    fun removePlantFromRoom(@PathVariable roomId: Long, @PathVariable plantId: Long) = service.removePlantFromRoom(roomId, plantId)
+    fun removePlantFromRoom(@PathVariable roomId: Long, @PathVariable plantId: Long): Unit
+        = service.removePlantFromRoom(roomId, plantId)
 }
