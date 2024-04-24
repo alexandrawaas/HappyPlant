@@ -12,5 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("inventory")
 class InventoryController (private val service: InventoryService){
     @GetMapping
+    @ResponseBody
     fun getInventory(): List<Plant> = service.getInventory()
 }

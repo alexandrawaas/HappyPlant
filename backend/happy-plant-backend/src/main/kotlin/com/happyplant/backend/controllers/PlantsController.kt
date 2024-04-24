@@ -18,20 +18,31 @@ import java.util.*
 @RequestMapping("plants")
 class PlantsController (private val service:PlantsService) {
     @GetMapping
-    fun getPlants(): List<Plant> = service.getPlants()
+    @ResponseBody
+    fun getPlants(@RequestHeader(name = "search") search: String?): List<Plant>{
+        if(search == null){
+            return service.getPlants()
+        }
+        else{
+            return service.getPlantsFiltered(search)
+        }
+    }
 
     @PostMapping
+    @ResponseBody
     fun addPlant(@RequestBody newPlant: Plant): Plant = service.addPlant()
 
     @GetMapping("/{plantId}")
+    @ResponseBody
     fun getPlant(@PathVariable plantId: Long): Plant = service.getPlant(plantId)
 
     @PutMapping("/{plantId}")
-    fun alterPlant(@PathVariable plantId: Long, @RequestBody plant: Plant) = service.alterPlant(plantId, plant)
+    fun alterPlant(@PathVariable plantId: Long, @RequestBody plant: Plant): Unit = service.alterPlant(plantId, plant)
 
     @DeleteMapping("/{plantId}")
-    fun deletePlant(@PathVariable plantId: Long) = service.deletePlant(plantId)
+    fun deletePlant(@PathVariable plantId: Long): Unit = service.deletePlant(plantId)
 
     @PatchMapping("/{plantId}/assignments/{assignmentId}")
-    fun setAssignmentForPlant(@PathVariable plantId: Long, @PathVariable assignmentId: Long, @RequestBody date: Date) = service.setAssignmentForPlant(plantId, assignmentId, date)
+    fun setAssignmentForPlant(@PathVariable plantId: Long, @PathVariable assignmentId: Long, @RequestBody date: Date): Unit
+        = service.setAssignmentForPlant(plantId, assignmentId, date)
 }

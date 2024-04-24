@@ -10,6 +10,10 @@ class PlantsService {
         TODO("Not yet implemented")
     }
 
+    fun getPlantsFiltered(search: String): List<Plant>{
+        TODO("Not yet implemented")
+    }
+
     fun addPlant(): Plant {
         TODO("Not yet implemented")
     }
@@ -18,15 +22,15 @@ class PlantsService {
         TODO("Not yet implemented")
     }
 
-    fun alterPlant(id: Long, plant: Plant): Plant {
+    fun alterPlant(id: Long, plant: Plant): Unit {
         TODO("Not yet implemented")
     }
 
-    fun deletePlant(id: Long): Plant {
+    fun deletePlant(id: Long): Unit {
         TODO("Not yet implemented")
     }
 
-    fun setAssignmentForPlant(plantId: Long, assignmentId: Long, date: Date): Any {
+    fun setAssignmentForPlant(plantId: Long, assignmentId: Long, date: Date): Unit {
         TODO("Not yet implemented")
     }
 }

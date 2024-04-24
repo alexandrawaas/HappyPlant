@@ -11,7 +11,11 @@ class RoomsService {
         TODO("Not yet implemented")
     }
 
-    fun addRoom(newRoom: Room): Any {
+    fun getRoomsFiltered(search: String): List<Room> {
+        TODO("Not yet implemented")
+    }
+
+    fun addRoom(newRoom: Room): Unit {
         TODO("Not yet implemented")
     }
 
@@ -19,7 +23,7 @@ class RoomsService {
         TODO("Not yet implemented")
     }
 
-    fun deleteRoom(roomId: Long): Any {
+    fun deleteRoom(roomId: Long): Unit {
         TODO("Not yet implemented")
     }
 
@@ -27,15 +31,15 @@ class RoomsService {
         TODO("Not yet implemented")
     }
 
-    fun addPlantsToRoom(roomId: Long, plant: Plant): Any {
+    fun addPlantsToRoom(roomId: Long, plant: Plant): Unit {
         TODO("Not yet implemented")
     }
 
-    fun repositionPlantInRoom(roomId: Long, plantId: Long, coords: Coordinates): Any {
+    fun repositionPlantInRoom(roomId: Long, plantId: Long, coords: Coordinates): Unit {
         TODO("Not yet implemented")
     }
 
-    fun removePlantFromRoom(roomId: Long, plantId: Long): Any {
+    fun removePlantFromRoom(roomId: Long, plantId: Long): Unit {
         TODO("Not yet implemented")
     }
 }

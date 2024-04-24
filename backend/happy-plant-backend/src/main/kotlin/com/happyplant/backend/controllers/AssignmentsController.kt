@@ -11,5 +11,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("assignments")
 class AssignmentsController (private val service: AssignmentsService){
     @GetMapping
+    @ResponseBody
     fun getActiveAssignments(): List<ActiveAssignment> = service.getActiveAssignments()
 }
