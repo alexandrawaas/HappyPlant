@@ -8,6 +8,6 @@ import java.util.*
 
 @Entity
 class Plant(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
+        @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long,
 ) {
 }

@@ -7,10 +7,13 @@ import java.util.*
 @Service
 class PlantsService {
     fun getPlants(): List<Plant> {
+        //return listOf(Plant(12, "nofilter"))
         TODO("Not yet implemented")
+
     }
 
     fun getPlantsFiltered(search: String): List<Plant>{
+        //return listOf(Plant(11, "filter"))
         TODO("Not yet implemented")
     }
 
