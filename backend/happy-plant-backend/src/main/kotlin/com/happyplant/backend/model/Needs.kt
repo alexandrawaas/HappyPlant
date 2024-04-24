@@ -9,8 +9,8 @@ import java.util.*
 @Table(name="needs")
 data class Needs(
         @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
-        @ElementCollection @CollectionTable private var intervals: Map<AssignmentType, Int>,
-        @Column private var lightingType: LightingType
+        @ElementCollection @CollectionTable private var intervals: Map<AssignmentType, Int?>,
+        @Column private var lightingType: LightingType?
 ) {
 
         //Methods
@@ -20,9 +20,9 @@ data class Needs(
                 //TODO: Implement
         }
 
-        fun getInterval(assignmentType: AssignmentType): Int
+        fun getInterval(assignmentType: AssignmentType): Int?
         {
               //TODO: Implement
-                return 0
+                return intervals[assignmentType]
         }
 }
