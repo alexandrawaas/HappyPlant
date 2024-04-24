@@ -14,7 +14,7 @@
 ### Backendfunktionalität
 - Pflanzendatenbank mit ca 30 Pflanzen mit je einem Default Bild und deren Daten vorkonfigurieren
 - Controller
-    - Species: create, getall
+    - SpeciesScreen: create, getall
 - Funktionen
     - room.add(species)
 ## Räume
@@ -68,18 +68,18 @@
     - Name, Spezies, Bild (wenn kein eigenes, das Default aus der Datenbank)
 - Adaptionen erlauben
     - ~~Anforderungen Luftfeuchtigkeit und Temperatur (individuell anpassen)~~
-    - Intervalle für Aufgaben (individuell anpassen)
+    - Intervalle für AssignmentsScreen (individuell anpassen)
     - Notizen zur Pflanze
 - jeweiliges Datum für nächstes Todo pro Kategorie (Gieß-Umtopf-Schnitt-Düng) anzeigen
     - ~~opt.: beim Gießen abhängig von Helligkeit und Luftfeuchtigkeit~~
 ## Aufgabenverwaltung
 ### Übersicht
-- ~~Darstellungsspezifika: Überfällige Aufgaben rot markieren, Farben für verschiedene Aufgabenarten~~
-- Aufgaben abhaken
+- ~~Darstellungsspezifika: Überfällige AssignmentsScreen rot markieren, Farben für verschiedene Aufgabenarten~~
+- AssignmentsScreen abhaken
     - ~~alle auf einmal~~
     - ~~gruppenweise pro Kategorie~~
     - rückwirkend für Datum
-- Tägliche Benachrichtigung ~~mit einstellbarer Uhrzeit~~ über Aufgaben für diesen Tag
+- Tägliche Benachrichtigung ~~mit einstellbarer Uhrzeit~~ über AssignmentsScreen für diesen Tag
     - ~~Uhrzeit-Einstellung im User-Profil festlegbar~~
 - ~~sortierbar (Art der Aufgabe, Fälligkeit, Raum)~~
 ### Backendfunktionalität
