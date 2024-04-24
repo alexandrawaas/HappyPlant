@@ -6,25 +6,12 @@ import java.util.*
 @Entity
 @Table(name="rooms")
 data class Room(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
-        @Column val name: String,
-        @OneToMany(cascade= [CascadeType.ALL], mappedBy = "room") val grid: ArrayList<Pixel>
+        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
+        @Column private val name: String,
+        @OneToMany(cascade=[CascadeType.ALL], mappedBy = "room") private val grid: ArrayList<Pixel>,
+        @ManyToOne() private val user: User
 )
 {
-        // Getters
-
-        fun getId(): UUID {
-                return id
-        }
-
-        fun getName(): String {
-                return name
-        }
-
-        fun getGrid(): ArrayList<Pixel> {
-                return grid
-        }
-
 
         // Methods
 

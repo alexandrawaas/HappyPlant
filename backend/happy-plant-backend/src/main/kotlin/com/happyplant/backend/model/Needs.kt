@@ -8,30 +8,10 @@ import java.util.*
 @Entity
 @Table(name="needs")
 data class Needs(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
-        @Column var intervals: Map<AssignmentType, Int>,
-        @Column var lightingType: LightingType?,
-        @OneToOne val plant: Plant,  // muss das weg?
-        @OneToOne val species: Species
+        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
+        @ElementCollection @CollectionTable private var intervals: Map<AssignmentType, Int>,
+        @Column private var lightingType: LightingType
 ) {
-        // Getters and Setters
-
-        fun getId(): UUID {
-                return id
-        }
-
-        fun getIntervals(): Map<AssignmentType, Int> {
-                return intervals
-        }
-
-        fun setIntervals(intervals: Map<AssignmentType, Int>) {
-                this.intervals = intervals
-        }
-
-        fun getLightingType(): LightingType? {
-                return lightingType
-        }
-
 
         //Methods
 

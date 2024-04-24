@@ -9,81 +9,27 @@ import java.util.*
 @Entity
 @Table(name="plants")
 data class Plant(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
-        @NotNull var name: String,
-        @NotNull var picturePath: String = "DefaultPicturePath",
-        @Column var notes: String?,
-        @OneToMany() var assignments: Map<AssignmentType, Assignment>,
-        @ManyToOne() var species: Species,
-        @OneToOne() @JoinColumn(referencedColumnName = "id") var needs: Needs,
+        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
+        @NotNull private var name: String,
+        @NotNull private var picturePath: String = "DefaultPicturePath",
+        @Column private var notes: String?,
+        @OneToMany() private var assignments: Map<AssignmentType, Assignment>,
+        @ManyToOne() private var species: Species,
+        @ManyToOne() private var user: User,
+        @OneToOne() @JoinColumn(referencedColumnName = "id") private var needs: Needs?,
 ) {
-        // Getters and Setters
-
-        fun getId(): UUID {
-                return id
-        }
-
-        fun getName(): String {
-                return name
-        }
-
-        fun setName(name: String) {
-                this.name = name
-        }
-
-        fun getPicturePath(): String {
-                return picturePath
-        }
-
-        fun setPicturePath(picturePath: String) {
-                this.picturePath = picturePath
-        }
-
-        fun getNotes(): String? {
-                return notes
-        }
-
-        fun setNotes(notes: String?) {
-                this.notes = notes
-        }
-
-        fun getAssignments(): Map<AssignmentType, Assignment> {
-                return assignments
-        }
-
-        fun setAssignments(assignments: Map<AssignmentType, Assignment>) {
-                this.assignments = assignments
-        }
-
-        fun getSpecies(): Species {
-                return species
-        }
-
-        fun setSpecies(species: Species) {
-                this.species = species
-        }
-
-        fun getNeeds(): Needs {
-                return needs
-        }
-
-        fun setNeeds(needs: Needs) {
-                this.needs = needs
-        }
-
-
         // Methods
 
         fun getNeedInterval(assignmentType: AssignmentType): Int?
         {
                 //TODO: Implement
-                return needs.getIntervals().get(assignmentType)
+                return needs?.getInterval(assignmentType)
         }
 
-        fun getLightingType(): LightingType?
+        fun getLightingType(): LightingType
         {
                 //TODO: Implement
-                return needs.getLightingType() ?: species.needs.lightingType
+                return LightingType.FULL_SHADE
         }
 
         fun getActiveAssignments(): List<Assignment>
