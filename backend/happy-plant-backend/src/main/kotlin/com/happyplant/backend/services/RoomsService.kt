@@ -1,6 +1,6 @@
 package com.happyplant.backend.services
 
-import com.happyplant.backend.datatransfer.Coordinates
+import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.Room
 import org.springframework.stereotype.Service
@@ -35,7 +35,7 @@ class RoomsService {
         TODO("Not yet implemented")
     }
 
-    fun repositionPlantInRoom(roomId: Long, plantId: Long, coords: Coordinates): Unit {
+    fun repositionPlantInRoom(roomId: Long, plantId: Long, coords: CoordinatesDTORequest): Unit {
         TODO("Not yet implemented")
     }
 
