@@ -1,6 +1,8 @@
 package com.happyplant.backend.services
 
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
+import com.happyplant.backend.datatransfer.PlantDTO
+import com.happyplant.backend.datatransfer.RoomDTO
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.Room
 import org.springframework.stereotype.Service
@@ -8,19 +10,19 @@ import java.util.*
 
 @Service
 class RoomsService {
-    fun getRooms(): List<Room> {
+    fun getRooms(): List<RoomDTO> {
         TODO("Not yet implemented")
     }
 
-    fun getRoomsFiltered(search: String): List<Room> {
+    fun getRoomsFiltered(search: String): List<RoomDTO> {
         TODO("Not yet implemented")
     }
 
-    fun addRoom(newRoom: Room): Unit {
+    fun addRoom(newRoom: RoomDTO): Unit {
         TODO("Not yet implemented")
     }
 
-    fun getRoom(roomId: UUID): Room {
+    fun getRoom(roomId: UUID): RoomDTO {
         TODO("Not yet implemented")
     }
 
@@ -28,11 +30,11 @@ class RoomsService {
         TODO("Not yet implemented")
     }
 
-    fun getPlantsInRoom(roomId: UUID): List<Plant> {
+    fun getPlantsInRoom(roomId: UUID): List<PlantDTO> {
         TODO("Not yet implemented")
     }
 
-    fun addPlantsToRoom(roomId: UUID, plant: Plant): Unit {
+    fun addPlantToRoom(roomId: UUID, plant: PlantDTO): Unit {
         TODO("Not yet implemented")
     }
 

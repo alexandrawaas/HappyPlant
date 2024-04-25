@@ -1,6 +1,8 @@
 package com.happyplant.backend.controllers
 
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
+import com.happyplant.backend.datatransfer.PlantDTO
+import com.happyplant.backend.datatransfer.RoomDTO
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.Room
 import com.happyplant.backend.services.RoomsService
@@ -12,7 +14,7 @@ import java.util.*
 class RoomsController (private val service: RoomsService){
     @GetMapping
     @ResponseBody
-    fun getRooms(@RequestParam(name = "search") search: String?): List<Room>{
+    fun getRooms(@RequestParam(name = "search") search: String?): List<RoomDTO>{
         if(search == null){
             return service.getRooms()
         }
@@ -22,21 +24,22 @@ class RoomsController (private val service: RoomsService){
     }
 
     @PostMapping
-    fun addRoom(@RequestBody newRoom: Room): Unit = service.addRoom(newRoom)
+    fun addRoom(@RequestBody newRoom: RoomDTO): Unit = service.addRoom(newRoom)
 
     @GetMapping("/{roomId}")
     @ResponseBody
-    fun getRoom(@PathVariable roomId: UUID): Room = service.getRoom(roomId)
+    fun getRoom(@PathVariable roomId: UUID): RoomDTO = service.getRoom(roomId)
 
     @DeleteMapping("/{roomId}")
     fun deleteRoom(@PathVariable roomId: UUID): Unit = service.deleteRoom(roomId)
 
     @GetMapping("/{roomId}/plants")
     @ResponseBody
-    fun getPlantsInRoom(@PathVariable roomId: UUID): List<Plant> = service.getPlantsInRoom(roomId)
+    fun getPlantsInRoom(@PathVariable roomId: UUID): List<PlantDTO> = service.getPlantsInRoom(roomId)
 
     @PostMapping("/{roomId}/plants")
-    fun addPlantToRoom(@PathVariable roomId: UUID, @RequestBody plant: Plant): Unit = service.addPlantsToRoom(roomId, plant)
+    fun addPlantToRoom(@PathVariable roomId: UUID, @RequestBody plant: PlantDTO): Unit = service.addPlantToRoom(roomId, plant)
+    //Hier vieleicht ID von Pflanze wenn diese bereits erstellt
 
     @PatchMapping("/{roomId}/plants/{plantId}")
     fun repositionPlantInRoom(@PathVariable roomId: UUID, @PathVariable plantId: UUID, @RequestBody coords: CoordinatesDTORequest): Unit

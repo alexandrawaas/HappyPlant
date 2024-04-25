@@ -1,5 +1,6 @@
 package com.happyplant.backend.controllers
 
+import com.happyplant.backend.datatransfer.PlantDTO
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.services.PlantsService
 import org.springframework.web.bind.annotation.*
@@ -12,7 +13,7 @@ class PlantsController (private val service:PlantsService) {
 
     @GetMapping
     @ResponseBody
-    fun getPlants(@RequestParam(name = "search") search: String?): List<Plant>{
+    fun getPlants(@RequestParam(name = "search") search: String?): List<PlantDTO>{
         if(search == null){
             return service.getPlants()
         }
@@ -23,14 +24,14 @@ class PlantsController (private val service:PlantsService) {
 
     @PostMapping
     @ResponseBody
-    fun addPlant(@RequestBody newPlant: Plant): Plant = service.addPlant()
+    fun addPlant(@RequestBody newPlant: PlantDTO): PlantDTO = service.addPlant(newPlant)
 
     @GetMapping("/{plantId}")
     @ResponseBody
-    fun getPlant(@PathVariable plantId: UUID): Plant = service.getPlant(plantId)
+    fun getPlant(@PathVariable plantId: UUID): PlantDTO = service.getPlant(plantId)
 
     @PutMapping("/{plantId}")
-    fun alterPlant(@PathVariable plantId: UUID, @RequestBody plant: Plant): Unit = service.alterPlant(plantId, plant)
+    fun alterPlant(@PathVariable plantId: UUID, @RequestBody plant: PlantDTO): Unit = service.alterPlant(plantId, plant)
 
     @DeleteMapping("/{plantId}")
     fun deletePlant(@PathVariable plantId: UUID): Unit = service.deletePlant(plantId)
