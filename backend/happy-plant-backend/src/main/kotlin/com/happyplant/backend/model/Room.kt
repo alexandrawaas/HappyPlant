@@ -23,4 +23,10 @@ data class Room(
         fun Room(x: Int, y: Int) {
                 //TODO: Implement
         }
+
+        fun getPixel(x: Int, y: Int): Pixel?
+        {
+                //TODO: Implement
+                return null
+        }
 }

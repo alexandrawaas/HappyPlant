@@ -16,6 +16,7 @@ data class Plant(
         @OneToMany() private var assignments: Map<AssignmentType, Assignment>,
         @ManyToOne() private var species: Species,
         @ManyToOne() private var user: User,
+        @ManyToOne() @JoinColumn(name = "pixel_id") private var pixel: Pixel?,
         @OneToOne() @JoinColumn(referencedColumnName = "id") private var needs: Needs?,
 ) {
         // Methods

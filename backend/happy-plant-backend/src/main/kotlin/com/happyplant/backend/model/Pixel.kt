@@ -1,5 +1,6 @@
 package com.happyplant.backend.model
 
+import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
 import java.util.*
 
@@ -10,7 +11,9 @@ data class Pixel(
         @Column private val x: Int,
         @Column private val y: Int,
         @Column private var isWindow: Boolean,
-        @ManyToOne() @JoinColumn(name = "room_id") private val room: Room
+        @Column private val lightingType: LightingType,
+        @ManyToOne() @JoinColumn(name = "room_id") private val room: Room,
+        @OneToMany(cascade=[CascadeType.ALL], mappedBy = "pixel") private val plants: ArrayList<Plant>
 ) {
 
         // Methods
