@@ -3,7 +3,6 @@ package com.happyplant.backend.controllers
 
 import com.happyplant.backend.datatransfer.SpeciesDTO
 import com.happyplant.backend.model.Species
-import com.happyplant.backend.services.PlantsService
 import com.happyplant.backend.services.SpeciesService
 import org.springframework.web.bind.annotation.*
 import java.util.*
