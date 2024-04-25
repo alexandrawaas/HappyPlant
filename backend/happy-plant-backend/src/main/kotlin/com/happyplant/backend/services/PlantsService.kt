@@ -1,6 +1,5 @@
 package com.happyplant.backend.services
 
-import com.happyplant.backend.model.Needs
 import com.happyplant.backend.model.Plant
 import org.springframework.stereotype.Service
 import java.util.*
