@@ -12,7 +12,7 @@ class PlantsController (private val service:PlantsService) {
 
     @GetMapping
     @ResponseBody
-    fun getPlants(@RequestHeader(name = "search") search: String?): List<Plant>{
+    fun getPlants(@RequestParam(name = "search") search: String?): List<Plant>{
         if(search == null){
             return service.getPlants()
         }

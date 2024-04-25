@@ -1,5 +1,6 @@
 package com.happyplant.backend.services
 
+import com.happyplant.backend.model.Needs
 import com.happyplant.backend.model.Plant
 import org.springframework.stereotype.Service
 import java.util.*
@@ -7,13 +8,11 @@ import java.util.*
 @Service
 class PlantsService {
     fun getPlants(): List<Plant> {
-        //return listOf(Plant(12, "nofilter"))
         TODO("Not yet implemented")
 
     }
 
     fun getPlantsFiltered(search: String): List<Plant>{
-        //return listOf(Plant(11, "filter"))
         TODO("Not yet implemented")
     }
 

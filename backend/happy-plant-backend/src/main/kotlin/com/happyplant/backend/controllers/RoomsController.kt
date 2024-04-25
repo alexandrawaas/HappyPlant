@@ -12,7 +12,7 @@ import java.util.*
 class RoomsController (private val service: RoomsService){
     @GetMapping
     @ResponseBody
-    fun getRooms(@RequestHeader(name = "search") search: String?): List<Room>{
+    fun getRooms(@RequestParam(name = "search") search: String?): List<Room>{
         if(search == null){
             return service.getRooms()
         }
