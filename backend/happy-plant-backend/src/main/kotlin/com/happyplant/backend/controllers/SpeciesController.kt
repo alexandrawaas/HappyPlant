@@ -5,6 +5,7 @@ import com.happyplant.backend.model.Species
 import com.happyplant.backend.services.PlantsService
 import com.happyplant.backend.services.SpeciesService
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 
 @RestController
@@ -16,5 +17,5 @@ class SpeciesController (private val service: SpeciesService){
 
     @GetMapping("/{speciesId}")
     @ResponseBody
-    fun getPlant(@PathVariable speciesId: Long): Species = service.getSpecies(speciesId)
+    fun getPlant(@PathVariable speciesId: UUID): Species = service.getSpecies(speciesId)
 }

@@ -21,19 +21,19 @@ class PlantsService {
         TODO("Not yet implemented")
     }
 
-    fun getPlant(id: Long): Plant {
+    fun getPlant(id: UUID): Plant {
         TODO("Not yet implemented")
     }
 
-    fun alterPlant(id: Long, plant: Plant): Unit {
+    fun alterPlant(id: UUID, plant: Plant): Unit {
         TODO("Not yet implemented")
     }
 
-    fun deletePlant(id: Long): Unit {
+    fun deletePlant(id: UUID): Unit {
         TODO("Not yet implemented")
     }
 
-    fun setAssignmentForPlant(plantId: Long, assignmentId: Long, date: Date): Unit {
+    fun setAssignmentForPlant(plantId: UUID, assignmentId: UUID, date: Date): Unit {
         TODO("Not yet implemented")
     }
 }

@@ -27,15 +27,15 @@ class PlantsController (private val service:PlantsService) {
 
     @GetMapping("/{plantId}")
     @ResponseBody
-    fun getPlant(@PathVariable plantId: Long): Plant = service.getPlant(plantId)
+    fun getPlant(@PathVariable plantId: UUID): Plant = service.getPlant(plantId)
 
     @PutMapping("/{plantId}")
-    fun alterPlant(@PathVariable plantId: Long, @RequestBody plant: Plant): Unit = service.alterPlant(plantId, plant)
+    fun alterPlant(@PathVariable plantId: UUID, @RequestBody plant: Plant): Unit = service.alterPlant(plantId, plant)
 
     @DeleteMapping("/{plantId}")
-    fun deletePlant(@PathVariable plantId: Long): Unit = service.deletePlant(plantId)
+    fun deletePlant(@PathVariable plantId: UUID): Unit = service.deletePlant(plantId)
 
     @PatchMapping("/{plantId}/assignments/{assignmentId}")
-    fun setAssignmentForPlant(@PathVariable plantId: Long, @PathVariable assignmentId: Long, @RequestBody date: Date): Unit
+    fun setAssignmentForPlant(@PathVariable plantId: UUID, @PathVariable assignmentId: UUID, @RequestBody date: Date): Unit
         = service.setAssignmentForPlant(plantId, assignmentId, date)
 }

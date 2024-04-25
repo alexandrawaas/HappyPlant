@@ -4,6 +4,7 @@ import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.Room
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class RoomsService {
@@ -19,27 +20,27 @@ class RoomsService {
         TODO("Not yet implemented")
     }
 
-    fun getRoom(roomId: Long): Room {
+    fun getRoom(roomId: UUID): Room {
         TODO("Not yet implemented")
     }
 
-    fun deleteRoom(roomId: Long): Unit {
+    fun deleteRoom(roomId: UUID): Unit {
         TODO("Not yet implemented")
     }
 
-    fun getPlantsInRoom(roomId: Long): List<Plant> {
+    fun getPlantsInRoom(roomId: UUID): List<Plant> {
         TODO("Not yet implemented")
     }
 
-    fun addPlantsToRoom(roomId: Long, plant: Plant): Unit {
+    fun addPlantsToRoom(roomId: UUID, plant: Plant): Unit {
         TODO("Not yet implemented")
     }
 
-    fun repositionPlantInRoom(roomId: Long, plantId: Long, coords: CoordinatesDTORequest): Unit {
+    fun repositionPlantInRoom(roomId: UUID, plantId: UUID, coords: CoordinatesDTORequest): Unit {
         TODO("Not yet implemented")
     }
 
-    fun removePlantFromRoom(roomId: Long, plantId: Long): Unit {
+    fun removePlantFromRoom(roomId: UUID, plantId: UUID): Unit {
         TODO("Not yet implemented")
     }
 }
