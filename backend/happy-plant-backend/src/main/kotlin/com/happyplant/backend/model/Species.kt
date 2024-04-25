@@ -1,6 +1,5 @@
 package com.happyplant.backend.model
 
-import com.happyplant.backend.datatransfer.species.SpeciesDtoResponse
 import jakarta.persistence.*
 import java.util.*
 
