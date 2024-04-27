@@ -36,11 +36,11 @@
 - alle Properties anzeigen
     - Name, Spezies, Bild (wenn kein eigenes, das Default aus der Datenbank)
 - Adaptionen erlauben
-    - Intervalle für Aufgaben (individuell anpassen)
+    - Intervalle für AssignmentsScreen (individuell anpassen)
     - Notizen zur Pflanze
 - jeweiliges Datum für nächstes Todo pro Kategorie (Gieß-Umtopf-Schnitt-Düng) anzeigen
 ## Aufgabenverwaltung
 ### Übersicht
-- Aufgaben abhaken
+- AssignmentsScreen abhaken
     - rückwirkend für Datum
-- Tägliche Benachrichtigung über Aufgaben für diesen Tag
+- Tägliche Benachrichtigung über AssignmentsScreen für diesen Tag
