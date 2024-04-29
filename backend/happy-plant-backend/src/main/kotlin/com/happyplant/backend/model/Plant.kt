@@ -34,7 +34,7 @@ data class Plant(
 
         fun getActiveAssignments(): List<Assignment>
         {
-                val activeAssignments = ArrayList<Assignment>()
+               val activeAssignments = ArrayList<Assignment>()
                 assignments.forEach { assignmentType, assignment ->  if (assignment.isActive(getNeedInterval(assignmentType) ?: -1)) {
                         activeAssignments.add(assignment)
                 }}

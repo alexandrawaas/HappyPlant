@@ -34,4 +34,9 @@ data class Assignment(
                 return lastDone?.plusDays(interval.toLong())?.isBefore(now) ?: true
                         || lastDone?.plusDays(interval.toLong())?.isEqual(now) ?: true
         }
+
+        fun getNextDue(interval: Int): LocalDateTime
+        {
+                return lastDone?.plusDays(interval.toLong()) ?: LocalDateTime.now()
+        }
 }
