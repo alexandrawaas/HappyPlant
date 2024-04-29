@@ -23,7 +23,6 @@ data class Plant(
 
         fun getNeedInterval(assignmentType: AssignmentType): Int?
         {
-                //TODO: Implement
                 return needs?.getInterval(assignmentType)
         }
 
@@ -35,14 +34,16 @@ data class Plant(
 
         fun getActiveAssignments(): List<Assignment>
         {
-                //TODO: Implement
-                return ArrayList<Assignment>()
+                val activeAssignments = ArrayList<Assignment>()
+                assignments.forEach { assignmentType, assignment ->  if (assignment.isActive(getNeedInterval(assignmentType) ?: -1)) {
+                        activeAssignments.add(assignment)
+                }}
+                return activeAssignments
+
         }
 
-        fun getAllAssignments(): List<Assignment>
-        {
-                //TODO: Implement
-                return ArrayList<Assignment>()
+        fun getAllAssignments(): List<Assignment> {
+                return ArrayList(assignments.values)
         }
 
         fun isPlaced(): Boolean

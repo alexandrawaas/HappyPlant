@@ -20,9 +20,8 @@ data class Needs(
                 //TODO: Implement
         }
 
-        fun getInterval(assignmentType: AssignmentType): Int?
+        fun getInterval(assignmentType: AssignmentType): Int
         {
-              //TODO: Implement
-                return intervals[assignmentType]
+                return intervals[assignmentType] ?: -1
         }
 }
