@@ -2,9 +2,7 @@ package com.happyplant.backend.services
 
 import com.happyplant.backend.datatransfer.species.SpeciesDtoResponse
 import com.happyplant.backend.datatransfer.species.asDtoResponse
-import com.happyplant.backend.model.Species
-import com.happyplant.backend.repository.SpeciesRepository
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
+import com.happyplant.backend.datasource.SpeciesRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
