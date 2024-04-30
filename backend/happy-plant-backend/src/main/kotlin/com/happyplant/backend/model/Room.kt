@@ -20,8 +20,13 @@ data class Room(
 )
 {
         // Constructor
-        constructor(name: String, user: User, x: Int, y: Int)
-                : this(UUID.randomUUID(), name, ArrayList(x*y), user)
+        constructor(name: String, user: User, x: Int, y: Int) : this(UUID.randomUUID(), name, mutableListOf(), user) {
+                for (_x in 0 until x) {
+                        for (_y in 0 until y) {
+                                grid.add(Pixel(this, _x, _y))
+                        }
+                }
+        }
 
 
         // Methods
