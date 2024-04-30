@@ -15,6 +15,6 @@ fun RoomDtoRequest.asEntity(): Room =
     Room(
         name = this.name,
         user = User.DUMMY_USER, //todo: get user from token
-        ratioValueX = this.ratioValueX,
-        ratioValueY = this.ratioValueY,
+        x = this.ratioValueX,
+        y = this.ratioValueY,
     )
