@@ -9,6 +9,7 @@ import com.happyplant.backend.datatransfer.room.asDtoResponse
 import com.happyplant.backend.datatransfer.room.asEntity
 import org.springframework.stereotype.Service
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class RoomsService (private val db: RoomRepository) {
@@ -23,13 +24,11 @@ class RoomsService (private val db: RoomRepository) {
         db.save(newRoom.asEntity()).asDtoResponse()
 
 
-    fun getRoom(roomId: UUID): RoomDtoResponse {
-        TODO("Not yet implemented")
-    }
+    fun getRoom(roomId: UUID): RoomDtoResponse? =
+        db.findById(roomId).map { it.asDtoResponse() }.getOrNull()
 
-    fun deleteRoom(roomId: UUID): Unit {
-        TODO("Not yet implemented")
-    }
+    fun deleteRoom(roomId: UUID) : Unit =
+        db.deleteById(roomId)
 
     fun getPlantsInRoom(roomId: UUID): List<PlantDTO> {
         TODO("Not yet implemented")

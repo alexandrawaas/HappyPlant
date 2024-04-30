@@ -7,6 +7,7 @@ import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.services.RoomsService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @RestController
@@ -28,6 +29,9 @@ class RoomsController (private val service: RoomsService){
 
     @GetMapping("/{roomId}")
     @ResponseBody
+    fun getRoom(@PathVariable roomId: UUID): RoomDtoResponse =
+        service.getRoom(roomId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found")
 
     @DeleteMapping("/{roomId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -27,8 +27,10 @@ data class Pixel(
         val room: Room,
 
         @OneToMany(cascade=[CascadeType.ALL], mappedBy = "pixel")
-        val plants: ArrayList<Plant>
+        val plants: List<Plant>
 ) {
+        constructor(room: Room, x: Int, y: Int)
+                : this(UUID.randomUUID(), x, y,false, LightingType.FULL_SHADE, room, mutableListOf())
 
         // Methods
 
