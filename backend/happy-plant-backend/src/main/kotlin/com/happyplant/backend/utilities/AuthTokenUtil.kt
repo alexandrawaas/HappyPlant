@@ -23,7 +23,6 @@ class AuthTokenUtil {
             .sign(algorithm)
     }
 
-
     fun validateToken(token: String): Boolean {
         return try {
             JWT.require(algorithm)
@@ -32,6 +31,17 @@ class AuthTokenUtil {
             true
         } catch (e: Exception) {
             false
+        }
+    }
+
+    fun getUserEmailFromToken(token: String): String? {
+        return try {
+            val jwt = JWT.require(algorithm)
+                .build()
+                .verify(token)
+            jwt.subject
+        } catch (e: Exception) {
+            null
         }
     }
 }
