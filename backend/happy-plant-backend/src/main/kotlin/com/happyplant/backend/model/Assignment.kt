@@ -3,6 +3,7 @@ package com.happyplant.backend.model
 import jakarta.persistence.*
 import java.util.UUID
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Entity
 @Table(name="assignments")
@@ -16,17 +17,26 @@ data class Assignment(
 
         fun completeAssignment()
         {
-                //TODO: Implement
+                lastDone = LocalDateTime.now()
         }
 
         fun completeAssignment(date: LocalDateTime)
         {
-                //TODO: Implement
+                lastDone = date
         }
 
         fun isActive(interval: Int): Boolean
         {
-                //TODO: Implement
-                return false
+                // -1 means intervall is null, e.g. plant does not have AssignmentType
+                if (interval == Needs.EMPTY_INTERVAL) return false
+
+                val now = LocalDateTime.now().with(LocalTime.MIDNIGHT)
+                return lastDone?.plusDays(interval.toLong())?.isBefore(now) ?: true
+                        || lastDone?.plusDays(interval.toLong())?.isEqual(now) ?: true
+        }
+
+        fun getNextDue(interval: Int): LocalDateTime
+        {
+                return lastDone?.plusDays(interval.toLong()) ?: LocalDateTime.now()
         }
 }

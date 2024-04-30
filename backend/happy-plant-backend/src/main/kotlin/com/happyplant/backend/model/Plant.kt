@@ -21,10 +21,9 @@ data class Plant(
 ) {
         // Methods
 
-        fun getNeedInterval(assignmentType: AssignmentType): Int?
+        fun getNeedInterval(assignmentType: AssignmentType): Int
         {
-                //TODO: Implement
-                return needs?.getInterval(assignmentType)
+                return needs?.getInterval(assignmentType) ?: Needs.EMPTY_INTERVAL
         }
 
         fun getLightingType(): LightingType
@@ -35,14 +34,14 @@ data class Plant(
 
         fun getActiveAssignments(): List<Assignment>
         {
-                //TODO: Implement
-                return ArrayList<Assignment>()
+                return assignments.filter { (assignmentType, assignment) ->
+                        assignment.isActive(getNeedInterval(assignmentType))
+                }.map { it.value }
+
         }
 
-        fun getAllAssignments(): List<Assignment>
-        {
-                //TODO: Implement
-                return ArrayList<Assignment>()
+        fun getAllAssignments(): List<Assignment> {
+                return ArrayList(assignments.values)
         }
 
         fun isPlaced(): Boolean
