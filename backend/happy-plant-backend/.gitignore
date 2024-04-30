@@ -44,3 +44,5 @@ out/
 
 ### Dotenv ###
 .env
+create.sql
+/data/

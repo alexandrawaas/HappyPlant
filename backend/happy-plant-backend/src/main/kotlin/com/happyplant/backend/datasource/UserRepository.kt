@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 import com.happyplant.backend.models.User
 
+@Repository
 interface UserRepository : JpaRepository<User, UUID> {
     fun findByEmail(email: String): User?
     fun findByResetPasswordToken(resetPasswordToken: String): User?

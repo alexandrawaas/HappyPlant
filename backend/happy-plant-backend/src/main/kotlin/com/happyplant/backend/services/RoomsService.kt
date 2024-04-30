@@ -1,28 +1,29 @@
 package com.happyplant.backend.services
 
+import com.happyplant.backend.datasource.RoomRepository
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.datatransfer.PlantDTO
-import com.happyplant.backend.datatransfer.RoomDTO
-import com.happyplant.backend.models.Plant
-import com.happyplant.backend.models.Room
+import com.happyplant.backend.datatransfer.room.RoomDtoRequest
+import com.happyplant.backend.datatransfer.room.RoomDtoResponse
+import com.happyplant.backend.datatransfer.room.asDtoResponse
+import com.happyplant.backend.datatransfer.room.asEntity
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class RoomsService {
-    fun getRooms(): List<RoomDTO> {
+class RoomsService (private val db: RoomRepository) {
+    fun getRooms(): List<RoomDtoResponse> =
+        db.findAll().map { it.asDtoResponse() }
+
+    fun getRoomsFiltered(search: String): List<RoomDtoResponse> {
         TODO("Not yet implemented")
     }
 
-    fun getRoomsFiltered(search: String): List<RoomDTO> {
-        TODO("Not yet implemented")
-    }
+    fun addRoom(newRoom: RoomDtoRequest) =
+        db.save(newRoom.asEntity()).asDtoResponse()
 
-    fun addRoom(newRoom: RoomDTO): Unit {
-        TODO("Not yet implemented")
-    }
 
-    fun getRoom(roomId: UUID): RoomDTO {
+    fun getRoom(roomId: UUID): RoomDtoResponse {
         TODO("Not yet implemented")
     }
 
