@@ -11,7 +11,7 @@ class PixelDto(
     var y: Int,
     var isWindow: Boolean,
     var lightingType: LightingType,
-    var room: RoomDtoResponse,
+    var roomId: UUID,
     var plants: List<PlantDTO>
 ) {
 }
