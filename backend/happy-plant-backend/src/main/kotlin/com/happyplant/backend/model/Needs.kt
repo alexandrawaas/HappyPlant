@@ -13,6 +13,10 @@ data class Needs(
         @ElementCollection @CollectionTable private var intervals: Map<AssignmentType, Int?>,
         @Column private var lightingType: LightingType?
 ) {
+        companion object{
+                const val EMPTY_INTERVAL = -1
+        }
+
 
         //Methods
 
@@ -23,6 +27,6 @@ data class Needs(
 
         fun getInterval(assignmentType: AssignmentType): Int
         {
-                return intervals[assignmentType] ?: -1
+                return intervals[assignmentType] ?: EMPTY_INTERVAL
         }
 }

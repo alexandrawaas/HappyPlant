@@ -28,7 +28,7 @@ data class Assignment(
         fun isActive(interval: Int): Boolean
         {
                 // -1 means intervall is null, e.g. plant does not have AssignmentType
-                if (interval == -1) return false
+                if (interval == Needs.EMPTY_INTERVAL) return false
 
                 val now = LocalDateTime.now().with(LocalTime.MIDNIGHT)
                 return lastDone?.plusDays(interval.toLong())?.isBefore(now) ?: true
