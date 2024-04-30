@@ -13,10 +13,22 @@ data class User(
         @NotNull private val passwordHash: String,
         @Column private var receivePushNotifications: Boolean,
         @Column private var pushNotificationsTime: LocalTime?,
-        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user") private var plants: ArrayList<Plant>,
-        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user") private var rooms: ArrayList<Room>
+        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user") private var plants: MutableList<Plant>,
+        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user") private var rooms: MutableList<Room>
 )
 {
+        companion object {
+                val DUMMY_USER = User(
+                        id = UUID.fromString("f789034b-737d-46e4-a3a4-72924b2138b7"),
+                        email = "foo@bar.com",
+                        passwordHash = "12345",
+                        receivePushNotifications = true,
+                        pushNotificationsTime = LocalTime.now(),
+                        plants = mutableListOf(),
+                        rooms = mutableListOf(),
+                )
+        }
+
         // Methods
 
         fun getActiveAssignments(): List<Assignment>

@@ -2,9 +2,8 @@ package com.happyplant.backend.controllers
 
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.datatransfer.PlantDTO
-import com.happyplant.backend.datatransfer.RoomDTO
-import com.happyplant.backend.model.Plant
-import com.happyplant.backend.model.Room
+import com.happyplant.backend.datatransfer.room.RoomDtoRequest
+import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.services.RoomsService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -15,7 +14,7 @@ import java.util.*
 class RoomsController (private val service: RoomsService){
     @GetMapping
     @ResponseBody
-    fun getRooms(@RequestParam(name = "search") search: String?): List<RoomDTO>{
+    fun getRooms(@RequestParam(name = "search") search: String?): List<RoomDtoResponse>{
         if(search == null){
             return service.getRooms()
         }
@@ -26,11 +25,12 @@ class RoomsController (private val service: RoomsService){
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addRoom(@RequestBody newRoom: RoomDTO): Unit = service.addRoom(newRoom)
+    fun addRoom(@RequestBody newRoom: RoomDtoRequest): RoomDtoResponse =
+        service.addRoom(newRoom)
 
     @GetMapping("/{roomId}")
     @ResponseBody
-    fun getRoom(@PathVariable roomId: UUID): RoomDTO = service.getRoom(roomId)
+    fun getRoom(@PathVariable roomId: UUID): RoomDtoResponse = service.getRoom(roomId)
 
     @DeleteMapping("/{roomId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

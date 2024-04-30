@@ -7,21 +7,29 @@ import java.util.*
 @Entity
 @Table(name="pixels")
 data class Pixel(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
-        @Column private val x: Int,
-        @Column private val y: Int,
-        @Column private var isWindow: Boolean,
-        @Column private val lightingType: LightingType,
-        @ManyToOne() @JoinColumn(name = "room_id") private val room: Room,
-        @OneToMany(cascade=[CascadeType.ALL], mappedBy = "pixel") private val plants: ArrayList<Plant>
+        @Id @GeneratedValue(strategy = GenerationType.UUID)
+        val id: UUID = UUID.randomUUID(),
+
+        @Column
+        val x: Int,
+
+        @Column
+        val y: Int,
+
+        @Column
+        var isWindow: Boolean,
+
+        @Column
+        val lightingType: LightingType,
+
+        @ManyToOne @JoinColumn(name = "room_id")
+        val room: Room,
+
+        @OneToMany(cascade=[CascadeType.ALL], mappedBy = "pixel")
+        val plants: ArrayList<Plant>
 ) {
 
         // Methods
-
-        fun setWindow(window: Boolean) {
-                this.isWindow = window
-                //TODO: Implement
-        }
 
         fun placePlant(plant: Plant)
         {

@@ -1,6 +1,6 @@
 package com.happyplant.backend.datasource
 
-import org.apache.catalina.User
+import com.happyplant.backend.model.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID
