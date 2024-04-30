@@ -1,6 +1,6 @@
 package com.happyplant.backend.datatransfer
 
-import com.happyplant.backend.model.Needs
+import com.happyplant.backend.models.Needs
 import jakarta.persistence.*
 import java.util.*
 

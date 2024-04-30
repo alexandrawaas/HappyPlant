@@ -1,10 +1,8 @@
 package com.happyplant.backend.datasource
 
-import com.happyplant.backend.model.Needs
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
+import com.happyplant.backend.models.Needs
 import java.util.UUID
+import org.springframework.data.jpa.repository.JpaRepository
 
-@Repository
-interface NeedsRepository: CrudRepository<Needs, UUID> {
+interface NeedsRepository: JpaRepository<Needs, UUID> {
 }

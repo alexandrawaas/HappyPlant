@@ -1,10 +1,8 @@
 package com.happyplant.backend.datasource
 
-import com.happyplant.backend.model.Assignment
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
+import com.happyplant.backend.models.Assignment
 import java.util.UUID
+import org.springframework.data.jpa.repository.JpaRepository
 
-@Repository
-interface AssignmentRepository: CrudRepository<Assignment, UUID> {
+interface AssignmentRepository: JpaRepository<Assignment, UUID> {
 }

@@ -1,7 +1,7 @@
 package com.happyplant.backend.datatransfer
 
-import com.happyplant.backend.model.Pixel
-import com.happyplant.backend.model.User
+import com.happyplant.backend.models.Pixel
+import com.happyplant.backend.models.User
 import jakarta.persistence.*
 import java.util.*
 

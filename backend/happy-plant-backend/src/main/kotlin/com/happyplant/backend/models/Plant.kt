@@ -1,7 +1,8 @@
-package com.happyplant.backend.model
+package com.happyplant.backend.models
 
-import com.happyplant.backend.model.types.AssignmentType
-import com.happyplant.backend.model.types.LightingType
+import com.happyplant.backend.models.types.AssignmentType
+import com.happyplant.backend.models.types.LightingType
+import com.happyplant.backend.models.Species
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.util.*
