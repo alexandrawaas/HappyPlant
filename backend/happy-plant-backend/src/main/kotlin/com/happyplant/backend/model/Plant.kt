@@ -16,37 +16,25 @@ data class Plant(
         @OneToMany() private var assignments: Map<AssignmentType, Assignment>,
         @ManyToOne() private var species: Species,
         @ManyToOne() private var user: User,
-        @ManyToOne() @JoinColumn(name = "pixel_id") private var pixel: Pixel?,
-        @OneToOne() @JoinColumn(referencedColumnName = "id") private var needs: Needs?,
+        @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
+        @OneToOne() @JoinColumn(referencedColumnName = "id") var needs: Needs?,
 ) {
         // Methods
 
-        fun getNeedInterval(assignmentType: AssignmentType): Int
-        {
-                return needs?.getInterval(assignmentType) ?: Needs.EMPTY_INTERVAL
-        }
+        fun getNeedInterval(assignmentType: AssignmentType): Int =
+                needs?.getInterval(assignmentType) ?: Needs.EMPTY_INTERVAL
 
-        fun getLightingType(): LightingType
-        {
-                //TODO: Implement
-                return LightingType.FULL_SHADE
-        }
+        fun getLightingType(): LightingType? =
+                needs?.lightingType
 
-        fun getActiveAssignments(): List<Assignment>
-        {
-                return assignments.filter { (assignmentType, assignment) ->
+        fun getActiveAssignments(): List<Assignment> =
+                assignments.filter { (assignmentType, assignment) ->
                         assignment.isActive(getNeedInterval(assignmentType))
                 }.map { it.value }
 
-        }
+        fun getAllAssignments(): List<Assignment> =
+                ArrayList(assignments.values)
 
-        fun getAllAssignments(): List<Assignment> {
-                return ArrayList(assignments.values)
-        }
-
-        fun isPlaced(): Boolean
-        {
-                //TODO: Implement
-                return false
-        }
+        fun isPlaced(): Boolean =
+                pixel != null
 }

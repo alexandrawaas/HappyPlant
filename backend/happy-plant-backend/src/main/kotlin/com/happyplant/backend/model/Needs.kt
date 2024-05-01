@@ -11,7 +11,7 @@ import java.util.*
 data class Needs(
         @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
         @ElementCollection @CollectionTable private var intervals: Map<AssignmentType, Int?>,
-        @Column private var lightingType: LightingType?
+        @Column var lightingType: LightingType?
 ) {
         companion object{
                 const val EMPTY_INTERVAL = -1

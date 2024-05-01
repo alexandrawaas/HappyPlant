@@ -28,7 +28,7 @@ data class Pixel(
         val room: Room,
 
         @OneToMany(cascade=[CascadeType.ALL], mappedBy = "pixel")
-        val plants: List<Plant>
+        val plants: MutableList<Plant>
 ) {
         constructor(room: Room, x: Int, y: Int)
                 : this(UUID.randomUUID(), x, y,false, LightingType.FULL_SHADE, room, mutableListOf())
@@ -45,13 +45,14 @@ data class Pixel(
                 return coordinates
         }
 
-        fun placePlant(plant: Plant)
-        {
-                //TODO: Implement
+        fun placePlant(plant: Plant) : Boolean {
+                plants.add(plant)
+                plant.pixel = this
+                return plant.getLightingType() == this.lightingType
         }
 
-        fun removePlant(plant: Plant)
-        {
-                //TODO: Implement
+        fun removePlant(plant: Plant) {
+                plants.remove(plant)
+                plant.pixel = null
         }
 }
