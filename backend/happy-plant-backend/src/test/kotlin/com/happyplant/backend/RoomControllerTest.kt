@@ -2,6 +2,7 @@ package com.happyplant.backend
 
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
+import com.happyplant.backend.model.Room
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -62,13 +63,19 @@ class RoomControllerTest(@Autowired var restTemplate: TestRestTemplate) {
     fun testMarkingPixelsAsWindows() {
         val createdId = createdRoomResponse.body!!.id
 
-        val windowXYs = listOf(Coordinate(0,1), Coordinate(0,2), Coordinate(2,0), Coordinate(3,0))
-        val requestedWindows = createdRoomResponse.body!!.grid.filter {windowXYs.contains(Coordinate(it.x, it.y))}
+        val requestedWindows = listOf(Coordinate(0,1), Coordinate(0,2), Coordinate(2,0), Coordinate(3,0))
+            .map { createdRoomResponse?.body?.grid?.find { pxl -> it.x == pxl.x && it.y == pxl.y } }
 
-        this.restTemplate.put("/rooms/{id}/windows", createdId, requestedWindows)
+        this.restTemplate.put("/rooms/{id}/windows", requestedWindows, createdId)
 
         val room = this.restTemplate.getForEntity("/rooms/{id}", RoomDtoResponse::class.java, createdId)
-        room.body?.grid?.all { it.isWindow == windowXYs.contains(Coordinate(it.x, it.y)) }
+        assertTrue {
+            room.body?.grid?.all {
+                it.isWindow == requestedWindows.any { w -> w?.x == it.x && w.y == it.y }
+            } ?: false
+        }
+
+
     }
 
     @Test
@@ -76,17 +83,33 @@ class RoomControllerTest(@Autowired var restTemplate: TestRestTemplate) {
         val createdId = createdRoomResponse.body!!.id
         val windowXYs = listOf(Coordinate(0,1), Coordinate(0,2), Coordinate(2,0), Coordinate(3,0))
         val requestedWindows = createdRoomResponse.body!!.grid.filter {windowXYs.contains(Coordinate(it.x, it.y))}
-        this.restTemplate.put("/rooms/{id}/windows", createdId, requestedWindows)
+        this.restTemplate.put("/rooms/{id}/windows", requestedWindows, createdId)
 
         val room = this.restTemplate.getForEntity("/rooms/{id}", RoomDtoResponse::class.java, createdId)
-        room.body?.grid?.all { it.isWindow == windowXYs.contains(Coordinate(it.x, it.y)) }
+        val grid = room?.body?.grid
+        assertNotNull(grid)
 
-        for(x in 0..<DEFAULT_X_RATIO) {
-            for(y in 0..<DEFAULT_Y_RATIO) {
-                print("${room.body!!.grid.find { it.x == x && it.y == y }?.lightingType?.ordinal},")
-            }
-            println()
-        }
+        assertTrue { grid[Room.getVirtualIndex(0,0, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(0,1, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(0,2, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(0,3, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(1,0, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(1,1, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(1,2, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(1,3, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 1 }
+        assertTrue { grid[Room.getVirtualIndex(2,0, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(2,1, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(2,2, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 2 }
+        assertTrue { grid[Room.getVirtualIndex(2,3, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 0 }
+        assertTrue { grid[Room.getVirtualIndex(3,0, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(3,1, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(3,2, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 1 }
+        assertTrue { grid[Room.getVirtualIndex(3,3, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 0 }
+        assertTrue { grid[Room.getVirtualIndex(4,0, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 3 }
+        assertTrue { grid[Room.getVirtualIndex(4,1, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 1 }
+        assertTrue { grid[Room.getVirtualIndex(4,2, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 0 }
+        assertTrue { grid[Room.getVirtualIndex(4,3, DEFAULT_X_RATIO, DEFAULT_Y_RATIO)].lightingType.ordinal == 0 }
+
     }
 
     @Test
