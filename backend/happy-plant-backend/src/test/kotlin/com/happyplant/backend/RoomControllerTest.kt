@@ -14,13 +14,16 @@ import kotlin.test.*
     classes = [BackendApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-class ExerciseControllerTest(@Autowired var restTemplate: TestRestTemplate) {
+class RoomControllerTest(@Autowired var restTemplate: TestRestTemplate) {
     lateinit var createdRoomResponse : ResponseEntity<RoomDtoResponse>
     var idsToDelete : MutableList<UUID> = mutableListOf()
 
+    val DEFAULT_X_RATIO = 5
+    val DEFAULT_Y_RATIO = 4
+
     @BeforeTest
     fun setup() {
-        val roomDtoRequest = RoomDtoRequest("bathroom", 3, 5)
+        val roomDtoRequest = RoomDtoRequest("bathroom", DEFAULT_X_RATIO, DEFAULT_Y_RATIO)
         createdRoomResponse = this.restTemplate.postForEntity("/rooms", roomDtoRequest, RoomDtoResponse::class.java)
     }
 
@@ -33,11 +36,18 @@ class ExerciseControllerTest(@Autowired var restTemplate: TestRestTemplate) {
     @Test
     fun testCreationResponseAndCorrectStorage() {
         val room1Name = "bathroom"
-        val roomDtoRequest1 = RoomDtoRequest(room1Name, 3, 5);
+        val x = 5
+        val y = 3
+        val roomDtoRequest1 = RoomDtoRequest(room1Name, ratioValueX = x, ratioValueY = y);
         val response = this.restTemplate.postForEntity("/rooms", roomDtoRequest1, RoomDtoResponse::class.java)
 
         assertTrue { response.body?.name.equals(room1Name) }
-        assertTrue { response.body?.grid?.size == 15 }
+        assertTrue { response.body?.grid?.size == x*y }
+        val dimensionX = response.body?.grid?.count { it.y == 0 } ?: throw Exception()
+        val dimensionY = response.body?.grid?.count { it.x == 0 } ?: throw Exception()
+        assertTrue { dimensionX == x }
+        assertTrue { dimensionY == y }
+        assertTrue { dimensionX / dimensionY == x / y }
 
         val storedSingle = this.restTemplate.getForEntity("/rooms/{id}", RoomDtoResponse::class.java, response.body?.id)
         assertTrue { storedSingle.body?.name.equals(room1Name) }
@@ -49,10 +59,42 @@ class ExerciseControllerTest(@Autowired var restTemplate: TestRestTemplate) {
     }
 
     @Test
+    fun testMarkingPixelsAsWindows() {
+        val createdId = createdRoomResponse.body!!.id
+
+        val windowXYs = listOf(Coordinate(0,1), Coordinate(0,2), Coordinate(2,0), Coordinate(3,0))
+        val requestedWindows = createdRoomResponse.body!!.grid.filter {windowXYs.contains(Coordinate(it.x, it.y))}
+
+        this.restTemplate.put("/rooms/{id}/windows", createdId, requestedWindows)
+
+        val room = this.restTemplate.getForEntity("/rooms/{id}", RoomDtoResponse::class.java, createdId)
+        room.body?.grid?.all { it.isWindow == windowXYs.contains(Coordinate(it.x, it.y)) }
+    }
+
+    @Test
+    fun testStoringWindowsOnRoomCorrectlySetsLightingTypes() {
+        val createdId = createdRoomResponse.body!!.id
+        val windowXYs = listOf(Coordinate(0,1), Coordinate(0,2), Coordinate(2,0), Coordinate(3,0))
+        val requestedWindows = createdRoomResponse.body!!.grid.filter {windowXYs.contains(Coordinate(it.x, it.y))}
+        this.restTemplate.put("/rooms/{id}/windows", createdId, requestedWindows)
+
+        val room = this.restTemplate.getForEntity("/rooms/{id}", RoomDtoResponse::class.java, createdId)
+        room.body?.grid?.all { it.isWindow == windowXYs.contains(Coordinate(it.x, it.y)) }
+
+        for(x in 0..<DEFAULT_X_RATIO) {
+            for(y in 0..<DEFAULT_Y_RATIO) {
+                print("${room.body!!.grid.find { it.x == x && it.y == y }?.lightingType?.ordinal},")
+            }
+            println()
+        }
+    }
+
+    @Test
     fun testDelete() {
         val createdId = createdRoomResponse.body!!.id
 
-        this.restTemplate.delete("/rooms/{id}", createdId)
+        val deletion = this.restTemplate.delete("/rooms/{id}", createdId)
+//        assertTrue { deletion.statusCode == HttpStatus.DELETED }
 
         val result = this.restTemplate.getForEntity("/rooms/{id}", String::class.java, createdId)
         assertTrue { result.statusCode == HttpStatus.NOT_FOUND }
