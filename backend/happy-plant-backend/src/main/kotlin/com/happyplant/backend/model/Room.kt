@@ -4,6 +4,7 @@ import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
 import java.awt.Dimension
 import java.util.*
+import java.util.function.Function
 
 @Entity
 @Table(name="rooms")
@@ -45,17 +46,33 @@ data class Room(
         // Methods
 
         fun storeWindows(windowPixels: List<Pixel>) {
-                windowPixels.forEach { it.isWindow = true }
+                // clear already set windows
+                grid.forEach {
+                        it.isWindow = false
+                        it.lightingType = LightingType.FULL_SHADE
+                }
+
+                windowPixels
+                        .map { getPixel(it.x, it.y) }
+                        .forEach { it.isWindow = true }
 
                 var light = LightingType.FULL_SUN;
                 for(i in 0..2) {
                         windowPixels
                                 .flatMap { it.getCoordinatesForManhattanDistance(i) }
-                                .onEach { println("manhattan distance: $i, pixel: $it") }
                                 .filter { pair -> pair.x in 0..<sizeX && pair.y in 0..<sizeY }
                                 .map { getPixel(it.x, it.y) }
-                                .onEach { it.lightingType += light }
+                                .forEach { it.lightingType += light }
                         light--
+                }
+        }
+
+        private fun printGrid(detail: Function<Pixel, String>) {
+                for(y in 0..<sizeY) {
+                        for(x in 0..<sizeX) {
+                                print("${detail.apply(getPixel(x, y))},")
+                        }
+                        println()
                 }
         }
 
