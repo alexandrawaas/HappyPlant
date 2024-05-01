@@ -7,4 +7,5 @@ import java.util.UUID
 
 @Repository
 interface RoomRepository: CrudRepository<Room, UUID> {
+    fun findAllByName(name: String): Iterable<Room>
 }

@@ -2,8 +2,10 @@ package com.happyplant.backend.controllers
 
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.datatransfer.PlantDTO
+import com.happyplant.backend.datatransfer.pixel.PixelDto
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
+import com.happyplant.backend.datatransfer.room.asDtoResponse
 import com.happyplant.backend.services.RoomsService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -15,29 +17,32 @@ import java.util.*
 class RoomsController (private val service: RoomsService){
     @GetMapping
     @ResponseBody
-    fun getRooms(@RequestParam(name = "search") search: String?): List<RoomDtoResponse>{
-        if(search == null){
-            return service.getRooms()
-        }
-        else{
-            return service.getRoomsFiltered(search)
-        }
-    }
+    fun getRooms(@RequestParam(name = "search") search: String?): List<RoomDtoResponse> =
+        if (search.isNullOrBlank())
+            service.getRooms().map { it.asDtoResponse() }
+        else
+            service.getRoomsFiltered(search).map { it.asDtoResponse() }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addRoom(@RequestBody newRoom: RoomDtoRequest): RoomDtoResponse =
-        service.addRoom(newRoom)
+        service.addRoom(newRoom).asDtoResponse()
+
+    @PutMapping("/{roomId}/windows")
+    @ResponseStatus(HttpStatus.OK)
+    fun storeWindowsInRoom(@PathVariable("roomId") roomId: UUID, @RequestBody windows: List<PixelDto>) =
+        service.getRoom(roomId)
 
     @GetMapping("/{roomId}")
     @ResponseBody
     fun getRoom(@PathVariable roomId: UUID): RoomDtoResponse =
-        service.getRoom(roomId)
+        service.getRoom(roomId)?.asDtoResponse()
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found")
 
     @DeleteMapping("/{roomId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteRoom(@PathVariable roomId: UUID): Unit = service.deleteRoom(roomId)
+    fun deleteRoom(@PathVariable roomId: UUID): Unit =
+        service.deleteRoom(roomId)
 
     @GetMapping("/{roomId}/plants")
     @ResponseBody

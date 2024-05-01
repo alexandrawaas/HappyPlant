@@ -7,30 +7,31 @@ import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.datatransfer.room.asDtoResponse
 import com.happyplant.backend.datatransfer.room.asEntity
+import com.happyplant.backend.model.Plant
+import com.happyplant.backend.model.Room
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Service
 class RoomsService (private val db: RoomRepository) {
-    fun getRooms(): List<RoomDtoResponse> =
-        db.findAll().map { it.asDtoResponse() }
+    fun getRooms(): List<Room> =
+        db.findAll().toList()
 
-    fun getRoomsFiltered(search: String): List<RoomDtoResponse> {
-        TODO("Not yet implemented")
-    }
+    fun getRoomsFiltered(search: String): List<Room> =
+        db.findAllByName(search).toList()
 
-    fun addRoom(newRoom: RoomDtoRequest) =
-        db.save(newRoom.asEntity()).asDtoResponse()
+    fun addRoom(newRoom: RoomDtoRequest) : Room =
+        db.save(newRoom.asEntity())
 
 
-    fun getRoom(roomId: UUID): RoomDtoResponse? =
-        db.findById(roomId).map { it.asDtoResponse() }.getOrNull()
+    fun getRoom(roomId: UUID): Room? =
+        db.findById(roomId).getOrNull()
 
     fun deleteRoom(roomId: UUID) : Unit =
         db.deleteById(roomId)
 
-    fun getPlantsInRoom(roomId: UUID): List<PlantDTO> {
+    fun getPlantsInRoom(roomId: UUID): List<Plant> {
         TODO("Not yet implemented")
     }
 
