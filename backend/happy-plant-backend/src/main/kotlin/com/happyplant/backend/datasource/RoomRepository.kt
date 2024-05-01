@@ -4,5 +4,7 @@ import com.happyplant.backend.models.Room
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 
-interface RoomRepository: JpaRepository<Room, UUID> {
+@Repository
+interface RoomRepository: CrudRepository<Room, UUID> {
+    fun findAllByName(name: String): Iterable<Room>
 }
