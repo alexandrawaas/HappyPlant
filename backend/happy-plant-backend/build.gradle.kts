@@ -28,6 +28,7 @@ dependencies {
 	implementation("org.hibernate:hibernate-core:6.0.0.Final")
     implementation("org.eclipse.persistence:eclipselink:3.0.2")
 	implementation("com.auth0:java-jwt:4.0.0")
+	implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	runtimeOnly("com.h2database:h2")

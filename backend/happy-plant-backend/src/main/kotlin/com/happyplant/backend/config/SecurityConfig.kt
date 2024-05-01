@@ -30,9 +30,14 @@ class SecurityConfig : WebMvcConfigurer {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(jwtInterceptor(AuthTokenUtil()))
+            .addPathPatterns("/assignments/**")
+            .addPathPatterns("/inventory/**")
+            .addPathPatterns("/plants/**")
+            .addPathPatterns("/rooms/**")
             .addPathPatterns("/test/secure")
-            .excludePathPatterns("/test/unsecure")
             .excludePathPatterns("/auth/**")
+            .excludePathPatterns("/species/**")
+            .excludePathPatterns("/test/unsecure")
     }
 
     private class DummyFilter : Filter {
