@@ -2,7 +2,6 @@ package com.happyplant.backend.models
 
 import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
-import java.awt.Dimension
 import java.util.*
 import java.util.function.Function
 
@@ -24,10 +23,11 @@ data class Room(
         @Column
         val sizeY: Int,
 
-        @ManyToOne()
+        @ManyToOne
         val user: User
 )
 {
+        // Static helper
         companion object {
                 fun getVirtualIndex(x: Int, y: Int, maxX: Int, maxY: Int) : Int =
                         x*maxY + y
@@ -61,7 +61,7 @@ data class Room(
                         .map { getPixel(it.x, it.y) }
                         .forEach { it.isWindow = true }
 
-                var light = LightingType.FULL_SUN;
+                var light = LightingType.FULL_SUN
                 for(i in 0..2) {
                         windowPixels
                                 .flatMap { it.getCoordinatesForManhattanDistance(i) }
@@ -81,14 +81,8 @@ data class Room(
                 }
         }
 
-        fun placePlant(plant: Plant, x: Int, y : Int)
-        {
-                //TODO: Implement
-        }
-
-        fun Room(x: Int, y: Int) {
-                //TODO: Implement
-        }
+        fun placePlant(plant: Plant, x: Int, y : Int) : Boolean  =
+                getPixel(x, y).placePlant(plant)
 
         fun getPixel(x: Int, y: Int): Pixel =
                 grid[getVirtualIndex(x,y,sizeX,sizeY)]
