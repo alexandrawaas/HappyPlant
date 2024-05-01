@@ -28,6 +28,11 @@ data class Room(
         val user: User
 )
 {
+        companion object {
+                fun getVirtualIndex(x: Int, y: Int, maxX: Int, maxY: Int) : Int =
+                        x*maxY + y
+        }
+
         // Constructor
         constructor(
                 name: String,
@@ -86,5 +91,5 @@ data class Room(
         }
 
         fun getPixel(x: Int, y: Int): Pixel =
-                grid[x*sizeY + y]
+                grid[getVirtualIndex(x,y,sizeX,sizeY)]
 }
