@@ -1,9 +1,10 @@
 package com.happyplant.backend.models
 
-import com.happyplant.backend.models.types.LightingType
-import com.happyplant.backend.models.Room
+import com.happyplant.backend.Coordinate
+import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
 import java.util.*
+import kotlin.math.abs
 
 @Entity
 @Table(name="pixels")
@@ -21,7 +22,7 @@ data class Pixel(
         var isWindow: Boolean,
 
         @Column
-        val lightingType: LightingType,
+        var lightingType: LightingType,
 
         @ManyToOne @JoinColumn(name = "room_id")
         val room: Room,
@@ -33,6 +34,16 @@ data class Pixel(
                 : this(UUID.randomUUID(), x, y,false, LightingType.FULL_SHADE, room, mutableListOf())
 
         // Methods
+
+        fun getCoordinatesForManhattanDistance(manhattanDistance: Int): List<Coordinate> {
+                val coordinates = mutableListOf<Coordinate>()
+                for (x in this.x - manhattanDistance..this.x + manhattanDistance) {
+                        for (y in this.y - (manhattanDistance - abs(this.x - x))..this.y + (manhattanDistance - abs(this.x - x))) {
+                                coordinates.add(Coordinate(x, y))
+                        }
+                }
+                return coordinates
+        }
 
         fun placePlant(plant: Plant)
         {

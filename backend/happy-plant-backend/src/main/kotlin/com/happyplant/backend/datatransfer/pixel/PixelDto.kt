@@ -5,7 +5,7 @@ import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.model.types.LightingType
 import java.util.*
 
-class PixelDto(
+data class PixelDto(
     val id: UUID,
     var x: Int,
     var y: Int,
