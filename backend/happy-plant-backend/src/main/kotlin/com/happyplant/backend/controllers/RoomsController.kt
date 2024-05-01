@@ -3,6 +3,7 @@ package com.happyplant.backend.controllers
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.datatransfer.PlantDTO
 import com.happyplant.backend.datatransfer.pixel.PixelDto
+import com.happyplant.backend.datatransfer.pixel.asEntity
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.datatransfer.room.asDtoResponse
@@ -30,9 +31,9 @@ class RoomsController (private val service: RoomsService){
 
     @PutMapping("/{roomId}/windows")
     @ResponseStatus(HttpStatus.OK)
-    fun storeWindowsInRoom(@PathVariable("roomId") roomId: UUID, @RequestBody windows: List<PixelDto>) =
-        service.getRoom(roomId)
-
+    fun storeWindowsInRoom(@PathVariable("roomId") roomId: UUID, @RequestBody windows: List<PixelDto>): RoomDtoResponse =
+        service.storeWindowsOnRoom(roomId, windows) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    
     @GetMapping("/{roomId}")
     @ResponseBody
     fun getRoom(@PathVariable roomId: UUID): RoomDtoResponse =
@@ -46,7 +47,10 @@ class RoomsController (private val service: RoomsService){
 
     @GetMapping("/{roomId}/plants")
     @ResponseBody
-    fun getPlantsInRoom(@PathVariable roomId: UUID): List<PlantDTO> = service.getPlantsInRoom(roomId)
+    fun getPlantsInRoom(@PathVariable roomId: UUID): List<PlantDTO> {
+        // service.getPlantsInRoom(roomId).map { it.asDtoResponse() }
+        TODO("not implemented yet")
+    }
 
     @PostMapping("/{roomId}/plants")
     @ResponseStatus(HttpStatus.NO_CONTENT)

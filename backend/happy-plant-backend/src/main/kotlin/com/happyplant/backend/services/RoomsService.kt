@@ -3,13 +3,17 @@ package com.happyplant.backend.services
 import com.happyplant.backend.datasource.RoomRepository
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.datatransfer.PlantDTO
+import com.happyplant.backend.datatransfer.pixel.PixelDto
+import com.happyplant.backend.datatransfer.pixel.asEntity
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.datatransfer.room.asDtoResponse
 import com.happyplant.backend.datatransfer.room.asEntity
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.Room
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -21,15 +25,23 @@ class RoomsService (private val db: RoomRepository) {
     fun getRoomsFiltered(search: String): List<Room> =
         db.findAllByName(search).toList()
 
-    fun addRoom(newRoom: RoomDtoRequest) : Room =
+    fun addRoom(newRoom: RoomDtoRequest): Room =
         db.save(newRoom.asEntity())
-
 
     fun getRoom(roomId: UUID): Room? =
         db.findById(roomId).getOrNull()
 
-    fun deleteRoom(roomId: UUID) : Unit =
+    fun deleteRoom(roomId: UUID): Unit =
         db.deleteById(roomId)
+
+    fun storeWindowsOnRoom(roomId: UUID, windows: List<PixelDto>): RoomDtoResponse? {
+        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        room.storeWindows(windows.map { it.asEntity(this) })
+        return db.findById(roomId)
+            .map { foundEntity -> db.save(room.copy(id = foundEntity.id)) }
+            .map { saved -> saved.asDtoResponse() }
+            .getOrNull()
+    }
 
     fun getPlantsInRoom(roomId: UUID): List<Plant> {
         TODO("Not yet implemented")
