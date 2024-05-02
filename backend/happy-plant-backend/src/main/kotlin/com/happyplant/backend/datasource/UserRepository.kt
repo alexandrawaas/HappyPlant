@@ -3,7 +3,8 @@ package com.happyplant.backend.datasource
 import jakarta.persistence.*
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
-import com.happyplant.backend.models.User
+import com.happyplant.backend.model.User
+import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : JpaRepository<User, UUID> {

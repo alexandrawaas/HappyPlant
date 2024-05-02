@@ -1,5 +1,6 @@
-package com.happyplant.backend.models
+package com.happyplant.backend.model
 
+import com.happyplant.backend.model.Needs
 import jakarta.persistence.*
 import java.util.*
 

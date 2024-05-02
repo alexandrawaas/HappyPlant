@@ -1,4 +1,5 @@
-package com.happyplant.backend.controllers.accounts
+package com.happyplant.backend.controllers
+
 import com.happyplant.backend.services.UserService
 import com.happyplant.backend.datatransfer.NotificationSettingsDTORequest
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.beans.factory.annotation.Autowired
 import com.happyplant.backend.datatransfer.UserDTO
-import com.happyplant.backend.models.User
+import com.happyplant.backend.model.User
 import com.happyplant.backend.utilities.AuthTokenUtil
 import com.happyplant.backend.datasource.UserRepository
 import java.util.Optional
@@ -32,7 +33,7 @@ class UserController (private val service: UserService){
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
         return if (userId != null) {
             val user: Optional<User>? = userRepository.findById(userId)
-            user?.orElse(null)?.toDto()
+            user?.orElse(null)?.asDto()
         } else {
             null
         }

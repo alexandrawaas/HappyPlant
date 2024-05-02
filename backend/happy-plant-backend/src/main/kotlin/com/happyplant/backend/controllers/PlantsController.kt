@@ -1,7 +1,7 @@
 package com.happyplant.backend.controllers
 
 import com.happyplant.backend.datatransfer.PlantDTO
-import com.happyplant.backend.models.Plant
+import com.happyplant.backend.model.Plant
 import com.happyplant.backend.services.PlantsService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*

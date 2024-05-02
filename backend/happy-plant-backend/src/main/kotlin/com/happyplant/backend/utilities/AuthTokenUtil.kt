@@ -2,9 +2,8 @@ package com.happyplant.backend.utilities
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.happyplant.backend.models.User
+import com.happyplant.backend.model.User
 import org.springframework.stereotype.Component
-import org.springframework.beans.factory.annotation.Value
 import java.util.*
 import io.github.cdimascio.dotenv.Dotenv
 

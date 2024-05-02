@@ -1,7 +1,6 @@
 package com.happyplant.backend.datatransfer.pixel
 
 import com.happyplant.backend.model.Pixel
-import com.happyplant.backend.model.Room
 import com.happyplant.backend.services.RoomsService
 
 fun Pixel.asDtoResponse(): PixelDto =
@@ -24,6 +23,6 @@ fun PixelDto.asEntity(roomService: RoomsService): Pixel =
         room = roomService.getRoom(this.roomId) ?: throw NoSuchElementException(),
         isWindow = this.isWindow,
         lightingType = this.lightingType,
-        plants = listOf(), // TODO
+        plants = mutableListOf(), // TODO
         // plants = this.plants.map { it.asEntity() }
     )

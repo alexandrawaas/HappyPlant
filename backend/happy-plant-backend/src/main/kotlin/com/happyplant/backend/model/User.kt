@@ -1,20 +1,51 @@
 package com.happyplant.backend.model
 
 import jakarta.persistence.*
-import org.jetbrains.annotations.NotNull
 import java.time.LocalTime
 import java.util.*
+import com.happyplant.backend.datatransfer.UserDTO
 
 @Entity
 @Table(name="users")
 data class User(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
-        @NotNull private var email: String,
-        @NotNull private val passwordHash: String,
-        @Column private var receivePushNotifications: Boolean,
-        @Column private var pushNotificationsTime: LocalTime?,
-        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user") private var plants: MutableList<Plant>,
-        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user") private var rooms: MutableList<Room>
+        @Id @GeneratedValue(strategy = GenerationType.UUID) 
+        var id: UUID = UUID.randomUUID(),
+
+        @Column(name = "email", nullable = false)
+        val email: String,
+
+        @Column(name = "password", nullable = false)
+        var passwordHash: String,
+
+        @Column(name = "email_verified", nullable = false)
+        var emailVerified: Boolean = false,
+
+        @Column(name = "email_verification_token", nullable = true)
+        var emailVerificationToken: String? = null,
+
+        @Column(name = "email_verification_expires", nullable = true)
+        var emailVerificationExpires: Long? = null,
+
+        @Column(name = "reset_password_token", nullable = true)
+        var resetPasswordToken: String? = null,
+
+        @Column(name = "reset_password_expires", nullable = true)
+        var resetPasswordExpires: Long? = null,
+
+        @Column(name = "reset_password_code", nullable = true)
+        var resetPasswordCode: Int? = null,
+
+        @Column(name = "receive_push_notifications")
+        private var receivePushNotifications: Boolean,
+
+        @Column(name = "push_notifications_time")
+        private var pushNotificationsTime: LocalTime?,
+
+        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user")
+        private var plants: MutableList<Plant>,
+
+        @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user")
+        private var rooms: MutableList<Room>
 )
 {
         companion object {
@@ -29,7 +60,12 @@ data class User(
                 )
         }
 
+
         // Methods
+
+        fun asDto(): UserDTO {
+                return UserDTO(id.toString(), email)
+        }
 
         fun getActiveAssignments(): List<Assignment>
         {
