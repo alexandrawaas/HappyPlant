@@ -63,10 +63,6 @@ data class User(
 
         // Methods
 
-        fun asDto(): UserDto {
-                return UserDto(id.toString(), email)
-        }
-
         fun getActiveAssignments(): List<Assignment>
         {
                 val activeAssignments = ArrayList<Assignment>()

@@ -13,6 +13,7 @@ import com.happyplant.backend.datatransfer.auth.CredentialsDto
 import com.happyplant.backend.datatransfer.auth.ResetPasswordDto
 import com.happyplant.backend.datatransfer.auth.UpdatePasswordDto
 import com.happyplant.backend.datatransfer.user.UserDto
+import com.happyplant.backend.datatransfer.user.asDto
 import com.happyplant.backend.model.User
 
 @Service
