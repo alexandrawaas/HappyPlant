@@ -1,4 +1,4 @@
-package com.happyplant.backend.model.types
+package com.happyplant.backend.models.types
 
 enum class LightingType {
     //ordinals are used for accumulation

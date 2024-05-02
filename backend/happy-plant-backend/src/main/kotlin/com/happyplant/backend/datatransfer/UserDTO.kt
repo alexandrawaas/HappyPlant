@@ -1,5 +1,6 @@
 package com.happyplant.backend.datatransfer
 
-class UserDTO {
-    //eig nur Authenticationdaten
-}
+data class UserDTO(
+    val id: String,
+    val email: String
+)

@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 //Screens
+import LoginScreen from "./screens/authentication/LoginScreen";
 import AssignmentsScreen from "./screens/AssignmentsScreen";
 import RoomsScreen from "./screens/RoomsScreen";
 import MyPlantsScreen from "./screens/MyPlantsScreen";
@@ -14,12 +15,25 @@ import CreatePlantScreen from "./screens/CreatePlantScreen";
 import PlaceWindow from "./screens/PlaceWindow";
 import SinglePlantScreen from "./screens/SinglePlantScreen";
 import SingleSpeciesScreen from "./screens/SingleSpeciesScreen";
+import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
+import UpdatePasswordScreen from "./screens/authentication/UpdatePasswordScreen";
+import VerifyEmailScreen from "./screens/authentication/VerifyEmailScreen";
+import RegisterScreen from "./screens/authentication/RegisterScreen";
+import LogoutScreen from "./screens/authentication/LogoutScreen";
+import TestScreen from "./screens/TestScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="AssignmentsScreen">
+          <Stack.Navigator initialRouteName="Login">
+              <Stack.Screen name="Login" component={LoginScreen}/>
+              <Stack.Screen name="Register" component={RegisterScreen}/>
+              <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}/>
+              <Stack.Screen name="UpdatePassword" component={UpdatePasswordScreen}/>
+              <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen}/>
+              <Stack.Screen name="Logout" component={LogoutScreen}/>
+              <Stack.Screen name="Test" component={TestScreen}/>
               <Stack.Screen name="Aufgaben" component={AssignmentsScreen}/>
               <Stack.Screen name="Räume" component={RoomsScreen}/>
               <Stack.Screen name="Meine Pflanzen" component={MyPlantsScreen}/>

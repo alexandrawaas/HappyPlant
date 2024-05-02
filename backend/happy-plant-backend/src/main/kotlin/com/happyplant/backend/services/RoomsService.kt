@@ -3,8 +3,8 @@ package com.happyplant.backend.services
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.datatransfer.PlantDTO
 import com.happyplant.backend.datatransfer.RoomDTO
-import com.happyplant.backend.model.Plant
-import com.happyplant.backend.model.Room
+import com.happyplant.backend.models.Plant
+import com.happyplant.backend.models.Room
 import org.springframework.stereotype.Service
 import java.util.*
 

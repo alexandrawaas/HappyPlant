@@ -1,9 +1,10 @@
-package com.happyplant.backend.model
+package com.happyplant.backend.models
 
 import jakarta.persistence.*
 import java.util.UUID
 import java.time.LocalDateTime
 import java.time.LocalTime
+import com.happyplant.backend.models.Plant
 
 @Entity
 @Table(name="assignments")

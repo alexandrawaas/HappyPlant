@@ -1,10 +1,8 @@
 package com.happyplant.backend.datasource
 
-import com.happyplant.backend.model.Pixel
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
+import com.happyplant.backend.models.Pixel
 import java.util.UUID
+import org.springframework.data.jpa.repository.JpaRepository
 
-@Repository
-interface PixelRepository: CrudRepository<Pixel,UUID> {
+interface PixelRepository: JpaRepository<Pixel,UUID> {
 }

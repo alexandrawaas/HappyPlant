@@ -1,6 +1,7 @@
-package com.happyplant.backend.model
+package com.happyplant.backend.models
 
-import com.happyplant.backend.model.types.LightingType
+import com.happyplant.backend.models.types.LightingType
+import com.happyplant.backend.models.Room
 import jakarta.persistence.*
 import java.util.*
 

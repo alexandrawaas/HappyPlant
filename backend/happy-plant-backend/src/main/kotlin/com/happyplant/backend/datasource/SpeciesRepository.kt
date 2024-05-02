@@ -1,10 +1,8 @@
 package com.happyplant.backend.datasource
 
-import com.happyplant.backend.model.Species
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
+import com.happyplant.backend.models.Species
+import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-@Repository
-interface SpeciesRepository: CrudRepository<Species, UUID> {
+interface SpeciesRepository: JpaRepository<Species, UUID> {
 }

@@ -1,6 +1,6 @@
 package com.happyplant.backend.datatransfer
 
-import com.happyplant.backend.model.types.AssignmentType
+import com.happyplant.backend.models.types.AssignmentType
 import java.util.*
 
 data class ActiveAssignmentDTOResponse(

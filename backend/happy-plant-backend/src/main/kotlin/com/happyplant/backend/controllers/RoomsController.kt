@@ -3,8 +3,8 @@ package com.happyplant.backend.controllers
 import com.happyplant.backend.datatransfer.CoordinatesDTORequest
 import com.happyplant.backend.datatransfer.PlantDTO
 import com.happyplant.backend.datatransfer.RoomDTO
-import com.happyplant.backend.model.Plant
-import com.happyplant.backend.model.Room
+import com.happyplant.backend.models.Plant
+import com.happyplant.backend.models.Room
 import com.happyplant.backend.services.RoomsService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*

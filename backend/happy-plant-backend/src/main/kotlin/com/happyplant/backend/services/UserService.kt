@@ -5,19 +5,7 @@ import com.happyplant.backend.datatransfer.NotificationSettingsDTORequest
 import org.springframework.stereotype.Service
 
 @Service
-class AccountService {
-    fun login(loginData: LoginDataDTORequest): Any {
-        TODO("Not yet implemented")
-    }
-
-    fun logout(): Any {
-        TODO("Not yet implemented")
-    }
-
-    fun register(loginData: LoginDataDTORequest): Any {
-        TODO("Not yet implemented")
-    }
-
+class UserService {
     fun alterNotificationSettings(settings: NotificationSettingsDTORequest): Any {
         TODO("Not yet implemented")
     }

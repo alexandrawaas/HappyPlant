@@ -1,7 +1,7 @@
 package com.happyplant.backend.datatransfer
 
-import com.happyplant.backend.model.types.AssignmentType
-import com.happyplant.backend.model.types.LightingType
+import com.happyplant.backend.models.types.AssignmentType
+import com.happyplant.backend.models.types.LightingType
 import jakarta.persistence.*
 import java.util.*
 
