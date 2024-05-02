@@ -1,10 +1,14 @@
 package com.happyplant.backend.datasource
 
-import com.happyplant.backend.model.User
-import org.springframework.data.repository.CrudRepository
-import org.springframework.stereotype.Repository
+import jakarta.persistence.*
+import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
+import com.happyplant.backend.model.User
+import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository: CrudRepository<User, UUID> {
+interface UserRepository : JpaRepository<User, UUID> {
+    fun findByEmail(email: String): User?
+    fun findByResetPasswordToken(resetPasswordToken: String): User?
+    fun findByEmailVerificationToken(emailVerificationToken: String): User?
 }

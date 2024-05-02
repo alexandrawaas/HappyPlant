@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
-import java.util.*
 import java.net.URLEncoder
-import com.happyplant.backend.models.User
+import com.happyplant.backend.model.User
 
 @Service
 class EmailService {

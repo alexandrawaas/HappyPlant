@@ -1,7 +1,5 @@
 package com.happyplant.backend.services
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
@@ -15,7 +13,7 @@ import com.happyplant.backend.datatransfer.auth.CredentialsDTO
 import com.happyplant.backend.datatransfer.auth.ResetPasswordDTO
 import com.happyplant.backend.datatransfer.auth.UpdatePasswordDTO
 import com.happyplant.backend.datatransfer.UserDTO
-import com.happyplant.backend.models.User
+import com.happyplant.backend.model.User
 
 @Service
 class AuthService(
@@ -31,20 +29,20 @@ class AuthService(
 
         val newUser = User (
             email = user.email,
-            password = hashPassword(user.password),
+            passwordHash = hashPassword(user.password),
             emailVerified = false,
             emailVerificationToken = UUID.randomUUID().toString(),
             emailVerificationExpires = System.currentTimeMillis() + 600000,
-            receivePushNotifications = false, // TOOD
-            pushNotificationsTime = null // TODO
-            // plants = ArrayList(),
-            // rooms = ArrayList()
+            receivePushNotifications = false, // TODO
+            pushNotificationsTime = null, // TODO
+            plants = mutableListOf(),
+            rooms = mutableListOf()
         )
         userRepository.save(newUser)
 
         emailService.sendEmailVerificationEmail(newUser, newUser.emailVerificationToken!!)
 
-        val userDto = newUser.toDto()
+        val userDto = newUser.asDto()
 
         return ApiResponse(true, "User registered successfully", userDto, HttpStatus.CREATED)
     }
@@ -53,7 +51,7 @@ class AuthService(
         val existingUser = userRepository.findByEmail(user.email)
             ?: return ApiResponse(false, "Invalid credentials", null, HttpStatus.UNAUTHORIZED)
 
-        if (!checkPassword(user.password, existingUser.password)) {
+        if (!checkPassword(user.password, existingUser.passwordHash)) {
             return ApiResponse(false, "Invalid credentials", null, HttpStatus.UNAUTHORIZED)
         }
 
@@ -63,7 +61,7 @@ class AuthService(
 
         val accessToken = authTokenUtil.generateToken(existingUser.id, existingUser)
         
-        val responseBody = mapOf("user" to existingUser.toDto(), "accessToken" to accessToken)
+        val responseBody = mapOf("user" to existingUser.asDto(), "accessToken" to accessToken)
 
         return ApiResponse(true, "User logged in successfully", responseBody, HttpStatus.OK)
     }
@@ -115,7 +113,7 @@ class AuthService(
             return ApiResponse(false, "Invalid reset password code", null, HttpStatus.BAD_REQUEST)
         }
 
-        user.password = hashPassword(request.newPassword)
+        user.passwordHash = hashPassword(request.newPassword)
         user.resetPasswordToken = null
         user.resetPasswordExpires = null
         user.resetPasswordCode = null
@@ -137,7 +135,7 @@ class AuthService(
         user.emailVerificationExpires = null
         userRepository.save(user)
 
-        val userDto = user.toDto()
+        val userDto = user.asDto()
 
         return ApiResponse(true, "Email verified successfully", userDto, HttpStatus.OK)
     }

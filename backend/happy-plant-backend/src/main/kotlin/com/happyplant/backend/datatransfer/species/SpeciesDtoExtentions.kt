@@ -1,7 +1,7 @@
 package com.happyplant.backend.datatransfer.species
 
 import com.happyplant.backend.datatransfer.needs.asDtoResponse
-import com.happyplant.backend.models.Species
+import com.happyplant.backend.model.Species
 
 fun Species.asDtoResponse(): SpeciesDtoResponse =
     SpeciesDtoResponse(
