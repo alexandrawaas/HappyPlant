@@ -9,7 +9,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("plants")
-class PlantsController (private val service:PlantService) {
+class PlantController (private val service:PlantService) {
 
     @GetMapping
     @ResponseBody
