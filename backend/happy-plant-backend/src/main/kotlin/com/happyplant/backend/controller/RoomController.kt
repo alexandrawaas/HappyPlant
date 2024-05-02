@@ -14,7 +14,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("rooms")
-class RoomsController (private val service: RoomService){
+class RoomController (private val service: RoomService){
     @GetMapping
     @ResponseBody
     fun getRooms(@RequestParam(name = "search") search: String?): List<RoomDtoResponse> =

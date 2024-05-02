@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("assignments")
-class AssignmentsController (private val service: AssignmentService){
+class AssignmentController (private val service: AssignmentService){
     @GetMapping
     @ResponseBody
     fun getActiveAssignments(): List<ActiveAssignmentDtoResponse> = service.getActiveAssignments()
