@@ -3,7 +3,7 @@ package com.happyplant.backend.model
 import jakarta.persistence.*
 import java.time.LocalTime
 import java.util.*
-import com.happyplant.backend.datatransfer.UserDTO
+import com.happyplant.backend.datatransfer.user.UserDto
 
 @Entity
 @Table(name="users")
@@ -63,8 +63,8 @@ data class User(
 
         // Methods
 
-        fun asDto(): UserDTO {
-                return UserDTO(id.toString(), email)
+        fun asDto(): UserDto {
+                return UserDto(id.toString(), email)
         }
 
         fun getActiveAssignments(): List<Assignment>

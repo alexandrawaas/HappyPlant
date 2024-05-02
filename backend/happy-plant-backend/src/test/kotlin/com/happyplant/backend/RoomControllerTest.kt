@@ -3,6 +3,7 @@ package com.happyplant.backend
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.model.Room
+import com.happyplant.backend.utility.Coordinate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate

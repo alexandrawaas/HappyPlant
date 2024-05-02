@@ -1,7 +1,7 @@
 package com.happyplant.backend.datatransfer.pixel
 
 import com.happyplant.backend.model.Pixel
-import com.happyplant.backend.services.RoomsService
+import com.happyplant.backend.service.RoomsService
 
 fun Pixel.asDtoResponse(): PixelDto =
     PixelDto(
