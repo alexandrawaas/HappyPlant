@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.beans.factory.annotation.Autowired
 import com.happyplant.backend.datatransfer.user.UserDto
+import com.happyplant.backend.datatransfer.user.asDto
 import com.happyplant.backend.model.User
 import com.happyplant.backend.utility.AuthTokenUtil
 import com.happyplant.backend.repository.UserRepository
