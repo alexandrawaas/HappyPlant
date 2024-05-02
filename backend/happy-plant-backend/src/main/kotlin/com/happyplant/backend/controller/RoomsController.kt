@@ -6,7 +6,7 @@ import com.happyplant.backend.datatransfer.pixel.PixelDto
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.datatransfer.room.asDtoResponse
-import com.happyplant.backend.service.RoomsService
+import com.happyplant.backend.service.RoomService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -14,7 +14,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("rooms")
-class RoomsController (private val service: RoomsService){
+class RoomsController (private val service: RoomService){
     @GetMapping
     @ResponseBody
     fun getRooms(@RequestParam(name = "search") search: String?): List<RoomDtoResponse> =

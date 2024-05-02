@@ -18,7 +18,7 @@ import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Service
-class RoomsService (private val db: RoomRepository) {
+class RoomService (private val db: RoomRepository) {
     fun getRooms(): List<Room> =
         db.findAll().toList()
 

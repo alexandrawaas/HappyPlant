@@ -1,7 +1,7 @@
 package com.happyplant.backend.datatransfer.pixel
 
 import com.happyplant.backend.model.Pixel
-import com.happyplant.backend.service.RoomsService
+import com.happyplant.backend.service.RoomService
 
 fun Pixel.asDtoResponse(): PixelDto =
     PixelDto(
@@ -15,7 +15,7 @@ fun Pixel.asDtoResponse(): PixelDto =
         // plants = this.plants.map { it.asDtoResponse() }
     )
 
-fun PixelDto.asEntity(roomService: RoomsService): Pixel =
+fun PixelDto.asEntity(roomService: RoomService): Pixel =
     Pixel(
         id = this.id,
         x = this.x,
