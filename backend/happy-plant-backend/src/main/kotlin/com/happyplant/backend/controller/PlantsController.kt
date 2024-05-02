@@ -1,7 +1,7 @@
 package com.happyplant.backend.controller
 
 import com.happyplant.backend.datatransfer.PlantDto
-import com.happyplant.backend.service.PlantsService
+import com.happyplant.backend.service.PlantService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -9,7 +9,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("plants")
-class PlantsController (private val service:PlantsService) {
+class PlantsController (private val service:PlantService) {
 
     @GetMapping
     @ResponseBody
