@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Button } from 'react-na
 import { commonStyles } from '../../utils/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { API_URL } from '@env';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -19,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
             if (rememberMeValue === 'true') {
                 const authToken = await AsyncStorage.getItem('authToken');
                 if (authToken) {
-                    const response = await axios.get('http://localhost:8080/user', {
+                    const response = await axios.get(`${API_URL}/user`, {
                         headers: {
                             Authorization: `Bearer ${authToken}`
                         }
@@ -39,7 +40,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/auth/login', {
+            const response = await axios.post(`${API_URL}/auth/login`, {
                 email: email,
                 password: password
             });

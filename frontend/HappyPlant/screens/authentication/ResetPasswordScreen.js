@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Alert, Text } from 'react-native';
 import { commonStyles } from '../../utils/CommonStyles';
 import axios from 'axios';
+import { API_URL } from '@env'; 
 
 const ResetPasswordScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
 
     const handleResetPassword = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/auth/password/reset', {
+            const response = await axios.post(`${API_URL}/auth/password/reset`, {
                 email: email
             });
             if (response.data.success) {

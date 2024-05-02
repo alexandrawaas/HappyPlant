@@ -2,12 +2,13 @@ import React from 'react';
 import { View, Button, Alert } from 'react-native';
 import axios from 'axios';
 import { getAuthToken } from '../utils/AuthTokenUtil';
+import { API_URL } from '@env';
 
 const TestScreen = () => {
     const handleSecureEndpoint = async () => {
         try {
             const authToken = getAuthToken();
-            const response = await axios.get('http://localhost:8080/test/secure', {
+            const response = await axios.get(`${API_URL}/test/secure`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }
