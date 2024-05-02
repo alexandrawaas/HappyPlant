@@ -1,6 +1,6 @@
 package com.happyplant.backend.datatransfer.needs
 
-import com.happyplant.backend.models.Needs
+import com.happyplant.backend.model.Needs
 
 fun Needs.asDtoResponse(): NeedsDtoResponse =
     NeedsDtoResponse(
