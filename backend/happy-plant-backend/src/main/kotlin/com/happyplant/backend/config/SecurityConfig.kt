@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.slf4j.LoggerFactory
 import jakarta.servlet.Filter
 import jakarta.servlet.ServletRequest
@@ -38,9 +39,18 @@ class SecurityConfig : WebMvcConfigurer {
             .excludePathPatterns("/test/unsecure")
     }
 
-    private class DummyFilter : Filter {
-        override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-            chain.doFilter(request, response)
-        }
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**") // Erlaubt CORS für alle Pfade
+            .allowedOrigins("*") // Erlaubt Anfragen von allen Ursprüngen
+            .allowedMethods("GET", "POST", "PUT", "DELETE") // Erlaubt bestimmte HTTP-Methoden
+            .allowedHeaders("*") // Erlaubt alle Header in der Anfrage
+            .allowCredentials(true) // Erlaubt die Übertragung von Anmeldeinformationen (z. B. Cookies)
+            .maxAge(3600) // Legt die maximale Zeit fest, für die der Browser die CORS-Einstellungen zwischenspeichern kann
     }
+
+    // private class DummyFilter : Filter {
+    //     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
+    //         chain.doFilter(request, response)
+    //     }
+    // }
 }

@@ -23,6 +23,11 @@ class AuthService(
     private val authTokenUtil: AuthTokenUtil
 ) {
     fun registerUser(user: CredentialsDto): ApiResponse<UserDto> {
+        val errorMessage = validateCredentials(user)
+        if (errorMessage.isNotEmpty()) {
+            return ApiResponse(false, errorMessage, null, HttpStatus.BAD_REQUEST)
+        }
+
         val existingUser = userRepository.findByEmail(user.email)
         if (existingUser != null) {
             return ApiResponse(false, "User with this email already exists", null, HttpStatus.BAD_REQUEST)
@@ -149,5 +154,36 @@ class AuthService(
 
     private fun checkPassword(plainPassword: String, hashedPassword: String): Boolean {
         return hashPassword(plainPassword) == hashedPassword
+    }
+
+    private fun validateCredentials(user: CredentialsDto): String {
+        val emailError = validateEmail(user.email)
+        val passwordError = validatePassword(user.password)
+        
+        val errorMessageBuilder = StringBuilder()
+        if (emailError != null) {
+            errorMessageBuilder.append("$emailError\n")
+        }
+        if (passwordError != null) {
+            errorMessageBuilder.append("$passwordError\n")
+        }
+        
+        return errorMessageBuilder.toString().trim()
+    }
+    
+    private fun validateEmail(email: String): String? {
+        return if (!email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))) {
+            "Invalid email format"
+        } else {
+            null
+        }
+    }
+    
+    private fun validatePassword(password: String): String? {
+        return if (!password.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+\$).{8,}\$"))) {
+            "Password must be at least 8 characters long and contain at least one digit, one lowercase, and one uppercase letter"
+        } else {
+            null
+        }
     }
 }

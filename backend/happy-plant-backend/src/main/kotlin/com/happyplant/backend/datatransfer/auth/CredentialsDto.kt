@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*
 
 data class CredentialsDto(
     
-    @Email
+    @Email(message = "Invalid email format")
     val email: String,
 
     @field:NotBlank(message = "Password is required")
