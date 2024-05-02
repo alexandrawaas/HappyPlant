@@ -1,9 +1,7 @@
 package com.happyplant.backend.config
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.slf4j.LoggerFactory
@@ -11,8 +9,8 @@ import jakarta.servlet.Filter
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.FilterChain
-import com.happyplant.backend.utilities.AuthTokenUtil
-import com.happyplant.backend.interceptors.JwtInterceptor
+import com.happyplant.backend.utility.AuthTokenUtil
+import com.happyplant.backend.interceptor.JwtInterceptor
 
 @Configuration
 class SecurityConfig : WebMvcConfigurer {
