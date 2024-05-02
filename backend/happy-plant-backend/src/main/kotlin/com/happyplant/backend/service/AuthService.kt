@@ -65,9 +65,9 @@ class AuthService(
             return ApiResponse(false, "Email not verified", null, HttpStatus.UNAUTHORIZED)
         }
 
-        val accessToken = authTokenUtil.generateToken(existingUser.id, existingUser)
+        val authToken = authTokenUtil.generateToken(existingUser.id, existingUser)
         
-        val responseBody = mapOf("user" to existingUser.asDto(), "accessToken" to accessToken)
+        val responseBody = mapOf("user" to existingUser.asDto(), "authToken" to authToken)
 
         return ApiResponse(true, "User logged in successfully", responseBody, HttpStatus.OK)
     }

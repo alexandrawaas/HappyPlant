@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
 import { commonStyles } from '../../utils/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,35 @@ import axios from 'axios';
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
+
+    useEffect(() => {
+        checkRememberMe();
+    }, []);
+
+    const checkRememberMe = async () => {
+        try {
+            const rememberMeValue = await AsyncStorage.getItem('rememberMe');
+            if (rememberMeValue === 'true') {
+                const authToken = await AsyncStorage.getItem('authToken');
+                if (authToken) {
+                    const response = await axios.get('http://localhost:8080/user', {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`
+                        }
+                    });
+                    if (response.data.success) {
+                        navigation.replace('Assignments');
+                    } else {
+                        await AsyncStorage.removeItem('authToken');
+                        await AsyncStorage.removeItem('rememberMe');
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Fehler beim Überprüfen des angemeldeten Benutzers:', error);
+        }
+    };
 
     const handleLogin = async () => {
         try {
@@ -15,8 +44,13 @@ const LoginScreen = ({ navigation }) => {
                 password: password
             });
             if (response.data.success) {
-                const accessToken = response.data.data.accessToken;
-                await AsyncStorage.setItem('accessToken', accessToken);
+                const authToken = response.data.data.authToken;
+                await AsyncStorage.setItem('authToken', authToken);
+                if (rememberMe) {
+                    await AsyncStorage.setItem('rememberMe', 'true');
+                } else {
+                    await AsyncStorage.removeItem('rememberMe');
+                }
                 navigation.replace('Aufgaben');
             } else {
                 Alert.alert('Fehler', response.data.message);
@@ -43,6 +77,13 @@ const LoginScreen = ({ navigation }) => {
                 secureTextEntry={true}
                 style={commonStyles.input}
             />
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <CheckBox
+                    value={rememberMe}
+                    onValueChange={setRememberMe}
+                />
+                <Text>automatisch anmelden</Text>
+            </View>
             <TouchableOpacity style={commonStyles.button} onPress={handleLogin}>
                 <Text style={commonStyles.buttonText}>Login</Text>
             </TouchableOpacity>

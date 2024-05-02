@@ -1,20 +1,15 @@
 import React from 'react';
 import { View, Button, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { getAuthToken } from '../utils/AuthTokenUtil';
 
 const TestScreen = () => {
     const handleSecureEndpoint = async () => {
         try {
-            const accessToken = await AsyncStorage.getItem('accessToken');
-            if (!accessToken) {
-                Alert.alert('Fehler', 'Kein AccessToken gefunden.');
-                return;
-            }
-
+            const authToken = getAuthToken();
             const response = await axios.get('http://localhost:8080/test/secure', {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${authToken}`
                 }
             });
 
