@@ -9,15 +9,15 @@ import java.util.*
 @Entity
 @Table(name="plants")
 data class Plant(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
-        @NotNull private var name: String,
-        @NotNull private var picturePath: String = "DefaultPicturePath",
-        @Column private var notes: String?,
-        @OneToMany() private var assignments: Map<AssignmentType, Assignment>,
-        @ManyToOne() private var species: Species,
-        @ManyToOne() private var user: User,
-        @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
-        @OneToOne() @JoinColumn(referencedColumnName = "id") var needs: Needs?,
+    @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
+    @NotNull var name: String,
+    @NotNull var picturePath: String = "DefaultPicturePath",
+    @Column var notes: String?,
+    @OneToMany() var assignments: Map<AssignmentType, Assignment>,
+    @ManyToOne() var species: Species,
+    @ManyToOne() private var user: User,
+    @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
+    @OneToOne() @JoinColumn(referencedColumnName = "id") var needs: Needs?,
 ) {
         // Methods
 

@@ -1,6 +1,6 @@
 package com.happyplant.backend.datatransfer.pixel
 
-import com.happyplant.backend.datatransfer.PlantDto
+import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.model.types.LightingType
 import java.util.*
 
@@ -11,6 +11,6 @@ data class PixelDto(
     var isWindow: Boolean,
     var lightingType: LightingType,
     var roomId: UUID,
-    var plants: List<PlantDto>
+    var plants: List<PlantDtoResponse>
 ) {
 }

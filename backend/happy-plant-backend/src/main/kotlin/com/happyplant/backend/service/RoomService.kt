@@ -2,7 +2,7 @@ package com.happyplant.backend.service
 
 import com.happyplant.backend.repository.RoomRepository
 import com.happyplant.backend.datatransfer.CoordinatesDtoRequest
-import com.happyplant.backend.datatransfer.PlantDto
+import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.datatransfer.pixel.PixelDto
 import com.happyplant.backend.datatransfer.pixel.asEntity
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
@@ -11,6 +11,7 @@ import com.happyplant.backend.datatransfer.room.asDtoResponse
 import com.happyplant.backend.datatransfer.room.asEntity
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.Room
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -47,7 +48,7 @@ class RoomService (private val db: RoomRepository) {
         TODO("Not yet implemented")
     }
 
-    fun addPlantToRoom(roomId: UUID, plant: PlantDto): Unit {
+    fun addPlantToRoom(roomId: UUID, plant: PlantDtoResponse): Unit {
         TODO("Not yet implemented")
     }
 

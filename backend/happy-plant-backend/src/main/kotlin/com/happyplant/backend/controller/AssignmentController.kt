@@ -1,6 +1,6 @@
 package com.happyplant.backend.controller
 
-import com.happyplant.backend.datatransfer.ActiveAssignmentDtoResponse
+import com.happyplant.backend.datatransfer.assignment.ActiveAssignmentDtoResponse
 import com.happyplant.backend.service.AssignmentService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
