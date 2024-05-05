@@ -1,7 +1,7 @@
 package com.happyplant.backend.controller
 
 import com.happyplant.backend.datatransfer.CoordinatesDtoRequest
-import com.happyplant.backend.datatransfer.PlantDto
+import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.datatransfer.pixel.PixelDto
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
@@ -46,14 +46,14 @@ class RoomController (private val service: RoomService){
 
     @GetMapping("/{roomId}/plants")
     @ResponseBody
-    fun getPlantsInRoom(@PathVariable roomId: UUID): List<PlantDto> {
+    fun getPlantsInRoom(@PathVariable roomId: UUID): List<PlantDtoResponse> {
         // service.getPlantsInRoom(roomId).map { it.asDtoResponse() }
         TODO("not implemented yet")
     }
 
     @PostMapping("/{roomId}/plants")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun addPlantToRoom(@PathVariable roomId: UUID, @RequestBody plant: PlantDto): Unit = service.addPlantToRoom(roomId, plant)
+    fun addPlantToRoom(@PathVariable roomId: UUID, @RequestBody plant: PlantDtoResponse): Unit = service.addPlantToRoom(roomId, plant)
     //Hier vieleicht ID von Pflanze wenn diese bereits erstellt
 
     @PatchMapping("/{roomId}/plants/{plantId}")

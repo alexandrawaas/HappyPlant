@@ -1,11 +1,9 @@
 package com.happyplant.backend.controller
 
-import com.happyplant.backend.datatransfer.PlantDto
+import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.service.InventoryService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -13,5 +11,6 @@ import org.springframework.web.bind.annotation.RestController
 class InventoryController (private val service: InventoryService){
     @GetMapping
     @ResponseBody
-    fun getInventory(): List<PlantDto> = service.getInventory()
+    @ResponseStatus(HttpStatus.OK)
+    fun getInventory(): List<PlantDtoResponse> = service.getInventory()
 }
