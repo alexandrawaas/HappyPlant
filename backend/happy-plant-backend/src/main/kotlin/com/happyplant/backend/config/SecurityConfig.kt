@@ -41,7 +41,7 @@ class SecurityConfig : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**") // Erlaubt CORS für alle Pfade
-            .allowedOrigins("*") // Erlaubt Anfragen von allen Ursprüngen
+            .allowedOriginPatterns("*") // Erlaubt Anfragen von allen Ursprüngen
             .allowedMethods("GET", "POST", "PUT", "DELETE") // Erlaubt bestimmte HTTP-Methoden
             .allowedHeaders("*") // Erlaubt alle Header in der Anfrage
             .allowCredentials(true) // Erlaubt die Übertragung von Anmeldeinformationen (z. B. Cookies)

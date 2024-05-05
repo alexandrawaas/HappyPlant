@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
 import { commonStyles } from '../../utils/CommonStyles';
 import axios from 'axios';
-import { API_URL } from '@env';
 
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -16,7 +15,7 @@ const RegisterScreen = ({ navigation }) => {
                 return;
             }
 
-            const response = await axios.post(`${API_URL}/auth/register`, {
+            const response = await axios.post(`${process.env.API_URL}/auth/register`, {
                 email: email,
                 password: password
             });
@@ -38,6 +37,8 @@ const RegisterScreen = ({ navigation }) => {
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <TextInput
@@ -45,6 +46,8 @@ const RegisterScreen = ({ navigation }) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={true}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <TextInput
@@ -52,6 +55,8 @@ const RegisterScreen = ({ navigation }) => {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={true}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <TouchableOpacity style={commonStyles.button} onPress={handleRegister}>

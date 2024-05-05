@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Button, Switch } from 'react-native';
 import { commonStyles } from '../../utils/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { API_URL } from '@env';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -20,13 +19,13 @@ const LoginScreen = ({ navigation }) => {
             if (rememberMeValue === 'true') {
                 const authToken = await AsyncStorage.getItem('authToken');
                 if (authToken) {
-                    const response = await axios.get(`${API_URL}/user`, {
+                    const response = await axios.get(`${process.env.API_URL}/user`, {
                         headers: {
                             Authorization: `Bearer ${authToken}`
                         }
                     });
                     if (response.data.success) {
-                        navigation.replace('Assignments');
+                        navigation.replace('Aufgaben');
                     } else {
                         await AsyncStorage.removeItem('authToken');
                         await AsyncStorage.removeItem('rememberMe');
@@ -40,7 +39,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post(`${API_URL}/auth/login`, {
+            const response = await axios.post(`${process.env.API_URL}/auth/login`, {
                 email: email,
                 password: password
             });
@@ -69,6 +68,8 @@ const LoginScreen = ({ navigation }) => {
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <TextInput
@@ -79,7 +80,7 @@ const LoginScreen = ({ navigation }) => {
                 style={commonStyles.input}
             />
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <CheckBox
+                <Switch
                     value={rememberMe}
                     onValueChange={setRememberMe}
                 />

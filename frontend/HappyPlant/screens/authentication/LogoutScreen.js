@@ -3,13 +3,12 @@ import { View, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { getAuthToken } from '../../utils/AuthTokenUtil';
-import { API_URL } from '@env';
 
 const LogoutScreen = ({ navigation }) => {
     const handleLogout = async () => {
         try {
             const authToken = await getAuthToken();
-            const response = await axios.post(`${API_URL}/auth/logout`, null, {
+            const response = await axios.post(`${process.env.API_URL}/auth/logout`, null, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }

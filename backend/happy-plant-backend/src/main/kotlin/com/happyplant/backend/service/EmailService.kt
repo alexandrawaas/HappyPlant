@@ -14,7 +14,7 @@ class EmailService {
     private lateinit var mailSender: JavaMailSender
 
     fun sendResetPasswordEmail(user: User, resetPasswordCode: Int) {
-        val recipientAddress = user.email
+        val recipientAddress = user.email.lowercase()
         val subject = "Passwort zurücksetzen oder ändern"
 
         val message = mailSender.createMimeMessage()
@@ -34,7 +34,7 @@ class EmailService {
     }
 
     fun sendEmailVerificationEmail(user: User, emailVerificationToken: String) {
-        val recipientAddress = user.email
+        val recipientAddress = user.email.lowercase()
         val subject = "Email-Adresse verifizieren"
         val encodedToken = URLEncoder.encode(emailVerificationToken, "UTF-8")
         val verificationUrl = "http://localhost:8080/auth/verify?token=$encodedToken"

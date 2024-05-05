@@ -26,7 +26,7 @@ class AuthTokenUtil {
 
     fun generateToken(userId: UUID, user: User): String {
         return JWT.create()
-            .withSubject(user.email)
+            .withSubject(user.email.lowercase())
             .withClaim("userId", userId.toString())
             .withIssuedAt(Date(now))
             .withExpiresAt(expiration)

@@ -28,13 +28,13 @@ class AuthService(
             return ApiResponse(false, errorMessage, null, HttpStatus.BAD_REQUEST)
         }
 
-        val existingUser = userRepository.findByEmail(user.email)
+        val existingUser = userRepository.findByEmail(user.email.lowercase())
         if (existingUser != null) {
             return ApiResponse(false, "User with this email already exists", null, HttpStatus.BAD_REQUEST)
         }
 
         val newUser = User (
-            email = user.email,
+            email = user.email.lowercase(),
             passwordHash = hashPassword(user.password),
             emailVerified = false,
             emailVerificationToken = UUID.randomUUID().toString(),
@@ -54,7 +54,7 @@ class AuthService(
     }
 
     fun login(user: CredentialsDto): ApiResponse<Map<String, Any>> {
-        val existingUser = userRepository.findByEmail(user.email)
+        val existingUser = userRepository.findByEmail(user.email.lowercase())
             ?: return ApiResponse(false, "Invalid credentials", null, HttpStatus.UNAUTHORIZED)
 
         if (!checkPassword(user.password, existingUser.passwordHash)) {
@@ -91,7 +91,7 @@ class AuthService(
     }
 
     fun resetPassword(request: ResetPasswordDto): ApiResponse<Map<String, String>> {
-        val user = userRepository.findByEmail(request.email)
+        val user = userRepository.findByEmail(request.email.lowercase())
             ?: return ApiResponse(false, "User with this email does not exist", null, HttpStatus.BAD_REQUEST)
 
         val resetPasswordToken = UUID.randomUUID().toString()
@@ -157,7 +157,7 @@ class AuthService(
     }
 
     private fun validateCredentials(user: CredentialsDto): String {
-        val emailError = validateEmail(user.email)
+        val emailError = validateEmail(user.email.lowercase())
         val passwordError = validatePassword(user.password)
         
         val errorMessageBuilder = StringBuilder()
