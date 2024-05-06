@@ -3,6 +3,7 @@ package com.happyplant.backend.datatransfer.plant
 import com.happyplant.backend.datatransfer.assignment.asDtoResponse
 import com.happyplant.backend.datatransfer.assignment.asEntity
 import com.happyplant.backend.datatransfer.needs.asDtoResponse
+import com.happyplant.backend.datatransfer.needs.asEntity
 import com.happyplant.backend.datatransfer.room.asDtoResponseShort
 import com.happyplant.backend.datatransfer.species.asDtoResponse
 import com.happyplant.backend.datatransfer.species.asEntity
@@ -32,10 +33,7 @@ fun PlantDtoRequest.asEntity(
         notes = notes,
         assignments = mapOf(),
         species = speciesService.getSpecies(speciesId).asEntity() ?: throw IllegalArgumentException("Species not found"),
-        needs = Needs(
-            lightingType = needs.lightingType,
-            intervals = needs.intervals ?: mapOf()
-        ),
+        needs = needs?.asEntity(),
         pixel = null,
         user = User.DUMMY_USER // TODO: get user from token
     )
