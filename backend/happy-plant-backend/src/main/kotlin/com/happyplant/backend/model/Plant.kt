@@ -13,7 +13,7 @@ data class Plant(
     @NotNull var name: String,
     @NotNull var picturePath: String = "DefaultPicturePath",
     @Column var notes: String?,
-    @OneToMany() var assignments: Map<AssignmentType, Assignment>,
+    @OneToMany(cascade = [CascadeType.ALL]) var assignments: Map<AssignmentType, Assignment>,
     @ManyToOne() var species: Species,
     @ManyToOne() private var user: User,
     @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
