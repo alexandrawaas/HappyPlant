@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class InventoryService(private val db: PlantRepository) {
     fun getInventory(): List<PlantDtoResponse> {
-        val placedPlants = db.findAll().filter { it.isPlaced() }    // TODO: Filter by active user ID
+        val placedPlants = db.findAll().filter { !it.isPlaced() }    // TODO: Filter by active user ID
         return placedPlants.map { it.asDtoResponse() }
     }
 
