@@ -2,6 +2,7 @@ package com.happyplant.backend.datatransfer.species;
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.happyplant.backend.datatransfer.needs.NeedsDtoResponse
+import com.happyplant.backend.model.Needs
 import java.util.UUID
 
 data class SpeciesDtoResponse(
@@ -11,5 +12,5 @@ data class SpeciesDtoResponse(
     @JsonProperty("picturePath") val picturePath: String,
     @JsonProperty("family") val family: String,
     @JsonProperty("description") val description: String,
-    @JsonProperty("needs") val needs: NeedsDtoResponse,
+    @JsonProperty("needs") val needs: Needs,
 )

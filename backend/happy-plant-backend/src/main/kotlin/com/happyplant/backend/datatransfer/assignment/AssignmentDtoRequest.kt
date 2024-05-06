@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 import java.util.*
 
-data class AssignmentDtoResponse(
-    @JsonProperty("id") val id: UUID,
+data class AssignmentDtoRequest(
     @JsonProperty("lastDone") val lastDone: LocalDateTime?,
-    @JsonProperty("plantId") val plantId: UUID
+    @JsonProperty("plantId") val plantId: UUID?,
     ) {
 }

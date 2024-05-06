@@ -11,7 +11,7 @@ import com.happyplant.backend.model.Plant
 data class Assignment(
         @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
         @Column var lastDone: LocalDateTime?,
-        @ManyToOne() private val plant: Plant
+        @ManyToOne() val plant: Plant
 )
 {
         // Methods

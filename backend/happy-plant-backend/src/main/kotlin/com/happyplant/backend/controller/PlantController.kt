@@ -13,32 +13,29 @@ import java.util.*
 
 @RestController
 @RequestMapping("plants")
-class PlantController (private val service:PlantService) {
+class PlantController (private val service: PlantService) {
 
     @GetMapping
     @ResponseBody
     fun getPlants(@RequestParam(name = "search") search: String?): List<PlantDtoResponse> {
-        if (search == null) {
-            return service.getPlants().map { plant -> plant.asDtoResponse() }
+        return if (search == null) {
+            service.getPlants().map { plant -> plant.asDtoResponse() }
         } else {
-            return service.getPlantsFiltered(search).map { plant -> plant.asDtoResponse() }
+            service.getPlantsFiltered(search).map { plant -> plant.asDtoResponse() }
         }
     }
 
     @PostMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    fun addPlant(@RequestBody newPlant: PlantDtoRequest): PlantDtoResponse {
-        val createdPlant = service.addPlant(newPlant)
-        return createdPlant.asDtoResponse()
-    }
+    fun addPlant(@RequestBody newPlant: PlantDtoRequest): PlantDtoResponse =
+        service.addPlant(newPlant).asDtoResponse()
 
     @GetMapping("/{plantId}")
     @ResponseBody
-    fun getPlant(@PathVariable plantId: UUID): PlantDtoResponse {
-        return service.getPlant(plantId)?.asDtoResponse()
+    fun getPlant(@PathVariable plantId: UUID): PlantDtoResponse =
+        service.getPlant(plantId)?.asDtoResponse()
             ?: throw ResponseStatusException( HttpStatus.NOT_FOUND, "Plant not found")
-    }
 
     @PutMapping("/{plantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
