@@ -15,7 +15,7 @@ class AssignmentService(private val db: PlantRepository) {
         // TODO: Filter by active user ID
         val activeAssignments = mutableListOf<ActiveAssignmentDtoResponse>()
         plants.forEach { plant -> activeAssignments.addAll(plant.getActiveAssignments()
-            .map { it.asActiveAssignmentDtoResponse(plant.id, plant.name, AssignmentType.WATERING) }) }
+            .map { it.value.asActiveAssignmentDtoResponse(plant.id, plant.name, it.key) }) }
         // TODO: Replace dummy assignment type with actual assignment type of the assignment
         return activeAssignments
     }
