@@ -27,10 +27,10 @@ data class Plant(
         fun getLightingType(): LightingType? =
                 needs?.lightingType
 
-        fun getActiveAssignments(): List<Assignment> =
+        fun getActiveAssignments(): Map<AssignmentType, Assignment> =
                 assignments.filter { (assignmentType, assignment) ->
                         assignment.isActive(getNeedInterval(assignmentType))
-                }.map { it.value }
+                }
 
         fun getAllAssignments(): List<Assignment> =
                 ArrayList(assignments.values)

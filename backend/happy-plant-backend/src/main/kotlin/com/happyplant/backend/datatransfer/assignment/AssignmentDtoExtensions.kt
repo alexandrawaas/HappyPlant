@@ -5,11 +5,12 @@ import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.types.AssignmentType
 import java.util.*
 
-fun Assignment.asDtoResponse(): AssignmentDtoResponse =
+fun Assignment.asDtoResponse(assignmentType: AssignmentType): AssignmentDtoResponse =
         AssignmentDtoResponse(
             id = this.id,
             lastDone = this.lastDone,
-            plantId = this.plant.id
+            plantId = this.plant.id,
+            assignmentType = assignmentType
         )
 
 fun Assignment.asActiveAssignmentDtoResponse(plantId: UUID, plantName: String, assignmentType: AssignmentType): ActiveAssignmentDtoResponse =

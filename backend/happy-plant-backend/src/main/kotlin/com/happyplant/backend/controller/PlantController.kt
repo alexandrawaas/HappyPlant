@@ -38,16 +38,16 @@ class PlantController (private val service: PlantService) {
             ?: throw ResponseStatusException( HttpStatus.NOT_FOUND, "Plant not found")
 
     @PutMapping("/{plantId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun alterPlant(@PathVariable plantId: UUID, @RequestBody plant: PlantDtoRequest): Unit =
-        service.alterPlant(plantId, plant)
+    @ResponseStatus(HttpStatus.OK)
+    fun alterPlant(@PathVariable plantId: UUID, @RequestBody plant: PlantDtoRequest): PlantDtoResponse =
+        service.alterPlant(plantId, plant).asDtoResponse()
 
     @DeleteMapping("/{plantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletePlant(@PathVariable plantId: UUID): Unit = service.deletePlant(plantId)
 
     @PatchMapping("/{plantId}/assignments/{assignmentId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun setAssignmentForPlant(@PathVariable plantId: UUID, @PathVariable assignmentId: UUID, @RequestBody date: LocalDateTime): Unit
-        = service.setAssignmentForPlant(plantId, assignmentId, date)
+    @ResponseStatus(HttpStatus.OK)
+    fun setAssignmentForPlant(@PathVariable plantId: UUID, @PathVariable assignmentId: UUID, @RequestBody date: LocalDateTime): PlantDtoResponse
+        = service.setAssignmentForPlant(plantId, assignmentId, date).asDtoResponse()
 }

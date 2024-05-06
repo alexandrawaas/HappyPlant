@@ -6,6 +6,5 @@ import java.util.*
 
 data class AssignmentDtoRequest(
     @JsonProperty("lastDone") val lastDone: LocalDateTime?,
-    @JsonProperty("plantId") val plantId: UUID?,
     ) {
 }
