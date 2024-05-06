@@ -1,7 +1,10 @@
 package com.happyplant.backend.service
 
+import com.happyplant.backend.datatransfer.assignment.asEntity
+import com.happyplant.backend.datatransfer.needs.asEntity
 import com.happyplant.backend.datatransfer.plant.PlantDtoRequest
 import com.happyplant.backend.datatransfer.plant.asEntity
+import com.happyplant.backend.datatransfer.species.asEntity
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.repository.PlantRepository
@@ -13,7 +16,8 @@ import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Service
-class PlantService(private val db: PlantRepository) {
+class PlantService(private val db: PlantRepository,
+                   private val speciesService: SpeciesService) {
     fun getPlants(): List<Plant> =
         db.findAll().toList()   // TODO: Filter by active user ID
 
@@ -21,16 +25,26 @@ class PlantService(private val db: PlantRepository) {
         db.findAllByNameOrSpeciesName(search).toList()      // TODO: Filter by active user ID
 
 
-    fun addPlant(newPlant: PlantDtoRequest): Plant =
-        db.save(newPlant.asEntity(db))
+    fun addPlant(newPlant: PlantDtoRequest): Plant {
+        var plantToSave = newPlant.asEntity(speciesService)
+        plantToSave = db.save(plantToSave)
+        plantToSave.assignments = newPlant.assignments.mapValues { it.value.asEntity(plantToSave) }
+        return db.save(plantToSave)
+    }
 
     fun getPlant(id: UUID): Plant? {
         return db.findById(id).getOrNull()
     }
 
     fun alterPlant(id: UUID, plant: PlantDtoRequest): Unit {
-        db.findById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        db.save(plant.asEntity(db))
+        val plantToSave = db.findById(id).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        plantToSave.name = plant.name
+        plantToSave.species = speciesService.getSpecies(plant.speciesId).asEntity() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        plantToSave.notes = plant.notes
+        plantToSave.picturePath = plant.picturePath
+        if (plant.needs != null) plantToSave.needs = plant.needs!!.asEntity()
+        plantToSave.assignments = plant.assignments.mapValues { it.value.asEntity(plantToSave) }
+        db.save(plantToSave)
     }
 
     fun deletePlant(id: UUID): Unit {
