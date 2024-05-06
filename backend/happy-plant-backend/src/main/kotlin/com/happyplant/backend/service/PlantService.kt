@@ -22,7 +22,7 @@ class PlantService(private val db: PlantRepository,
         db.findAll().toList()   // TODO: Filter by active user ID
 
     fun getPlantsFiltered(search: String): List<Plant> =
-        db.findAllByNameOrSpeciesName(search).toList()      // TODO: Filter by active user ID
+        db.findAllByNameOrSpeciesName(search, search).toList()      // TODO: Filter by active user ID
 
 
     fun addPlant(newPlant: PlantDtoRequest): Plant {
