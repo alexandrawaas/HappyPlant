@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Button, Switch } from '
 import { commonStyles } from '../../utils/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { getAuthToken, removeAuthToken, saveAuthToken } from '../../utils/AuthTokenUtil';
+import { saveAuthToken } from '../../utils/AuthTokenUtil';
 import { API_URL } from '../../config';
 
 const LoginScreen = ({ navigation }) => {
@@ -20,43 +20,6 @@ const LoginScreen = ({ navigation }) => {
         const unsubscribe = navigation.addListener('blur', handleBlur);
         return unsubscribe;
     }, [navigation]);
-
-    useEffect(() => {
-        checkRememberMe();
-    }, []);
-
-    const checkRememberMe = async () => {
-        try {
-            const rememberMeValue = 
-                typeof window !== 'undefined' && window.localStorage ?
-                window.localStorage.getItem('rememberMe') :
-                await AsyncStorage.getItem('rememberMe');
-
-            if (rememberMeValue === 'true') {
-                const authToken = await getAuthToken();
-                if (authToken) {
-                    const response = await axios.get(`${API_URL}/user`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`
-                        }
-                    });
-                    if (response.data.success) {
-                        navigation.replace('Aufgaben');
-                    } else {
-                        await removeAuthToken();
-                        
-                        if (typeof window !== 'undefined' && window.localStorage) {
-                            window.localStorage.removeItem('rememberMe');
-                        } else {
-                            await AsyncStorage.removeItem('rememberMe');
-                        }
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Fehler beim Überprüfen des angemeldeten Benutzers:', error);
-        }
-    };
 
     const handleLogin = async () => {
         try {

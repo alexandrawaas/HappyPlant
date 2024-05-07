@@ -20,12 +20,14 @@ import UpdatePasswordScreen from "./screens/authentication/UpdatePasswordScreen"
 import RegisterScreen from "./screens/authentication/RegisterScreen";
 import LogoutScreen from "./screens/authentication/LogoutScreen";
 import TestScreen from "./screens/TestScreen";
+import LoadingScreen from "./screens/authentication/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="Anmelden">
+          <Stack.Navigator initialRouteName="Loading">
+              <Stack.Screen name="Loading" component={LoadingScreen}/>
               <Stack.Screen name="Anmelden" component={LoginScreen}/>
               <Stack.Screen name="Registrieren" component={RegisterScreen}/>
               <Stack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen}/>
