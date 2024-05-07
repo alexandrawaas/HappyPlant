@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Button, Switch } from '
 import { commonStyles } from '../../utils/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { getAuthToken, removeAuthToken, saveAuthToken } from '../../utils/AuthTokenUtil';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -15,9 +16,13 @@ const LoginScreen = ({ navigation }) => {
 
     const checkRememberMe = async () => {
         try {
-            const rememberMeValue = await AsyncStorage.getItem('rememberMe');
+            const rememberMeValue = 
+                typeof window !== 'undefined' && window.localStorage ?
+                window.localStorage.getItem('rememberMe') :
+                await AsyncStorage.getItem('rememberMe');
+
             if (rememberMeValue === 'true') {
-                const authToken = await AsyncStorage.getItem('authToken');
+                const authToken = await getAuthToken();
                 if (authToken) {
                     const response = await axios.get(`${process.env.API_URL}/user`, {
                         headers: {
@@ -27,8 +32,13 @@ const LoginScreen = ({ navigation }) => {
                     if (response.data.success) {
                         navigation.replace('Aufgaben');
                     } else {
-                        await AsyncStorage.removeItem('authToken');
-                        await AsyncStorage.removeItem('rememberMe');
+                        await removeAuthToken();
+                        
+                        if (typeof window !== 'undefined' && window.localStorage) {
+                            window.localStorage.removeItem('rememberMe');
+                        } else {
+                            await AsyncStorage.removeItem('rememberMe');
+                        }
                     }
                 }
             }
@@ -45,12 +55,22 @@ const LoginScreen = ({ navigation }) => {
             });
             if (response.data.success) {
                 const authToken = response.data.data.authToken;
-                await AsyncStorage.setItem('authToken', authToken);
+                await saveAuthToken(authToken);
+
                 if (rememberMe) {
-                    await AsyncStorage.setItem('rememberMe', 'true');
+                    if (typeof window !== 'undefined' && window.localStorage) {
+                        window.localStorage.setItem('rememberMe', 'true');
+                    } else {
+                        await AsyncStorage.setItem('rememberMe', 'true');
+                    }
                 } else {
-                    await AsyncStorage.removeItem('rememberMe');
+                    if (typeof window !== 'undefined' && window.localStorage) {
+                        window.localStorage.removeItem('rememberMe');
+                    } else {
+                        await AsyncStorage.removeItem('rememberMe');
+                    }
                 }
+
                 navigation.replace('Aufgaben');
             } else {
                 Alert.alert('Fehler', response.data.message);

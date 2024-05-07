@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { getAuthToken } from '../../utils/AuthTokenUtil';
+import { getAuthToken, removeAuthToken } from '../../utils/AuthTokenUtil';
 
 const LogoutScreen = ({ navigation }) => {
     const handleLogout = async () => {
@@ -15,7 +15,7 @@ const LogoutScreen = ({ navigation }) => {
             });
 
             if (response.data.success) {
-                await AsyncStorage.removeItem('authToken');
+                await removeAuthToken();
                 navigation.replace('Login');
             } else {
                 Alert.alert('Fehler', response.data.message);
