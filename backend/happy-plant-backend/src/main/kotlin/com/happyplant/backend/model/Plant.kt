@@ -19,7 +19,7 @@ data class Plant(
     @ManyToOne() var species: Species,
     @ManyToOne() private var user: User,
     @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
-    @OneToOne(cascade = [CascadeType.ALL]) @JoinColumn(referencedColumnName = "id") var needs: Needs?,
+    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn(name = "needs_id") var needs: Needs?,
 ) {
         // Methods
 
