@@ -21,10 +21,10 @@ class AuthTokenUtil {
 
     private val algorithm: Algorithm by lazy { Algorithm.HMAC512(jwtSecret) }
 
-    private val now = System.currentTimeMillis()
-    private val expiration = Date(now + jwtValidity!!)
-
     fun generateToken(userId: UUID, user: User): String {
+        val now = System.currentTimeMillis()
+        val expiration = Date(now + jwtValidity!!)
+
         return JWT.create()
             .withSubject(user.email.lowercase())
             .withClaim("userId", userId.toString())

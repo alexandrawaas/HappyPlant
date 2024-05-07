@@ -23,7 +23,7 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
             });
             if (response.data.success) {
                 Alert.alert('Erfolgreich', 'Passwort erfolgreich aktualisiert.');
-                navigation.navigate('Login');
+                navigation.navigate('Anmelden');
             } else {
                 Alert.alert('Fehler', response.data.message);
             }

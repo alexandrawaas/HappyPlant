@@ -11,6 +11,16 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
+    const handleBlur = () => {
+        setEmail('');
+        setPassword('');
+    }
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', handleBlur);
+        return unsubscribe;
+    }, [navigation]);
+
     useEffect(() => {
         checkRememberMe();
     }, []);
@@ -112,8 +122,8 @@ const LoginScreen = ({ navigation }) => {
             <TouchableOpacity style={commonStyles.button} onPress={handleLogin}>
                 <Text style={commonStyles.buttonText}>Login</Text>
             </TouchableOpacity>
-            <Button title="Password vergessen?" onPress={() => navigation.navigate('ResetPassword')} />
-            <Button title="Du hast noch keinen Account? Hier registrieren!" onPress={() => navigation.navigate('Register')} />
+            <Button title="Password vergessen?" onPress={() => navigation.navigate('Passwort zurücksetzen', { email })} />
+            <Button title="Du hast noch keinen Account? Hier registrieren!" onPress={() => navigation.navigate('Registrieren')} />
         </View>
     );
 };
