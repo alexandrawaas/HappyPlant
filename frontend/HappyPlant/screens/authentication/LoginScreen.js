@@ -77,6 +77,8 @@ const LoginScreen = ({ navigation }) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={true}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

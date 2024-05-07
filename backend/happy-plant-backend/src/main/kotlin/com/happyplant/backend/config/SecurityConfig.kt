@@ -41,16 +41,16 @@ class SecurityConfig : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**") // Erlaubt CORS für alle Pfade
-            .allowedOriginPatterns("*") // Erlaubt Anfragen von allen Ursprüngen
+            .allowedOrigins("*") // Erlaubt Anfragen von allen Ursprüngen
             .allowedMethods("GET", "POST", "PUT", "DELETE") // Erlaubt bestimmte HTTP-Methoden
             .allowedHeaders("*") // Erlaubt alle Header in der Anfrage
             .allowCredentials(true) // Erlaubt die Übertragung von Anmeldeinformationen (z. B. Cookies)
             .maxAge(3600) // Legt die maximale Zeit fest, für die der Browser die CORS-Einstellungen zwischenspeichern kann
     }
 
-    // private class DummyFilter : Filter {
-    //     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-    //         chain.doFilter(request, response)
-    //     }
-    // }
+    private class DummyFilter : Filter {
+        override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
+            chain.doFilter(request, response)
+        }
+    }
 }
