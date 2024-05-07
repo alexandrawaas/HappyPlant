@@ -20,7 +20,7 @@ import kotlin.jvm.optionals.getOrNull
 
 @Service
 class PlantService(private val db: PlantRepository,
-                   private val speciesRepository: SpeciesRepository) {
+                   private val speciesService: SpeciesService) {
     fun getPlants(): List<Plant> =
         db.findAll().toList()   // TODO: Filter by active user ID
 
@@ -29,31 +29,24 @@ class PlantService(private val db: PlantRepository,
 
 
     fun addPlant(newPlant: PlantDtoRequest): Plant {
-        var plantToSave = newPlant.asEntity(speciesRepository)
-        plantToSave = db.save(plantToSave)
-        val assignments = mutableMapOf<AssignmentType, Assignment>()
-        plantToSave.needs?.intervals?.forEach {
-            assignments[it.key] = Assignment(lastDone = null, plant = plantToSave)
-        }
-        val newAssignments = newPlant.assignments.mapValues { it.value.asEntity(plantToSave) }
-        assignments += newAssignments
-        plantToSave.assignments = assignments
+        val plantToSave = newPlant.asEntity(speciesService)
         return db.save(plantToSave)
     }
 
     fun getPlant(id: UUID): Plant? {
-        return db.findById(id).getOrNull()
+        return db.findById(id).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
     fun alterPlant(id: UUID, plant: PlantDtoRequest): Plant {
-        val plantToSave = db.findById(id).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        plantToSave.name = plant.name
-        plantToSave.species = speciesRepository.findById(plant.speciesId).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        plantToSave.notes = plant.notes
-        plantToSave.picturePath = plant.picturePath
-        if (plant.needs != null) plantToSave.needs = plant.needs!!.asEntity()
-        plantToSave.assignments += plant.assignments.mapValues { it.value.asEntity(plantToSave) }
-        return db.save(plantToSave)
+        val plantToSave = getPlant(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val patchedPlant = plantToSave.copy(
+            name = plant.name,
+            species = speciesService.getSpecies(plant.speciesId),
+            notes = plant.notes,
+            picturePath = plant.picturePath,
+            needs = plant.needs?.asEntity() ?: plantToSave.needs,
+            assignments = plantToSave.assignments + plant.assignments.mapValues { it.value.asEntity(plantToSave) })
+        return db.save(patchedPlant)
     }
 
     fun deletePlant(id: UUID): Unit {

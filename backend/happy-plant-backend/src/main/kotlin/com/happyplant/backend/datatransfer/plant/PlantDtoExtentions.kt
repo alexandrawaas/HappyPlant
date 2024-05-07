@@ -27,16 +27,15 @@ fun Plant.asDtoResponse(): PlantDtoResponse =
     )
 
 fun PlantDtoRequest.asEntity(
-    speciesRepository: SpeciesRepository,
+    speciesService: SpeciesService,
 ): Plant {
     return Plant(
         name = name,
         picturePath = picturePath,
         notes = notes,
-        assignments = mapOf(),
-        species = speciesRepository.findById(speciesId).getOrNull() ?: throw IllegalArgumentException("Species not found"),
-        needs = needs?.asEntity() ?: speciesRepository.findById(speciesId).getOrNull()?.needs ?: throw IllegalArgumentException("Species not found"),
-        pixel = null,
-        user = User.DUMMY_USER // TODO: get user from token
+        species = speciesService.getSpecies(speciesId),
+        user = User.DUMMY_USER,          // TODO: get user from token,
+        needs = needs?.asEntity() ?: speciesService.getSpecies(speciesId).needs,
+        newPlantAssignments = assignments
     )
 }

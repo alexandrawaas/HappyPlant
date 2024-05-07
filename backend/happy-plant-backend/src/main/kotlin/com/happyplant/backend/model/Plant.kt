@@ -1,5 +1,7 @@
 package com.happyplant.backend.model
 
+import com.happyplant.backend.datatransfer.assignment.AssignmentDtoRequest
+import com.happyplant.backend.datatransfer.assignment.asEntity
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
@@ -37,4 +39,22 @@ data class Plant(
 
         fun isPlaced(): Boolean =
                 pixel != null
+
+        constructor(
+            name: String,
+            picturePath: String,
+            notes: String?,
+            species: Species,
+            user: User,
+            needs: Needs,
+            newPlantAssignments: Map<AssignmentType, AssignmentDtoRequest>
+        ) : this(UUID.randomUUID(), name, picturePath, notes, mutableMapOf(), species, user, null, needs) {
+            val assignments = mutableMapOf<AssignmentType, Assignment>()
+            this.needs?.intervals?.forEach {
+                assignments[it.key] = Assignment(lastDone = null, plant = this)
+            }
+            assignments += newPlantAssignments.mapValues { it.value.asEntity(this) }
+            this.assignments = assignments.toMap()
+    }
+
 }

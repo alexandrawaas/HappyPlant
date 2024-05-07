@@ -9,6 +9,7 @@ data class AssignmentDtoResponse(
     @JsonProperty("id") val id: UUID,
     @JsonProperty("assignmentType") val assignmentType: AssignmentType,
     @JsonProperty("lastDone") val lastDone: LocalDateTime?,
-    @JsonProperty("plantId") val plantId: UUID
+    @JsonProperty("plantId") val plantId: UUID,
+    @JsonProperty("plantName") val plantName: String
     ) {
 }

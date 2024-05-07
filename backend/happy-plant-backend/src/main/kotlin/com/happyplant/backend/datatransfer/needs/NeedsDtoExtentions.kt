@@ -15,3 +15,10 @@ fun NeedsDtoRequest.asEntity(): Needs =
         lightingType = this.lightingType,
         intervals = this.intervals ?: mapOf()
     )
+
+fun NeedsDtoResponse.asEntity(): Needs =
+    Needs(
+        id = this.id,
+        lightingType = this.lightingType,
+        intervals = this.intervals
+    )

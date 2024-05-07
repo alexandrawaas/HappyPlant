@@ -12,7 +12,7 @@ fun Species.asDtoResponse(): SpeciesDtoResponse =
         picturePath = this.picturePath,
         family = this.family,
         description = this.description,
-        needs = this.needs,
+        needs = this.needs.asDtoResponse(),
     )
 
 fun SpeciesDtoResponse.asEntity(): Species =
@@ -22,5 +22,5 @@ fun SpeciesDtoResponse.asEntity(): Species =
         picturePath = this.picturePath,
         family = this.family,
         description = this.description,
-        needs = this.needs
+        needs = this.needs.asEntity(),
     )

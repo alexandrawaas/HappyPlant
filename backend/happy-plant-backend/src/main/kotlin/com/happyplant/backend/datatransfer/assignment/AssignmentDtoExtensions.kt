@@ -10,16 +10,9 @@ fun Assignment.asDtoResponse(assignmentType: AssignmentType): AssignmentDtoRespo
             id = this.id,
             lastDone = this.lastDone,
             plantId = this.plant.id,
+            plantName = this.plant.name,
             assignmentType = assignmentType
         )
-
-fun Assignment.asActiveAssignmentDtoResponse(plantId: UUID, plantName: String, assignmentType: AssignmentType): ActiveAssignmentDtoResponse =
-    ActiveAssignmentDtoResponse(
-        plantId = plantId,
-        lastDone = this.lastDone,
-        plantName = plantName,
-        assignmentType = assignmentType
-    )
 
 fun AssignmentDtoRequest.asEntity(newPlant: Plant): Assignment =
         Assignment(
