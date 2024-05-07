@@ -1,0 +1,40 @@
+###
+GET http://localhost:8080/plants
+
+###
+POST http://localhost:8080/rooms
+Content-Type: application/json
+
+{
+  "name": "Badezimmer",
+  "ratioValueX": 3,
+  "ratioValueY": 5
+}
+
+
+###
+@roomId = 9294de78-ca09-47b6-a862-0ae40485b525
+@plantId = a717af38-e53d-441d-bca9-e80f84b08ee3
+PATCH http://localhost:8080/rooms/{{roomId}}/plants/{{plantId}}
+Content-Type: application/json
+
+{
+  "x": 0,
+  "y": 2
+}
+
+###
+DELETE http://localhost:8080/rooms/{{roomId}}/plants/{{plantId}}
+
+
+###
+GET http://localhost:8080/rooms/{{roomId}}
+Content-Type: application/json
+
+###
+GET http://localhost:8080/rooms/{{roomId}}/plants
+Content-Type: application/json
+
+###
+GET http://localhost:8080/plants/{{plantId}}
+Content-Type: application/json
