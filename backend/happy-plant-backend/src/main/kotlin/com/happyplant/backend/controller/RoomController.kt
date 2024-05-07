@@ -1,8 +1,10 @@
 package com.happyplant.backend.controller
 
 import com.happyplant.backend.datatransfer.CoordinatesDtoRequest
+import com.happyplant.backend.datatransfer.pixel.PixelDtoRequest
 import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
-import com.happyplant.backend.datatransfer.pixel.PixelDto
+import com.happyplant.backend.datatransfer.pixel.PixelDtoResponse
+import com.happyplant.backend.datatransfer.plant.asDtoResponse
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.datatransfer.room.asDtoResponse
@@ -30,7 +32,7 @@ class RoomController (private val service: RoomService){
 
     @PutMapping("/{roomId}/windows")
     @ResponseStatus(HttpStatus.OK)
-    fun storeWindowsInRoom(@PathVariable("roomId") roomId: UUID, @RequestBody windows: List<PixelDto>): RoomDtoResponse =
+    fun storeWindowsInRoom(@PathVariable("roomId") roomId: UUID, @RequestBody windows: List<PixelDtoRequest>): RoomDtoResponse =
         service.storeWindowsOnRoom(roomId, windows) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     
     @GetMapping("/{roomId}")
@@ -46,23 +48,16 @@ class RoomController (private val service: RoomService){
 
     @GetMapping("/{roomId}/plants")
     @ResponseBody
-    fun getPlantsInRoom(@PathVariable roomId: UUID): List<PlantDtoResponse> {
-        // service.getPlantsInRoom(roomId).map { it.asDtoResponse() }
-        TODO("not implemented yet")
-    }
-
-    @PostMapping("/{roomId}/plants")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun addPlantToRoom(@PathVariable roomId: UUID, @RequestBody plant: PlantDtoResponse): Unit = service.addPlantToRoom(roomId, plant)
-    //Hier vieleicht ID von Pflanze wenn diese bereits erstellt
+    fun getPlantsInRoom(@PathVariable roomId: UUID): List<PlantDtoResponse> =
+         service.getPlantsInRoom(roomId).map { it.asDtoResponse() }
 
     @PatchMapping("/{roomId}/plants/{plantId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun repositionPlantInRoom(@PathVariable roomId: UUID, @PathVariable plantId: UUID, @RequestBody coords: CoordinatesDtoRequest): Unit
-        = service.repositionPlantInRoom(roomId, plantId, coords)
+    @ResponseBody
+    fun repositionPlantInRoom(@PathVariable roomId: UUID, @PathVariable plantId: UUID, @RequestBody coords: CoordinatesDtoRequest): Boolean =
+        service.repositionPlantInRoom(roomId, plantId, coords)
 
     @DeleteMapping("/{roomId}/plants/{plantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun removePlantFromRoom(@PathVariable roomId: UUID, @PathVariable plantId: UUID): Unit
-        = service.removePlantFromRoom(roomId, plantId)
+    fun removePlantFromRoom(@PathVariable roomId: UUID, @PathVariable plantId: UUID): Unit =
+        service.removePlantFromRoom(roomId, plantId)
 }

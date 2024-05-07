@@ -1,21 +1,23 @@
 package com.happyplant.backend.datatransfer.pixel
 
+import com.happyplant.backend.datatransfer.plant.asDtoResponse
+import com.happyplant.backend.datatransfer.plant.asEntity
 import com.happyplant.backend.model.Pixel
 import com.happyplant.backend.service.RoomService
+import com.happyplant.backend.service.SpeciesService
 
-fun Pixel.asDtoResponse(): PixelDto =
-    PixelDto(
+fun Pixel.asDtoResponse(): PixelDtoResponse =
+    PixelDtoResponse(
         id = this.id,
         x = this.x,
         y = this.y,
         roomId = this.room.id,
         isWindow = this.isWindow,
         lightingType = this.lightingType,
-        plants = listOf(), // TODO
-        // plants = this.plants.map { it.asDtoResponse() }
+        plants = this.plants.map { it.asDtoResponse() }
     )
 
-fun PixelDto.asEntity(roomService: RoomService): Pixel =
+fun PixelDtoRequest.asEntity(roomService: RoomService, speciesService: SpeciesService): Pixel =
     Pixel(
         id = this.id,
         x = this.x,
@@ -23,6 +25,5 @@ fun PixelDto.asEntity(roomService: RoomService): Pixel =
         room = roomService.getRoom(this.roomId) ?: throw NoSuchElementException(),
         isWindow = this.isWindow,
         lightingType = this.lightingType,
-        plants = mutableListOf(), // TODO
-        // plants = this.plants.map { it.asEntity() }
+        plants = this.plants.map { it.asEntity(speciesService) }.toMutableList()
     )

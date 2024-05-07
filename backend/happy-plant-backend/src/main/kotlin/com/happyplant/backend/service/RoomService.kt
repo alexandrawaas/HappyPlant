@@ -2,8 +2,8 @@ package com.happyplant.backend.service
 
 import com.happyplant.backend.repository.RoomRepository
 import com.happyplant.backend.datatransfer.CoordinatesDtoRequest
-import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
-import com.happyplant.backend.datatransfer.pixel.PixelDto
+import com.happyplant.backend.datatransfer.pixel.PixelDtoRequest
+import com.happyplant.backend.datatransfer.pixel.PixelDtoResponse
 import com.happyplant.backend.datatransfer.pixel.asEntity
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
@@ -11,7 +11,6 @@ import com.happyplant.backend.datatransfer.room.asDtoResponse
 import com.happyplant.backend.datatransfer.room.asEntity
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.model.Room
-import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -19,7 +18,14 @@ import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Service
-class RoomService (private val db: RoomRepository) {
+class RoomService (
+    private val db: RoomRepository,
+    private val plantService: PlantService,
+    private val speciesService: SpeciesService,
+) {
+    fun save(room: Room) =
+        db.save(room)
+
     fun getRooms(): List<Room> =
         db.findAll().toList()
 
@@ -35,9 +41,9 @@ class RoomService (private val db: RoomRepository) {
     fun deleteRoom(roomId: UUID): Unit =
         db.deleteById(roomId)
 
-    fun storeWindowsOnRoom(roomId: UUID, windows: List<PixelDto>): RoomDtoResponse? {
+    fun storeWindowsOnRoom(roomId: UUID, windows: List<PixelDtoRequest>): RoomDtoResponse? {
         val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        room.storeWindows(windows.map { it.asEntity(this) })
+        room.storeWindows(windows.map { it.asEntity(this, speciesService ) })
         return db.findById(roomId)
             .map { foundEntity -> db.save(room.copy(id = foundEntity.id)) }
             .map { saved -> saved.asDtoResponse() }
@@ -45,18 +51,27 @@ class RoomService (private val db: RoomRepository) {
     }
 
     fun getPlantsInRoom(roomId: UUID): List<Plant> {
-        TODO("Not yet implemented")
+        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
+        return room.grid.flatMap { it.plants }
     }
 
-    fun addPlantToRoom(roomId: UUID, plant: PlantDtoResponse): Unit {
-        TODO("Not yet implemented")
-    }
+    fun repositionPlantInRoom(roomId: UUID, plantId: UUID, coords: CoordinatesDtoRequest): Boolean {
+        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
+        val plant = plantService.getPlant(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant could not be found.")
 
-    fun repositionPlantInRoom(roomId: UUID, plantId: UUID, coords: CoordinatesDtoRequest): Unit {
-        TODO("Not yet implemented")
+        val matchingPosition = room.placePlant(plant, coords.x, coords.y)
+        save(room)
+
+        return matchingPosition
     }
 
     fun removePlantFromRoom(roomId: UUID, plantId: UUID): Unit {
-        TODO("Not yet implemented")
+        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
+        val plant = plantService.getPlant(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant could not be found.")
+        if(!plant.isPlaced() || plant.pixel?.room?.id != room.id) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Plant is not in Room to be removed from.")
+        }
+        plant.removeFromRoom()
+        save(room)
     }
 }

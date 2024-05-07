@@ -3,8 +3,6 @@ package com.happyplant.backend.datatransfer.plant
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.happyplant.backend.datatransfer.assignment.AssignmentDtoResponse
 import com.happyplant.backend.datatransfer.needs.NeedsDtoResponse
-import com.happyplant.backend.datatransfer.pixel.PixelDto
-import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.datatransfer.room.RoomDtoResponseShort
 import com.happyplant.backend.datatransfer.species.SpeciesDtoResponse
 import java.util.*
