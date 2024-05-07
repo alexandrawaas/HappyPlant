@@ -1,13 +1,12 @@
 package com.happyplant.backend.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
 @RequestMapping("test")
 class TestController {
+
     @GetMapping("/secure")
     fun secureEndpoint(): Map<String, String> {
         val message = "Secure Endpoint reached!"

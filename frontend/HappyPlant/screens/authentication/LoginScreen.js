@@ -4,6 +4,7 @@ import { commonStyles } from '../../utils/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { getAuthToken, removeAuthToken, saveAuthToken } from '../../utils/AuthTokenUtil';
+import { API_URL } from '../../config';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -24,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
             if (rememberMeValue === 'true') {
                 const authToken = await getAuthToken();
                 if (authToken) {
-                    const response = await axios.get(`${process.env.API_URL}/user`, {
+                    const response = await axios.get(`${API_URL}/user`, {
                         headers: {
                             Authorization: `Bearer ${authToken}`
                         }
@@ -49,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post(`${process.env.API_URL}/auth/login`, {
+            const response = await axios.post(`${API_URL}/auth/login`, {
                 email: email,
                 password: password
             });

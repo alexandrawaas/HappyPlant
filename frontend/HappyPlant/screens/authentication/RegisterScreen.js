@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
 import { commonStyles } from '../../utils/CommonStyles';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const RegisterScreen = ({ navigation }) => {
                 return;
             }
 
-            const response = await axios.post(`${process.env.API_URL}/auth/register`, {
+            const response = await axios.post(`${API_URL}/auth/register`, {
                 email: email,
                 password: password
             });
