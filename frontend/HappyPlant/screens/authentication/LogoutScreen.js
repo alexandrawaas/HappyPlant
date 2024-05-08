@@ -1,26 +1,22 @@
 import React from 'react';
 import { View, Button, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { getAuthToken, removeAuthToken } from '../../utils/AuthTokenUtil';
+import { API_URL } from '../../config';
 
 const LogoutScreen = ({ navigation }) => {
     const handleLogout = async () => {
         try {
-            const accessToken = await AsyncStorage.getItem('accessToken');
-            if (!accessToken) {
-                Alert.alert('Fehler', 'Kein AccessToken gefunden.');
-                return;
-            }
-
-            const response = await axios.post('http://localhost:8080/auth/logout', null, {
+            const authToken = await getAuthToken();
+            const response = await axios.post(`${API_URL}/auth/logout`, null, {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${authToken}`
                 }
             });
 
             if (response.data.success) {
-                await AsyncStorage.removeItem('accessToken');
-                navigation.replace('Login');
+                await removeAuthToken();
+                navigation.replace('Anmelden');
             } else {
                 Alert.alert('Fehler', response.data.message);
             }

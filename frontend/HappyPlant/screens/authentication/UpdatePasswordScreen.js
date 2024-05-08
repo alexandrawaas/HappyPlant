@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Alert, Text } from 'react-native';
 import { commonStyles } from '../../utils/CommonStyles';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 const UpdatePasswordScreen = ({ navigation, route }) => {
     const [resetPasswordCode, setResetPasswordCode] = useState('');
@@ -15,14 +16,14 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
                 return;
             }
 
-            const response = await axios.post('http://localhost:8080/auth/password/update', {
+            const response = await axios.post(`${API_URL}/auth/password/update`, {
                 resetPasswordToken: route.params.resetPasswordToken,
                 resetPasswordCode: resetPasswordCode,
                 newPassword: newPassword
             });
             if (response.data.success) {
                 Alert.alert('Erfolgreich', 'Passwort erfolgreich aktualisiert.');
-                navigation.navigate('Login');
+                navigation.navigate('Anmelden');
             } else {
                 Alert.alert('Fehler', response.data.message);
             }

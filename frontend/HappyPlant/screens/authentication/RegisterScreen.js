@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
 import { commonStyles } from '../../utils/CommonStyles';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleBlur = () => {
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+    };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('blur', handleBlur);
+        return unsubscribe;
+    }, [navigation]);
 
     const handleRegister = async () => {
         try {
@@ -15,12 +27,16 @@ const RegisterScreen = ({ navigation }) => {
                 return;
             }
 
-            const response = await axios.post('http://localhost:8080/auth/register', {
+            const response = await axios.post(`${API_URL}/auth/register`, {
                 email: email,
                 password: password
             });
             if (response.data.success) {
-                navigation.navigate('VerifyEmail');
+                Alert.alert(
+                    'Fast geschafft!',
+                    'Wir haben eine Verifizierungs-E-Mail an Ihre Adresse gesendet. Bitte überprüfen Sie Ihren Posteingang.',
+                    [{ text: 'OK', onPress: () => navigation.replace('Anmelden') }]
+                );
             } else {
                 Alert.alert('Fehler', response.data.message);
             }
@@ -37,6 +53,8 @@ const RegisterScreen = ({ navigation }) => {
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <TextInput
@@ -44,6 +62,8 @@ const RegisterScreen = ({ navigation }) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={true}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <TextInput
@@ -51,12 +71,14 @@ const RegisterScreen = ({ navigation }) => {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={true}
+                autoCorrect={false}
+                autoCapitalize="none"
                 style={commonStyles.input}
             />
             <TouchableOpacity style={commonStyles.button} onPress={handleRegister}>
                 <Text style={commonStyles.buttonText}>Registrieren</Text>
             </TouchableOpacity>
-            <Button title="Ich habe schon einen Account" onPress={() => navigation.navigate('Login')} />
+            <Button title="Ich habe schon einen Account" onPress={() => navigation.navigate('Anmelden')} />
         </View>
     );
 };

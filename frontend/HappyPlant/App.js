@@ -17,22 +17,22 @@ import SinglePlantScreen from "./screens/SinglePlantScreen";
 import SingleSpeciesScreen from "./screens/SingleSpeciesScreen";
 import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
 import UpdatePasswordScreen from "./screens/authentication/UpdatePasswordScreen";
-import VerifyEmailScreen from "./screens/authentication/VerifyEmailScreen";
 import RegisterScreen from "./screens/authentication/RegisterScreen";
 import LogoutScreen from "./screens/authentication/LogoutScreen";
 import TestScreen from "./screens/TestScreen";
+import LoadingScreen from "./screens/authentication/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
-              <Stack.Screen name="Login" component={LoginScreen}/>
-              <Stack.Screen name="Register" component={RegisterScreen}/>
-              <Stack.Screen name="ResetPassword" component={ResetPasswordScreen}/>
-              <Stack.Screen name="UpdatePassword" component={UpdatePasswordScreen}/>
-              <Stack.Screen name="VerifyEmail" component={VerifyEmailScreen}/>
-              <Stack.Screen name="Logout" component={LogoutScreen}/>
+          <Stack.Navigator initialRouteName="Loading">
+              <Stack.Screen name="Loading" component={LoadingScreen}/>
+              <Stack.Screen name="Anmelden" component={LoginScreen}/>
+              <Stack.Screen name="Registrieren" component={RegisterScreen}/>
+              <Stack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen}/>
+              <Stack.Screen name="Passwort ändern" component={UpdatePasswordScreen}/>
+              <Stack.Screen name="Abmelden" component={LogoutScreen}/>
               <Stack.Screen name="Test" component={TestScreen}/>
               <Stack.Screen name="Aufgaben" component={AssignmentsScreen}/>
               <Stack.Screen name="Räume" component={RoomsScreen}/>

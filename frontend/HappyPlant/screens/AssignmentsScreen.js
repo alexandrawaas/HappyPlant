@@ -9,7 +9,7 @@ export default function AssignmentsScreen({ navigation }) {
             <Button title="Lexikon" onPress={()=> navigation.navigate("Lexikon")} />
             <Button title="Einstellungen" onPress={()=> navigation.navigate("Einstellungen")} />
             <Button title="Test" onPress={()=> navigation.navigate("Test")} />
-            <Button title="Abmelden" onPress={()=> navigation.navigate("Logout")} />
+            <Button title="Abmelden" onPress={()=> navigation.navigate("Abmelden")} />
         </View>
     );
 }

@@ -23,13 +23,18 @@ class AuthService(
     private val authTokenUtil: AuthTokenUtil
 ) {
     fun registerUser(user: CredentialsDto): ApiResponse<UserDto> {
-        val existingUser = userRepository.findByEmail(user.email)
+        val errorMessage = validateCredentials(user)
+        if (errorMessage.isNotEmpty()) {
+            return ApiResponse(false, errorMessage, null, HttpStatus.BAD_REQUEST)
+        }
+
+        val existingUser = userRepository.findByEmail(user.email.lowercase())
         if (existingUser != null) {
             return ApiResponse(false, "User with this email already exists", null, HttpStatus.BAD_REQUEST)
         }
 
         val newUser = User (
-            email = user.email,
+            email = user.email.lowercase(),
             passwordHash = hashPassword(user.password),
             emailVerified = false,
             emailVerificationToken = UUID.randomUUID().toString(),
@@ -49,7 +54,7 @@ class AuthService(
     }
 
     fun login(user: CredentialsDto): ApiResponse<Map<String, Any>> {
-        val existingUser = userRepository.findByEmail(user.email)
+        val existingUser = userRepository.findByEmail(user.email.lowercase())
             ?: return ApiResponse(false, "Invalid credentials", null, HttpStatus.UNAUTHORIZED)
 
         if (!checkPassword(user.password, existingUser.passwordHash)) {
@@ -60,9 +65,9 @@ class AuthService(
             return ApiResponse(false, "Email not verified", null, HttpStatus.UNAUTHORIZED)
         }
 
-        val accessToken = authTokenUtil.generateToken(existingUser.id, existingUser)
+        val authToken = authTokenUtil.generateToken(existingUser.id, existingUser)
         
-        val responseBody = mapOf("user" to existingUser.asDto(), "accessToken" to accessToken)
+        val responseBody = mapOf("user" to existingUser.asDto(), "authToken" to authToken)
 
         return ApiResponse(true, "User logged in successfully", responseBody, HttpStatus.OK)
     }
@@ -86,7 +91,7 @@ class AuthService(
     }
 
     fun resetPassword(request: ResetPasswordDto): ApiResponse<Map<String, String>> {
-        val user = userRepository.findByEmail(request.email)
+        val user = userRepository.findByEmail(request.email.lowercase())
             ?: return ApiResponse(false, "User with this email does not exist", null, HttpStatus.BAD_REQUEST)
 
         val resetPasswordToken = UUID.randomUUID().toString()
@@ -149,5 +154,36 @@ class AuthService(
 
     private fun checkPassword(plainPassword: String, hashedPassword: String): Boolean {
         return hashPassword(plainPassword) == hashedPassword
+    }
+
+    private fun validateCredentials(user: CredentialsDto): String {
+        val emailError = validateEmail(user.email.lowercase())
+        val passwordError = validatePassword(user.password)
+        
+        val errorMessageBuilder = StringBuilder()
+        if (emailError != null) {
+            errorMessageBuilder.append("$emailError\n")
+        }
+        if (passwordError != null) {
+            errorMessageBuilder.append("$passwordError\n")
+        }
+        
+        return errorMessageBuilder.toString().trim()
+    }
+    
+    private fun validateEmail(email: String): String? {
+        return if (!email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))) {
+            "Invalid email format"
+        } else {
+            null
+        }
+    }
+    
+    private fun validatePassword(password: String): String? {
+        return if (!password.matches(Regex("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+\$).{8,}\$"))) {
+            "Password must be at least 8 characters long and contain at least one digit, one lowercase, and one uppercase letter"
+        } else {
+            null
+        }
     }
 }
