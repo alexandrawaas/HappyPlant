@@ -5,10 +5,18 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 import java.net.URLEncoder
+import io.github.cdimascio.dotenv.Dotenv
 import com.happyplant.backend.model.User
 
 @Service
 class EmailService {
+
+    private var apiUrl: String? = null
+
+    init {
+        val dotenv = Dotenv.configure().load();
+        apiUrl = dotenv["API_URL"] ?: throw IllegalStateException("API_URL is not set in .env file");
+    }
 
     @Autowired
     private lateinit var mailSender: JavaMailSender
@@ -37,8 +45,7 @@ class EmailService {
         val recipientAddress = user.email.lowercase()
         val subject = "Email-Adresse verifizieren"
         val encodedToken = URLEncoder.encode(emailVerificationToken, "UTF-8")
-        val verificationUrl = "http://localhost:8080/auth/verify?token=$encodedToken" // für iOS Simulator
-        // val verificationUrl = "http://192.168.2.130:8080/auth/verify?token=$encodedToken" // für Android Emulator
+        val verificationUrl = "$apiUrl/auth/verify?token=$encodedToken"
 
         val message = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true, "UTF-8")
