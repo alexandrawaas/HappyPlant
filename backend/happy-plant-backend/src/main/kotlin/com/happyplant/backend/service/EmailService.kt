@@ -37,7 +37,8 @@ class EmailService {
         val recipientAddress = user.email.lowercase()
         val subject = "Email-Adresse verifizieren"
         val encodedToken = URLEncoder.encode(emailVerificationToken, "UTF-8")
-        val verificationUrl = "http://localhost:8080/auth/verify?token=$encodedToken"
+        val verificationUrl = "http://localhost:8080/auth/verify?token=$encodedToken" // für iOS Simulator
+        // val verificationUrl = "http://192.168.2.130:8080/auth/verify?token=$encodedToken" // für Android Emulator
 
         val message = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true, "UTF-8")
