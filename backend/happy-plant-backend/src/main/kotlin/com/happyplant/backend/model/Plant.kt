@@ -6,6 +6,7 @@ import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -23,7 +24,7 @@ data class Plant(
 ) {
         // Methods
 
-        fun getNeedInterval(assignmentType: AssignmentType): Int =
+        private fun getNeedInterval(assignmentType: AssignmentType): Int =
                 needs?.getInterval(assignmentType) ?: Needs.EMPTY_INTERVAL
 
         fun getLightingType(): LightingType? =
@@ -37,6 +38,12 @@ data class Plant(
         fun getAllAssignments(): List<Assignment> =
                 ArrayList(assignments.values)
 
+        fun addAssignment(assignmentType: AssignmentType, lastDone: LocalDateTime?) {
+            val newAssignments = assignments.toMutableMap()
+            newAssignments[assignmentType] = Assignment(lastDone = lastDone, plant = this)
+            assignments = newAssignments
+        }
+
         fun isPlaced(): Boolean =
                 pixel != null
 
@@ -47,14 +54,10 @@ data class Plant(
             species: Species,
             user: User,
             needs: Needs,
-            newPlantAssignments: Map<AssignmentType, AssignmentDtoRequest>
         ) : this(UUID.randomUUID(), name, picturePath, notes, mutableMapOf(), species, user, null, needs) {
-            val assignments = mutableMapOf<AssignmentType, Assignment>()
-            this.needs?.intervals?.forEach {
-                assignments[it.key] = Assignment(lastDone = null, plant = this)
+            this.needs?.intervals?.keys?.forEach { assignmentType ->
+                this.addAssignment(assignmentType, null)
             }
-            assignments += newPlantAssignments.mapValues { it.value.asEntity(this) }
-            this.assignments = assignments.toMap()
     }
 
 }

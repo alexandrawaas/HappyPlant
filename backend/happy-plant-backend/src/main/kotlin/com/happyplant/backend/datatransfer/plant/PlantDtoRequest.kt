@@ -11,6 +11,5 @@ data class PlantDtoRequest(
     @JsonProperty("picturePath") var picturePath: String = "DefaultPicturePath",
     @JsonProperty("notes") var notes: String?,
     @JsonProperty("speciesId") var speciesId: UUID,
-    @JsonProperty("needs") var needs: NeedsDtoRequest?,
-    @JsonProperty("assignments") var assignments: Map<AssignmentType, AssignmentDtoRequest>,
+    @JsonProperty("needs") var needs: NeedsDtoRequest?
 )

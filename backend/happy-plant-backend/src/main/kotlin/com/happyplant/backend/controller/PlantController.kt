@@ -1,8 +1,10 @@
 package com.happyplant.backend.controller
 
+import com.happyplant.backend.datatransfer.assignment.AssignmentDtoRequest
 import com.happyplant.backend.datatransfer.plant.PlantDtoRequest
 import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.datatransfer.plant.asDtoResponse
+import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.service.PlantService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -46,8 +48,8 @@ class PlantController (private val service: PlantService) {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletePlant(@PathVariable plantId: UUID): Unit = service.deletePlant(plantId)
 
-    @PatchMapping("/{plantId}/assignments/{assignmentId}")
+    @PatchMapping("/{plantId}/assignments")
     @ResponseStatus(HttpStatus.OK)
-    fun setAssignmentForPlant(@PathVariable plantId: UUID, @PathVariable assignmentId: UUID, @RequestBody date: LocalDateTime): PlantDtoResponse
-        = service.setAssignmentForPlant(plantId, assignmentId, date).asDtoResponse()
+    fun setAssignmentForPlant(@PathVariable plantId: UUID, @RequestBody assignment: AssignmentDtoRequest): PlantDtoResponse
+        = service.setAssignmentForPlant(plantId, assignment).asDtoResponse()
 }

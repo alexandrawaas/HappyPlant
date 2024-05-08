@@ -1,5 +1,6 @@
 package com.happyplant.backend.service
 
+import com.happyplant.backend.datatransfer.assignment.AssignmentDtoRequest
 import com.happyplant.backend.datatransfer.assignment.asEntity
 import com.happyplant.backend.datatransfer.needs.asEntity
 import com.happyplant.backend.datatransfer.plant.PlantDtoRequest
@@ -34,18 +35,18 @@ class PlantService(private val db: PlantRepository,
     }
 
     fun getPlant(id: UUID): Plant? {
-        return db.findById(id).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        return db.findById(id).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
     }
 
     fun alterPlant(id: UUID, plant: PlantDtoRequest): Plant {
-        val plantToSave = getPlant(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val plantToSave = getPlant(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
         val patchedPlant = plantToSave.copy(
             name = plant.name,
             species = speciesService.getSpecies(plant.speciesId),
             notes = plant.notes,
             picturePath = plant.picturePath,
-            needs = plant.needs?.asEntity() ?: plantToSave.needs,
-            assignments = plantToSave.assignments + plant.assignments.mapValues { it.value.asEntity(plantToSave) })
+            needs = plant.needs?.asEntity() ?: plantToSave.needs)
+        patchedPlant.needs?.intervals?.forEach { if (!patchedPlant.assignments.keys.contains(it.key)) patchedPlant.addAssignment(assignmentType = it.key, lastDone = null) }
         return db.save(patchedPlant)
     }
 
@@ -53,10 +54,9 @@ class PlantService(private val db: PlantRepository,
         db.deleteById(id)
     }
 
-    fun setAssignmentForPlant(plantId: UUID, assignmentId: UUID, date: LocalDateTime): Plant {
-        val plant: Plant = db.findById(plantId).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        val assignmentKey: AssignmentType = plant.assignments.filter { it.value.id == assignmentId }.keys.firstOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        plant.assignments[assignmentKey]!!.lastDone = date
+    fun setAssignmentForPlant(plantId: UUID, assignment: AssignmentDtoRequest): Plant {
+        val plant: Plant = db.findById(plantId).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
+        plant.assignments[assignment.assignmentType]?.lastDone = assignment.lastDone
         return db.save(plant)
     }
 }

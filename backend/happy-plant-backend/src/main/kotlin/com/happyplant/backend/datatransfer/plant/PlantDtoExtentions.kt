@@ -36,6 +36,5 @@ fun PlantDtoRequest.asEntity(
         species = speciesService.getSpecies(speciesId),
         user = User.DUMMY_USER,          // TODO: get user from token,
         needs = needs?.asEntity() ?: speciesService.getSpecies(speciesId).needs,
-        newPlantAssignments = assignments
     )
 }
