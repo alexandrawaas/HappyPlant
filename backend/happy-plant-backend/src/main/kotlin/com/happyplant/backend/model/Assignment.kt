@@ -9,9 +9,9 @@ import com.happyplant.backend.model.Plant
 @Entity
 @Table(name="assignments")
 data class Assignment(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
-        @Column private var lastDone: LocalDateTime?,
-        @ManyToOne() private val plant: Plant
+        @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
+        @Column var lastDone: LocalDateTime?,
+        @ManyToOne() val plant: Plant
 )
 {
         // Methods

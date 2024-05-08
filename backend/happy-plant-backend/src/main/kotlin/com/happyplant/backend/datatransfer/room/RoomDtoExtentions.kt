@@ -11,6 +11,12 @@ fun Room.asDtoResponse(): RoomDtoResponse =
         grid = this.grid.map { it.asDtoResponse() },
     )
 
+fun Room.asDtoResponseShort(): RoomDtoResponseShort =
+    RoomDtoResponseShort(
+        id = this.id,
+        name = this.name,
+    )
+
 fun RoomDtoRequest.asEntity(): Room =
     Room(
         name = this.name,

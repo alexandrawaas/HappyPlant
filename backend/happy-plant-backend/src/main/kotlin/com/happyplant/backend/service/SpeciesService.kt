@@ -2,6 +2,7 @@ package com.happyplant.backend.service
 
 import com.happyplant.backend.datatransfer.species.SpeciesDtoResponse
 import com.happyplant.backend.datatransfer.species.asDtoResponse
+import com.happyplant.backend.model.Species
 import com.happyplant.backend.repository.SpeciesRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -11,13 +12,13 @@ import kotlin.jvm.optionals.getOrElse
 
 @Service
 class SpeciesService(private val db: SpeciesRepository) {
-    fun getSpecies(speciesId: UUID): SpeciesDtoResponse =
-        db.findById(speciesId).map { it.asDtoResponse() }
+    fun getSpecies(speciesId: UUID): Species =
+        db.findById(speciesId)
             .getOrElse {
                 throw ResponseStatusException(HttpStatus.NOT_FOUND, "species id '$speciesId' not found.")
             }
 
 
-    fun getSpecies(): List<SpeciesDtoResponse> =
-        db.findAll().map { it.asDtoResponse() }
+    fun getSpecies(): List<Species> =
+        db.findAll()
 }

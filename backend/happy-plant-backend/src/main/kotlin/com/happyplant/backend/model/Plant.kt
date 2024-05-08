@@ -1,40 +1,63 @@
 package com.happyplant.backend.model
 
+import com.happyplant.backend.datatransfer.assignment.AssignmentDtoRequest
+import com.happyplant.backend.datatransfer.assignment.asEntity
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
 @Table(name="plants")
 data class Plant(
-        @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
-        @NotNull private var name: String,
-        @NotNull private var picturePath: String = "DefaultPicturePath",
-        @Column private var notes: String?,
-        @OneToMany() private var assignments: Map<AssignmentType, Assignment>,
-        @ManyToOne() private var species: Species,
-        @ManyToOne() private var user: User,
-        @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
-        @OneToOne() @JoinColumn(referencedColumnName = "id") var needs: Needs?,
+    @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
+    @NotNull var name: String,
+    @NotNull var picturePath: String = "DefaultPicturePath",
+    @Column var notes: String?,
+    @OneToMany(cascade = [CascadeType.ALL]) var assignments: Map<AssignmentType, Assignment>,
+    @ManyToOne() var species: Species,
+    @ManyToOne() private var user: User,
+    @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
+    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn(name = "needs_id") var needs: Needs?,
 ) {
         // Methods
 
-        fun getNeedInterval(assignmentType: AssignmentType): Int =
+        private fun getNeedInterval(assignmentType: AssignmentType): Int =
                 needs?.getInterval(assignmentType) ?: Needs.EMPTY_INTERVAL
 
         fun getLightingType(): LightingType? =
                 needs?.lightingType
 
-        fun getActiveAssignments(): List<Assignment> =
+        fun getActiveAssignments(): Map<AssignmentType, Assignment> =
                 assignments.filter { (assignmentType, assignment) ->
                         assignment.isActive(getNeedInterval(assignmentType))
-                }.map { it.value }
+                }
 
         fun getAllAssignments(): List<Assignment> =
                 ArrayList(assignments.values)
 
+        fun addAssignment(assignmentType: AssignmentType, lastDone: LocalDateTime?) {
+            val newAssignments = assignments.toMutableMap()
+            newAssignments[assignmentType] = Assignment(lastDone = lastDone, plant = this)
+            assignments = newAssignments
+        }
+
         fun isPlaced(): Boolean =
                 pixel != null
+
+        constructor(
+            name: String,
+            picturePath: String,
+            notes: String?,
+            species: Species,
+            user: User,
+            needs: Needs,
+        ) : this(UUID.randomUUID(), name, picturePath, notes, mutableMapOf(), species, user, null, needs) {
+            this.needs?.intervals?.keys?.forEach { assignmentType ->
+                this.addAssignment(assignmentType, null)
+            }
+    }
+
 }

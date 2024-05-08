@@ -8,8 +8,8 @@ import java.util.*
 @Entity
 @Table(name="needs")
 data class Needs(
-    @Id @GeneratedValue(strategy = GenerationType.UUID) private val id: UUID = UUID.randomUUID(),
-    @ElementCollection @CollectionTable private var intervals: Map<AssignmentType, Int?>,
+    @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
+    @ElementCollection @CollectionTable var intervals: Map<AssignmentType, Int?>,
     @Column var lightingType: LightingType?
 ) {
         companion object{

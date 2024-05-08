@@ -42,7 +42,5 @@ out/
 ### MacOS ###
 .DS_Store
 
-### Dotenv ###
-.env
 create.sql
 /data/
