@@ -4,7 +4,6 @@
 ### Übersicht
 - alle bestehenden Pflanzenarten anzeigen (Name und Bild) 
     - Pflanzendatenbank mit ca 30 Pflanzen mit je einem Default Bild und deren Daten vorkonfigurieren
-- User kann neue Pflanzenarten hinzufügen
 ### Einzelansicht
 - alle Infos zu Spezies (Name, Bild, Licht-Gieß-Umtopf-Schnitt-Düng)
 - Funktion "Pflanze dieser Art zu meinem Haushalt hinzufügen" > Welcher Raum > normales Drag and Drop Interface
@@ -32,6 +31,10 @@
     - Pflanze per Drag and Drop in Raum Grid platzieren
         - dabei Feedback ob guter/schlechter Standort
 ## Pflanzen
+### Übersicht
+- Liste aller Pflanzen, die einem gehören (sowohl platzierte als auch unplatzierte)
+    - durchsuchbar nach Name/Spezies
+- Neue Pflanze erstellen (wie oben in Raum-Einzelansicht)
 ### Einzelansicht (Navigation: Raum>Pflanze)
 - alle Properties anzeigen
     - Name, Spezies, Bild (wenn kein eigenes, das Default aus der Datenbank)
@@ -39,6 +42,7 @@
     - Intervalle für AssignmentsScreen (individuell anpassen)
     - Notizen zur Pflanze
 - jeweiliges Datum für nächstes Todo pro Kategorie (Gieß-Umtopf-Schnitt-Düng) anzeigen
+- für eine Kategorie sagen, dass man schon erledigt hat (unabhängig von einem Todo)
 ## Aufgabenverwaltung
 ### Übersicht
 - AssignmentsScreen abhaken
