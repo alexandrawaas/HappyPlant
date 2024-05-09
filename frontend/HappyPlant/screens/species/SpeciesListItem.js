@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button, Image, TouchableOpacity, TouchableNativeFeedback, TouchableHighlight, TouchableWithoutFeedback } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import SpeciesListItemAddButton from "./SpeciesListItemAddButton";
 
 export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {

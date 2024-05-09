@@ -1,5 +1,4 @@
 import { AssignmentTypeTranslations } from "../../utils/EnumTranslations";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { AssignmentTypeIcons } from "../../utils/EnumIcons";
 import { LightingTypeTranslations } from "../../utils/EnumTranslations";
 import { Tooltip } from "react-native-elements";

@@ -2,10 +2,6 @@ import {View, Text, StyleSheet, Image,} from "react-native";
 import { useEffect, useState } from "react";
 import { useRoute } from '@react-navigation/native';
 import { API_URL } from "../../config";
-import { LightingTypeTranslations, AssignmentTypeTranslations } from "../../utils/EnumTranslations";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { AssignmentTypeIcons } from "../../utils/EnumIcons";
-import { Tooltip } from "react-native-elements";
 import NeedLabelWithIcon from "./NeedLabelWithIcon";
 
 export default function SingleSpeciesScreen({ navigation }) {

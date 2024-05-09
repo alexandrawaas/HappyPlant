@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet } from "react-native";
-import speciesMock from "./SpeciesMock";
 import SpeciesListItem from "./SpeciesListItem";
 import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
