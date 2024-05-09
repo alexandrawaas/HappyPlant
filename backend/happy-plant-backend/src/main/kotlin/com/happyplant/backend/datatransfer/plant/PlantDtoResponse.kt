@@ -13,7 +13,8 @@ data class PlantDtoResponse(
     @JsonProperty("picturePath") var picturePath: String = "DefaultPicturePath",
     @JsonProperty("notes") var notes: String?,
     @JsonProperty("room") var room: RoomDtoResponseShort?,
+    @JsonProperty("hasOptimalLightingCondition") var hasOptimalLightingCondition: Boolean,
     @JsonProperty("species") var species: SpeciesDtoResponse,
     @JsonProperty("needs") var needs: NeedsDtoResponse?,
-    @JsonProperty("assignments") var assignments: List<AssignmentDtoResponse>, ) {
-}
+    @JsonProperty("assignments") var assignments: List<AssignmentDtoResponse>,
+)

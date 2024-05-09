@@ -6,5 +6,4 @@ import java.util.*
 data class RoomDtoResponseShort(
         @JsonProperty("id") val id: UUID,
         @JsonProperty("name") val name: String,
-) {
-}
+)

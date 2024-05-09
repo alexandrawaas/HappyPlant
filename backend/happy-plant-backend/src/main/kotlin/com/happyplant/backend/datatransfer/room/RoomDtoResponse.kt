@@ -8,5 +8,4 @@ data class RoomDtoResponse(
     @JsonProperty("id") val id: UUID,
     @JsonProperty("name") val name: String,
     @JsonProperty("grid") val grid: List<PixelDtoResponse>,
-) {
-}
+)
