@@ -47,6 +47,12 @@ data class Plant(
         fun isPlaced(): Boolean =
                 pixel != null
 
+        fun removeFromRoom() {
+            if(isPlaced()) {
+                pixel!!.removePlant(this)
+            }
+        }
+
         constructor(
             name: String,
             picturePath: String,

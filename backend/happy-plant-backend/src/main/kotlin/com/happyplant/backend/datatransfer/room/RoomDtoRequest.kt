@@ -1,7 +1,6 @@
 package com.happyplant.backend.datatransfer.room
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.*
 
 data class RoomDtoRequest(
     @JsonProperty("name") val name: String,

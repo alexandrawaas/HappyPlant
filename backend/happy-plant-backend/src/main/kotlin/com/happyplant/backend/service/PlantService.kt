@@ -20,8 +20,13 @@ import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 @Service
-class PlantService(private val db: PlantRepository,
-                   private val speciesService: SpeciesService) {
+class PlantService(
+    private val db: PlantRepository,
+    private val speciesService: SpeciesService,
+) {
+    fun save(plant: Plant) =
+        db.save(plant)
+
     fun getPlants(): List<Plant> =
         db.findAll().toList()   // TODO: Filter by active user ID
 

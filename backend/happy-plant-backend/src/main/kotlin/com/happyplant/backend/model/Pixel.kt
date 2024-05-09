@@ -3,6 +3,7 @@ package com.happyplant.backend.model
 import com.happyplant.backend.utility.Coordinate
 import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
+import org.eclipse.persistence.annotations.Mutable
 import java.util.*
 import kotlin.math.abs
 
@@ -46,8 +47,10 @@ data class Pixel(
         }
 
         fun placePlant(plant: Plant) : Boolean {
-                plants.add(plant)
-                plant.pixel = this
+                if(!plants.any { it.id == plant.id }) { // TODO: speed up performance by using a set
+                        plants.add(plant)
+                        plant.pixel = this
+                }
                 return plant.getLightingType() == this.lightingType
         }
 
