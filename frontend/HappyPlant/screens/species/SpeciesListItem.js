@@ -9,13 +9,22 @@ export default function SpeciesListItem({ species }) {
                     source={require('../../assets/icon.png')}
                 />
             </View>
-            <View style={styles.titleContainer}>
+            {/* <View style={styles.titleContainer}>
                 <Text style={styles.header}>{species.name}</Text>
                 <Text style={styles.subHeader}>{species.family}</Text>
             </View>
             <SpeciesListItemAddButton
                 title="+"
-            />
+            /> */}
+            <View style={[styles.cardbox, styles.shadowed]}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.header}>{species.name}</Text>
+                    <Text style={styles.subHeader}>{species.family}</Text>
+                </View>
+                <SpeciesListItemAddButton
+                    title="+"
+                />
+            </View>
         </View>
     );
 }
@@ -29,26 +38,39 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     container: {
+        flexDirection: "row",
+        alignItems: "center",
+        height: 100,
+        margin: 10,
+    },
+    imageContainer: {
+        borderRadius: 50,
+        width: 85,
+        height: 85,
+        overflow: "hidden",
+        position: "absolute",
+        left: 0,
+    },
+    image: {
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+    },
+    cardbox: {
+        flex: 1,
+        height: "100%",
+        marginLeft: 30,
+        position: "relative",
+        zIndex: -2,
+        backgroundColor: "#fef7ee",
+        borderRadius: 10,
+        paddingRight: 20,
+
+        paddingLeft: 60,
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        margin: 10,
-        borderRadius: 10,
         alignItems: "center",
-        paddingRight: 20,
-        height: 100,
-        backgroundColor: "#fef7ee",
-    },
-    imageContainer: {
-        // backgroundColor: "green",
-        borderRadius: 50,
-        width: 70,
-        height: 70,
-    },
-    image: {
-        borderRadius: 50,
-        width: 70,
-        height: 70,
     },
     titleContainer: {
         display: "flex",
