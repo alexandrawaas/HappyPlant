@@ -23,24 +23,21 @@ const intervals0 = {
     watering: 7,
     cutting: 14,
     fertilizing: 30,
-    repotting: 365,
-    repositioning: 60
+    repotting: 365
 };
 
 const intervals1 = {
     watering: 5,
     cutting: 14,
     fertilizing: 30,
-    repotting: 180,
-    repositioning: 30
+    repotting: 180
 };
 
 const intervals2 = {
     watering: 7,
     cutting: 21,
     fertilizing: 45,
-    repotting: 240,
-    repositioning: 45
+    repotting: 240
 };
 
 

@@ -6,4 +6,5 @@ import java.util.*
 
 interface SpeciesRepository: JpaRepository<Species, UUID> {
     fun findByName(name: String): Species?
+    fun findAllByNameContainingIgnoreCase(query: String): Iterable<Species>
 }

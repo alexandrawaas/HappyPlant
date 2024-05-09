@@ -11,7 +11,8 @@ export default function SpeciesListItemAddButton({ title, onPress, style }) {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: 'white',
+        background: "linear-gradient(180deg, #FFFFFF 0%, #00000 100%)",
+        backgroundColor: "white",
         paddingHorizontal: 10,
         paddingVertical: 3,
         borderRadius: 12,
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
+        marginRight: 20,
     },
     buttonText: {
         color: 'black',

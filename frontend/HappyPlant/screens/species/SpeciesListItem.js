@@ -1,31 +1,27 @@
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import { View, Text, StyleSheet, Button, Image, TouchableOpacity, TouchableNativeFeedback, TouchableHighlight, TouchableWithoutFeedback } from "react-native";
 import SpeciesListItemAddButton from "./SpeciesListItemAddButton";
 
-export default function SpeciesListItem({ species }) {
+export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
     return (
-        <View style={styles.container}>
-            <View style={[styles.imageContainer, styles.shadowed]}>
-                <Image style={styles.image}
-                    source={require('../../assets/icon.png')}
-                />
-            </View>
-            {/* <View style={styles.titleContainer}>
-                <Text style={styles.header}>{species.name}</Text>
-                <Text style={styles.subHeader}>{species.family}</Text>
-            </View>
-            <SpeciesListItemAddButton
-                title="+"
-            /> */}
-            <View style={[styles.cardbox, styles.shadowed]}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.header}>{species.name}</Text>
-                    <Text style={styles.subHeader}>{species.family}</Text>
+        <TouchableWithoutFeedback onPress={onPressItem}>
+            <View style={styles.container} >
+                <View style={[styles.imageContainer, styles.shadowed]}>
+                    <Image style={styles.image}
+                        source={require('../../assets/adaptive-icon.png')}
+                    />
                 </View>
-                <SpeciesListItemAddButton
-                    title="+"
-                />
+                <View style={[styles.cardbox, styles.shadowed]}>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.header}>{species.name}</Text>
+                        <Text style={styles.subHeader}>{species.family}</Text>
+                    </View>
+                    <SpeciesListItemAddButton
+                        onPress={onPressAdd}
+                        title="+"
+                    />
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -42,6 +38,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: 100,
         margin: 10,
+        zIndex: -3,
     },
     imageContainer: {
         borderRadius: 50,
@@ -50,6 +47,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         position: "absolute",
         left: 0,
+        backgroundColor: "white",
     },
     image: {
         width: "100%",
