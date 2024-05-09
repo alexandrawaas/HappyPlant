@@ -15,7 +15,7 @@ export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
                         <Text style={styles.header}>{species.name}</Text>
                         <Text style={styles.subHeader}>{species.family}</Text>
                     </View>
-                    <SpeciesListItemAddButton
+                    <SpeciesListItemAddButton style={styles.button}
                         onPress={onPressAdd}
                         title="+"
                     />
@@ -35,9 +35,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: "row",
+        display: "flex",
         alignItems: "center",
         height: 100,
-        margin: 10,
+        marginBottom: 20,
         zIndex: -3,
     },
     imageContainer: {
@@ -62,7 +63,6 @@ const styles = StyleSheet.create({
         zIndex: -2,
         backgroundColor: "#fef7ee",
         borderRadius: 10,
-        paddingRight: 20,
 
         paddingLeft: 60,
         display: "flex",
@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
     titleContainer: {
         display: "flex",
         padding: 10,
-        width: 240,
     },
     header: {
         fontSize: 18,
@@ -81,5 +80,5 @@ const styles = StyleSheet.create({
     },
     subHeader: {
         fontSize: 14,
-    }
+    },
 });
