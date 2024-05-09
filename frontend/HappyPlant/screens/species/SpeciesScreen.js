@@ -37,8 +37,8 @@ export default function SpeciesScreen({ navigation }) {
                 ? species.map(i =>
                     <SpeciesListItem
                         species={i} key={i.id}
-                        onPressItem={() => navigation.navigate("Einzelne Pflanzenart")}
-                        onPressAdd={() => navigation.navigate("Pflanze erstellen")}
+                        onPressItem={() => navigation.navigate("Einzelne Pflanzenart", {id: i.id})}
+                        onPressAdd={() => navigation.navigate("Pflanze erstellen", {id: i.id})}
                     />
                 )
                 : <Text style={styles.fallBackText}>Keine Spezies gefunden.</Text>}
