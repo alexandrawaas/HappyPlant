@@ -8,13 +8,13 @@ import LoginScreen from "./screens/authentication/LoginScreen";
 import AssignmentsScreen from "./screens/AssignmentsScreen";
 import RoomsScreen from "./screens/RoomsScreen";
 import MyPlantsScreen from "./screens/MyPlantsScreen";
-import SpeciesScreen from "./screens/SpeciesScreen";
+import SpeciesScreen from "./screens/species/SpeciesScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SingleRoomScreen from "./screens/SingleRoomScreen";
 import CreatePlantScreen from "./screens/CreatePlantScreen";
 import PlaceWindow from "./screens/PlaceWindow";
 import SinglePlantScreen from "./screens/SinglePlantScreen";
-import SingleSpeciesScreen from "./screens/SingleSpeciesScreen";
+import SingleSpeciesScreen from "./screens/species/SingleSpeciesScreen";
 import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
 import UpdatePasswordScreen from "./screens/authentication/UpdatePasswordScreen";
 import RegisterScreen from "./screens/authentication/RegisterScreen";
@@ -26,7 +26,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="Loading">
+          <Stack.Navigator initialRouteName="Lexikon">
               <Stack.Screen name="Loading" component={LoadingScreen}/>
               <Stack.Screen name="Anmelden" component={LoginScreen}/>
               <Stack.Screen name="Registrieren" component={RegisterScreen}/>
