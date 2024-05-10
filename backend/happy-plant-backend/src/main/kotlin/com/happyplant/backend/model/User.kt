@@ -36,10 +36,13 @@ data class User(
         var resetPasswordCode: Int? = null,
 
         @Column(name = "receive_push_notifications")
-        private var receivePushNotifications: Boolean,
+        var receivePushNotifications: Boolean,
+
+        @Column(name = "push_notification_token")
+        var pushNotificationToken: String? = null,
 
         @Column(name = "push_notifications_time")
-        private var pushNotificationsTime: LocalTime?,
+        var pushNotificationsTime: LocalTime?,
 
         @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user", orphanRemoval = true)
         private var plants: MutableList<Plant>,
