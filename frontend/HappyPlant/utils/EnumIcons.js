@@ -2,6 +2,9 @@
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {StyleSheet} from "react-native";
 
 const styles = StyleSheet.create({
@@ -17,3 +20,12 @@ export const AssignmentTypeIcons = {
     "REPOTTING": <MaterialCommunityIcons name="shovel" color="#000000" size={20} style={styles.icon}/>,
     "LIGHTING": <MaterialIcons name="sunny" color="#000000" size={20} style={styles.icon}/>,
 }
+
+export const RoomTypeIcons = {
+    "BATH": <FontAwesome5 name="bath" color="#000000" size={50}/>, 
+    "SLEEP": <Ionicons name="bed" color="#000000" size={50}/>, 
+    "COOK": <FontAwesome6 name="kitchen-set" color="#000000" size={50}/>, 
+    "LIVE": <FontAwesome6 name="couch" color="#000000" size={50}/>, 
+    "OTHER": <></>, 
+}
+

@@ -6,11 +6,11 @@ import HeaderBackground from './screens/global/HeaderBackground';
 //Screens
 import LoginScreen from "./screens/authentication/LoginScreen";
 import AssignmentsScreen from "./screens/AssignmentsScreen";
-import RoomsScreen from "./screens/RoomsScreen";
+import RoomsScreen from "./screens/room/RoomsScreen";
 import MyPlantsScreen from "./screens/MyPlantsScreen";
 import SpeciesScreen from "./screens/species/SpeciesScreen";
 import SettingsScreen from "./screens/SettingsScreen";
-import SingleRoomScreen from "./screens/SingleRoomScreen";
+import SingleRoomScreen from "./screens/room/SingleRoomScreen";
 import CreatePlantScreen from "./screens/CreatePlantScreen";
 import PlaceWindow from "./screens/PlaceWindow";
 import SinglePlantScreen from "./screens/SinglePlantScreen";
