@@ -31,13 +31,12 @@ export default function SingleSpeciesScreen({ navigation }) {
                 <Text style={styles.header2}>Überblick</Text>
                 <NeedLabelWithIcon assignmentType="LIGHTING" value={species?.needs?.lightingType}/>
                 <View style={styles.pairedNeedContainer}>
-                    <NeedLabelWithIcon assignmentType="WATERING" value={species?.needs?.intervals.WATERING}/>
-                    <NeedLabelWithIcon assignmentType="FERTILIZING" value={species?.needs?.intervals.FERTILIZING}/>
-                </View>
-                <View style={styles.pairedNeedContainer}>
-                    <NeedLabelWithIcon assignmentType="REPOTTING" value={species?.needs?.intervals.REPOTTING}/>
-                    <NeedLabelWithIcon assignmentType="CUTTING" value={species?.needs?.intervals.CUTTING}/>
-                </View>
+                    {species?.needs?.intervals
+                    ? Object.entries(species.needs.intervals).map(([k, v]) => 
+                        <NeedLabelWithIcon assignmentType={k} value={v}/>
+                    )
+                    : null}
+                </View> 
 
                 <Text style={styles.header2}>Information</Text>
                 <Text style={styles.informationBlock}>Diese Pflanze gehört zur Familie der {species.family}. {species.description}</Text>
@@ -99,7 +98,8 @@ const styles = StyleSheet.create({
     },
     pairedNeedContainer: {
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        flexWrap: "wrap"
     },
     informationBlock: {
         textAlign: "justify"

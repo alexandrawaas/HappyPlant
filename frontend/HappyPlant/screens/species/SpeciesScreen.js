@@ -12,7 +12,7 @@ export default function SpeciesScreen({ navigation }) {
         fetch(`${API_URL}/species`)
             .catch(err => console.dir(err))
             .then(response => response.json())
-            .then(data => Array.isArray(data) ? setSpecies(data) : speciesMock)
+            .then(data => setSpecies(data))
     }, [])
 
     useEffect(() => {
