@@ -1,6 +1,7 @@
 package com.happyplant.backend.model
 
 import com.happyplant.backend.model.types.LightingType
+import com.happyplant.backend.model.types.RoomCategory
 import jakarta.persistence.*
 import java.util.*
 import java.util.function.Function
@@ -13,6 +14,9 @@ data class Room(
 
         @Column
         val name: String,
+
+        @Column
+        val category: RoomCategory = RoomCategory.OTHER,
 
         @OneToMany(cascade=[CascadeType.ALL], mappedBy = "room")
         val grid: MutableList<Pixel>,
@@ -36,10 +40,11 @@ data class Room(
         // Constructor
         constructor(
                 name: String,
+                category: RoomCategory,
                 user: User,
                 ratioValueX: Int,
                 ratioValueY: Int,
-        ) : this(UUID.randomUUID(), name, mutableListOf(), sizeX=ratioValueX, sizeY=ratioValueY, user) {
+        ) : this(UUID.randomUUID(), name, category, mutableListOf(), sizeX=ratioValueX, sizeY=ratioValueY, user) {
                 for (x in 0 until ratioValueX) {
                         for (y in 0 until ratioValueY) {
                                 grid.add(Pixel(this, x, y)) // TODO: change to actual logic
