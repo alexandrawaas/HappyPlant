@@ -53,8 +53,6 @@ paths:
           description: Bad Request
         '401':
           description: Not authorized
-        '404':
-          description: Plants not found
     post:
       tags:
         - plant
@@ -66,9 +64,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PlantDtoRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/PlantDtoRequest'
         required: true
       responses:
         '201':
@@ -77,11 +72,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PlantDtoResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/PlantDtoResponse'
         '400':
-          description: Invalid input
+          description: Bad Request
         '401':
           description: Not authorized
         '422':
@@ -100,8 +92,8 @@ paths:
           description: ID of plant to return
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         '200':
           description: successful operation
@@ -109,11 +101,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PlantDtoResponse'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/PlantDtoResponse'
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
@@ -130,22 +117,17 @@ paths:
           description: ID of plant to return
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         description: Update an existent plant in the user's list
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PlantDtoRequest'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/PlantDtoRequest'
       responses:
         '200':
           description: plant successfully updated
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
@@ -162,23 +144,21 @@ paths:
           description: ID of plant to return
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
-        '200':
+        '204':
           description: plant successfully deleted
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
           description: Plant not found
 
-  /plants/{plantId}/assignments/{assignmentId}:
+  /plants/{plantId}/assignments:
     patch:
       tags:
         - plant
-      summary: Update a plant assignment's "last done" date
+      summary: Update a plant's assignment
       description: Specify when an assignment was done the last time
       operationId: updatePlantAssignment
       parameters:
@@ -187,30 +167,20 @@ paths:
           description: ID of plant to update
           required: true
           schema:
-            type: integer
-            format: int64
-        - name: assignmentId
-          in: path
-          description: ID of assignment to update
-          required: true
-          schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
-        description: Update an existent plant's "last done" date for an assignment
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AssignmentDateDto'
+              $ref: '#/components/schemas/AssignmentDtoRequest'
       responses:
         '200':
           description: plant assignment successfully updated
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
-          description: Plant assignment not found
+          description: Plant not found
 
   /inventory:
     get:
@@ -219,13 +189,6 @@ paths:
       summary: Get a list of all non-placed plants
       description: Returns a list of all plants not yet placed in a room
       operationId: getInventory
-      parameters:
-        - name: search
-          in: query
-          description: String from search bar
-          schema:
-            type: string
-          required: false
       responses:
         '200':
           description: successful operation
@@ -281,8 +244,8 @@ paths:
           description: ID of species that needs to be fetched
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         '200':
           description: successful operation
@@ -323,8 +286,6 @@ paths:
           description: No content
         '400':
           description: Bad Request
-        '404':
-          description: No Rooms found
     post:
       tags:
         - room
@@ -345,7 +306,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RoomDtoResponse'
         '400':
-          description: Invalid input
+          description: Bad Request
         '401':
           description: Not authorized
         '422':
@@ -365,8 +326,8 @@ paths:
           description: ID of room to return
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         '200':
           description: successful operation
@@ -374,8 +335,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RoomDtoResponse'
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
@@ -392,13 +351,11 @@ paths:
           description: ID of room to return
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
-        '200':
+        '204':
           description: Room successfully deleted
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
@@ -417,8 +374,8 @@ paths:
           description: ID of room to set windows in
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         description: Update the windows in a room
         content:
@@ -426,7 +383,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/PixelDto'
+                $ref: '#/components/schemas/PixelDtoRequest'
       responses:
         '200':
           description: windows successfully saved
@@ -452,17 +409,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PlantDtoResponse'
-        '400':
-          description: Invalid ID
-        '404':
+        '204':
           description: No Plants found
+        '401':
+          description: Not authorized
+        '404':
+          description: Room not found
 
   /rooms/{roomId}/plants/{plantId}:
     patch:
       tags:
         - room
       summary: Update the place of a plant in a room
-      description: Move a plant's spot inside of a room
+      description: Move a plant's spot inside of a room or add plant to room
       operationId: updatePlantInRoom
       parameters:
         - name: roomId
@@ -470,17 +429,16 @@ paths:
           description: ID of room to look in
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
         - name: plantId
           in: path
           description: ID of plant to update
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
-        description: Update a plant's place inside a room
         content:
           application/json:
             schema:
@@ -488,13 +446,10 @@ paths:
       responses:
         '200':
           description: plant placement successfully updated
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
-          description: Not found
-
+          description: Room or plant not found
     delete:
       tags:
         - room
@@ -507,24 +462,22 @@ paths:
           description: ID of room to look in
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
         - name: plantId
           in: path
           description: ID of plant to delete
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
-        '200':
+        '204':
           description: Plant successfully deleted from the room
-        '400':
-          description: Invalid ID supplied
         '401':
           description: Not authorized
         '404':
-          description: Plant not found
+          description: Room or plant not found
 
   /assignments:
     get:
@@ -541,7 +494,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ActiveAssignmentDtoResponse'
+                  $ref: '#/components/schemas/AssignmentDtoResponse'
         '204':
           description: No content
         '401':
@@ -561,8 +514,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDto'
-        '400':
-          description: Invalid Token supplied
         '401':
           description: Not authorized
         '404':
@@ -581,8 +532,6 @@ paths:
       responses:
         '200':
           description: User settings successfully updated
-        '400':
-          description: Invalid Token supplied
         '401':
           description: Not authorized
         '404':
@@ -594,10 +543,8 @@ paths:
       description: Deletes the current user's account
       operationId: deleteUser
       responses:
-        '200':
+        '204':
           description: Account successfully deleted
-        '400':
-          description: Invalid Token supplied
         '401':
           description: Not authorized
         '404':
@@ -713,9 +660,11 @@ paths:
         content:
           application/json:
             schema:
-              type: string
-              description: Verify-email-token
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
         required: true
       responses:
         '200':
@@ -738,9 +687,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         name:
           type: string
           example: butterfly orchid
@@ -763,9 +712,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         lightingType:
           $ref: '#/components/schemas/LightingType'
         intervals:
@@ -775,7 +724,7 @@ components:
             key:
               $ref: '#/components/schemas/AssignmentType'
             value:
-              type: integer
+              type: string
               example: 7
 
     NeedsDtoRequest:
@@ -788,7 +737,7 @@ components:
               key:
                 $ref: '#/components/schemas/AssignmentType'
               value:
-                type: integer
+                type: string
                 example: 7
           lightingType:
             $ref: '#/components/schemas/LightingType'
@@ -810,10 +759,19 @@ components:
         - part_shade
         - full_shade
 
-    AssignmentDateDto:
+    RoomCategory:
       type: string
-      format: date-time
-      example: 2024-03-17T12:02:15Z
+      enum:
+        - living_room
+        - bedroom
+        - kitchen
+        - bathroom
+        - office
+        - hallway
+        - balcony
+        - terrace
+        - greenhouse
+        - other
 
     AssignmentDtoRequest:
       type: object
@@ -833,9 +791,9 @@ components:
         type: object
         properties:
             id:
-              type: integer
-              format: int64
-              example: 2
+              type: string
+              format: uuid
+              example: "e386941f-d52a-46d3-b23a-9ccab3158220"
             assignmentType:
                 $ref: '#/components/schemas/AssignmentType'
             lastDone:
@@ -843,30 +801,12 @@ components:
               format: date-time
               example: 2024-03-20T09:12:28Z
             plantId:
-              type: integer
-              format: int64
-              example: 10
-
-    ActiveAssignmentDtoResponse :
-      type: object
-      required:
-        - plantId
-        - plantName
-        - assignmentType
-      properties:
-        plantId:
-          type: integer
-          format: int64
-          example: 3
-        plantName:
-          type: string
-          example: Bob
-        assignmentType:
-          $ref: '#/components/schemas/AssignmentType'
-        lastDone:
-          type: string
-          format: date-time
-          example: 2024-03-20T09:12:28Z
+              type: string
+              format: uuid
+              example: "e386941f-d52a-46d3-b23a-9ccab3158220"
+            plantName:
+              type: string
+              example: Bob
 
     RoomDtoResponse:
       type: object
@@ -876,18 +816,20 @@ components:
         - grid
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         name:
           type: string
           example: living room
+        category:
+          $ref: '#/components/schemas/RoomCategory'
         grid:
           type: array
           items:
             type: array
             items:
-              $ref: '#/components/schemas/PixelDto'
+              $ref: '#/components/schemas/PixelDtoResponse'
 
     RoomDtoRequest:
       type: object
@@ -899,11 +841,13 @@ components:
         name:
           type: string
           example: living room
+        category:
+          $ref: '#/components/schemas/RoomCategory'
         ratioValueX:
-          type: integer
+          type: string
           example: 5
         ratioValueY:
-          type: integer
+          type: string
           example: 4
 
     RoomDtoResponseShort:
@@ -913,12 +857,14 @@ components:
         - name
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         name:
           type: string
           example: living room
+        category:
+          $ref: '#/components/schemas/RoomCategory'
 
 
     PlantDtoResponse:
@@ -929,9 +875,9 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         name:
           type: string
           example: Bob
@@ -961,9 +907,9 @@ components:
           type: string
           example: Bob
         speciesId:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         notes:
           type: string
           example: Present from my grandma, lost many leaves due to cold
@@ -977,26 +923,51 @@ components:
           type: string
           example: /assets/pictures/abcdefg.jpg
 
-    PixelDto:
+    PixelDtoResponse:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         x:
-          type: integer
+          type: string
         y:
-          type: integer
+          type: string
         isWindow:
           type: boolean
           example: false
         lightingType:
           $ref: '#/components/schemas/LightingType'
         roomId:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
+        plants:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlantDtoResponse'
+
+    PixelDtoRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
+        x:
+          type: string
+        y:
+          type: string
+        isWindow:
+          type: boolean
+          example: false
+        lightingType:
+          $ref: '#/components/schemas/LightingType'
+        roomId:
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         plants:
           type: array
           items:
@@ -1009,9 +980,9 @@ components:
         - y
       properties:
         x:
-          type: integer
+          type: string
         y:
-          type: integer
+          type: string
 
     UpdatePasswordDto:
       type: object
@@ -1056,22 +1027,12 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         email:
           type: string
           example: m.mustermann@test.com
-
-    UserLoginObject:
-      type: object
-      properties:
-        email:
-          type: string
-          example: m.mustermann@test.com
-        passwordHash:
-          type: string
-          example: 3d180ab86e
 
     NotificationSettingsDtoRequest:
       type: object
