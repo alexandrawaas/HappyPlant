@@ -16,7 +16,7 @@ import java.time.LocalTime
 @Component
 class ScheduledNotifier( private val userService: UserService) {
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0/15 * * * *")
      fun sendNotifications() = runBlocking {
         var current = LocalTime.now()
 
