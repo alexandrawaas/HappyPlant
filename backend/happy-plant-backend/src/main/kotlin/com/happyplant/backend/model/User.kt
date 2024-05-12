@@ -3,7 +3,6 @@ package com.happyplant.backend.model
 import jakarta.persistence.*
 import java.time.LocalTime
 import java.util.*
-import com.happyplant.backend.datatransfer.user.UserDto
 
 @Entity
 @Table(name="users")
