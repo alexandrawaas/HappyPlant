@@ -8,6 +8,7 @@ import Constants from "expo-constants";
 import {Platform} from 'react-native';
 import { API_URL } from '../../config';
 
+
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -37,7 +38,6 @@ const RegisterScreen = ({ navigation }) => {
                 (token) => { setExpoPushToken(token); }
             );
 
-            const response = await axios.post('http://localhost:8080/auth/register', {
             const response = await axios.post(`${API_URL}/auth/register`, {
                 email: email,
                 password: password,
