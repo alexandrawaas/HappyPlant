@@ -1,6 +1,5 @@
 package com.happyplant.backend.utility
 
-
 import com.happyplant.backend.service.UserService
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
