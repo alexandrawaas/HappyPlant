@@ -15,10 +15,16 @@ import SinglePlantScreen from "./screens/SinglePlantScreen";
 import SingleSpeciesScreen from "./screens/species/SingleSpeciesScreen";
 import LogoutScreen from "./screens/authentication/LogoutScreen";
 import TestScreen from "./screens/TestScreen";
+//Utils
+import { useNotification } from "./utils/useNotification";
+import LoadingScreen from "./screens/authentication/LoadingScreen";
 import UpdatePasswordScreen from "./screens/authentication/UpdatePasswordScreen";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
+
+  const{notification} = useNotification();
+
   return (
       <NavigationContainer>
           <TabNavigator />
