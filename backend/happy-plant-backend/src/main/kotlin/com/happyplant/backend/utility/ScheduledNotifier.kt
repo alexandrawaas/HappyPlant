@@ -6,20 +6,48 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 
 @Component
-class ScheduledNotifier(
-    private val userService: UserService,
-    service: UserService,) {
+class ScheduledNotifier( private val userService: UserService) {
 
-    @Scheduled(cron = "0 0/5 * * * *")
-    fun sendNotifications(){
+    @Scheduled(cron = "0 0/15 * * * *")
+    suspend fun sendNotifications() {
         var current = LocalTime.now()
+        println("Scheduler called " + current.format(DateTimeFormatter.ISO_LOCAL_TIME))
 
-        var users = userService.getAllUsers().filter { user ->
+
+        var pushNotificationDTOs = userService.getAllUsers().filter { user ->
             user.receivePushNotifications
-            && user.pushNotificationsTime?.isBefore(current) ?: false
-            && user.pushNotificationsTime?.isAfter(current.minusMinutes(15)) ?: false
+                    && user.pushNotificationsTime?.isBefore(current) ?: false
+                    && user.pushNotificationsTime?.isAfter(current.minusMinutes(15)) ?: false
+        }.map { PushNotificationDTO::userToPushNotificationDTO }.toList()
+
+        val sizedArrays: List<Array<User>> = emptyList()
+
+        if(pushNotificationDTOs.size > 100){
+            for(i in 0..(pushNotificationDTOs.size)/100){
+                sizedArrays.plus(pushNotificationDTOs.filterIndexed { index, user -> index >= i*100 && index < i*100}.toTypedArray() )
+            }
+        }
+        else{
+            sizedArrays.plus(pushNotificationDTOs.toTypedArray())
+        }
+
+        val client = HttpClient()
+        val httpResponses: List<HttpResponse> = emptyList()
+
+        for (arr in sizedArrays) {
+
+            httpResponses.plus(
+                client.post("https://exp.host/--/api/v2/push/send"){
+                    contentType(ContentType.Application.Json)
+                    setBody(arr)
+                }
+            )
         }
 
         /*
@@ -27,11 +55,9 @@ class ScheduledNotifier(
                 user -> user.pushNotificationsTime?.isBefore(current) ?: false
                 && user.pushNotificationsTime?.isAfter(current.minusMinutes(5)) ?: false
         };
-         */
+        */
 
-        for(user in users){
-            println("Notification to " + user.email + " - " + current.format(DateTimeFormatter.ISO_LOCAL_TIME) )
-        }
+        client.close();
     }
 
 }
