@@ -12,58 +12,56 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
+import java.util.stream.Stream
+import kotlin.reflect.KFunction1
+import kotlin.streams.toList
 
 @Component
 class ScheduledNotifier( private val userService: UserService) {
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0/15 * * * *")
      fun sendNotifications() = runBlocking {
         var current = LocalTime.now()
-        println("Scheduler called " + current.format(DateTimeFormatter.ISO_LOCAL_TIME))
 
 
-        /*
         var pushNotificationDTOs = userService.getAllUsers().filter { user ->
             user.receivePushNotifications
                     && user.pushNotificationsTime?.isBefore(current) ?: false
                     && user.pushNotificationsTime?.isAfter(current.minusMinutes(15)) ?: false
-        }.map { PushNotificationDTO::userToPushNotificationDTO }.toList()
-         */
+        }.stream().map{ user -> PushNotificationDTO.userToPushNotificationDTO(user) }.toList()
 
-        var pushNotificationDTOs = listOf(User.DUMMY_USER, User.DUMMY_USER2, User.DUMMY_USER3, User.DUMMY_USER4, User.DUMMY_USER5, User.DUMMY_USER6, User.DUMMY_USER7).map { PushNotificationDTO::userToPushNotificationDTO }.toList()
+        //for testing
+        //var pushNotificationDTOs: MutableList<PushNotificationDTO> = listOf(User.DUMMY_USER, User.DUMMY_USER2, User.DUMMY_USER3, User.DUMMY_USER4, User.DUMMY_USER5, User.DUMMY_USER6, User.DUMMY_USER7).stream().map{ user -> PushNotificationDTO.userToPushNotificationDTO(user) }.toList()
 
-        val sizedArrays: List<Array<User>> = emptyList()
+        val sizedArrays: MutableList<Array<PushNotificationDTO>> = ArrayList()
 
         if(pushNotificationDTOs.size > 100){
             for(i in 0..(pushNotificationDTOs.size)/100){
-                sizedArrays.plus(pushNotificationDTOs.filterIndexed { index, user -> index >= i*100 && index < i*100}.toTypedArray() )
+                sizedArrays.add(pushNotificationDTOs.filterIndexed { index, user -> index >= i*100 && index < i*100}.toTypedArray() )
             }
         }
         else{
-            sizedArrays.plus(pushNotificationDTOs.toTypedArray())
+            sizedArrays.add(pushNotificationDTOs.toTypedArray())
         }
 
         val client = HttpClient(CIO)
-        val httpResponses: List<HttpResponse> = emptyList()
 
         for (arr in sizedArrays) {
-            println("api call" + arr)
+            //println("api call 2 - size: " + arr.size + " test: " + arr.get(0).title + " - " + arr.get(0).body )
+
             launch{
                 sendRequest(client, arr)
             }
-        }
 
-        /*
-        var users = listOf(User.DUMMY_USER, User.DUMMY_USER2, User.DUMMY_USER3, User.DUMMY_USER4, User.DUMMY_USER5, User.DUMMY_USER6, User.DUMMY_USER7);
-        */
+        }
 
         client.close();
     }
 
-    suspend fun sendRequest(client: HttpClient, arr: Array<User>): List<HttpResponse>{
-        val httpResponses: List<HttpResponse> = emptyList()
+    suspend fun sendRequest(client: HttpClient, arr: Array<PushNotificationDTO>): List<HttpResponse>{
+        val httpResponses: MutableList<HttpResponse> = ArrayList()
 
-        httpResponses.plus(
+        httpResponses.add(
             client.post("https://exp.host/--/api/v2/push/send") {
                 contentType(ContentType.Application.Json)
                 setBody(arr)
