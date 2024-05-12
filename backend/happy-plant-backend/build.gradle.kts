@@ -6,6 +6,7 @@ plugins {
 	kotlin("jvm") version "1.9.23"
 	kotlin("plugin.spring") version "1.9.23"
 	kotlin("plugin.jpa") version "1.9.23"
+	kotlin("plugin.serialization") version "1.9.23"
 }
 
 group = "com.example"
@@ -36,6 +37,8 @@ dependencies {
 	testImplementation(kotlin("test"))
 	implementation("io.ktor:ktor-client-core:2.3.11")
 	implementation("io.ktor:ktor-client-cio:2.3.11")
+	implementation("io.ktor:ktor-client-websockets:2.3.11")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }
 
 tasks.withType<KotlinCompile> {

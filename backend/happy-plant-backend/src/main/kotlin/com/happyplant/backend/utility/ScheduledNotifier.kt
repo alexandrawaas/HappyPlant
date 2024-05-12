@@ -1,25 +1,22 @@
 package com.happyplant.backend.utility
 
-import com.happyplant.backend.model.User
+
 import com.happyplant.backend.service.UserService
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import kotlinx.coroutines.*
-import java.util.stream.Stream
-import kotlin.reflect.KFunction1
-import kotlin.streams.toList
 
 @Component
 class ScheduledNotifier( private val userService: UserService) {
 
-    @Scheduled(cron = "0 0/15 * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
      fun sendNotifications() = runBlocking {
         var current = LocalTime.now()
 
@@ -30,8 +27,10 @@ class ScheduledNotifier( private val userService: UserService) {
                     && user.pushNotificationsTime?.isAfter(current.minusMinutes(15)) ?: false
         }.stream().map{ user -> PushNotificationDTO.userToPushNotificationDTO(user) }.toList()
 
+
         //for testing
-        //var pushNotificationDTOs: MutableList<PushNotificationDTO> = listOf(User.DUMMY_USER, User.DUMMY_USER2, User.DUMMY_USER3, User.DUMMY_USER4, User.DUMMY_USER5, User.DUMMY_USER6, User.DUMMY_USER7).stream().map{ user -> PushNotificationDTO.userToPushNotificationDTO(user) }.toList()
+        //var pushNotificationDTOs: MutableList<PushNotificationDTO> = listOf(User.DUMMY_USER).stream().map{ user -> PushNotificationDTO.userToPushNotificationDTO(user) }.toList();
+
 
         val sizedArrays: MutableList<Array<PushNotificationDTO>> = ArrayList()
 
@@ -44,31 +43,19 @@ class ScheduledNotifier( private val userService: UserService) {
             sizedArrays.add(pushNotificationDTOs.toTypedArray())
         }
 
-        val client = HttpClient(CIO)
+        val client = HttpClient.newBuilder().build();
 
         for (arr in sizedArrays) {
-            //println("api call 2 - size: " + arr.size + " test: " + arr.get(0).title + " - " + arr.get(0).body )
-
-            launch{
-                sendRequest(client, arr)
-            }
-
+            var json: String = Json.encodeToString(arr);
+            //println(json);
+            val request = HttpRequest.newBuilder()
+                .uri(URI.create("https://exp.host/--/api/v2/push/send"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+            val response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            //println(response.body())
         }
-
-        client.close();
-    }
-
-    suspend fun sendRequest(client: HttpClient, arr: Array<PushNotificationDTO>): List<HttpResponse>{
-        val httpResponses: MutableList<HttpResponse> = ArrayList()
-
-        httpResponses.add(
-            client.post("https://exp.host/--/api/v2/push/send") {
-                contentType(ContentType.Application.Json)
-                setBody(arr)
-            }
-        )
-
-        return httpResponses
     }
 
 }
