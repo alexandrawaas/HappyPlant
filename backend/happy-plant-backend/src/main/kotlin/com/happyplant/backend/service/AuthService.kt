@@ -15,6 +15,7 @@ import com.happyplant.backend.datatransfer.auth.UpdatePasswordDto
 import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.datatransfer.user.asDto
 import com.happyplant.backend.model.User
+import java.time.LocalTime
 
 @Service
 class AuthService(
@@ -39,8 +40,9 @@ class AuthService(
             emailVerified = false,
             emailVerificationToken = UUID.randomUUID().toString(),
             emailVerificationExpires = System.currentTimeMillis() + 600000,
-            receivePushNotifications = false, // TODO
-            pushNotificationsTime = null, // TODO
+            receivePushNotifications = true,
+            pushNotificationToken = user.pushNotificationToken,
+            pushNotificationsTime = LocalTime.of(10, 0), //TODO Standard
             plants = mutableListOf(),
             rooms = mutableListOf()
         )

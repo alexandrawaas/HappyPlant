@@ -42,7 +42,7 @@ data class User(
         var pushNotificationToken: String? = null,
 
         @Column(name = "push_notifications_time")
-        var pushNotificationsTime: LocalTime?,
+        var pushNotificationsTime: LocalTime? = LocalTime.of(10,  0),
 
         @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user", orphanRemoval = true)
         private var plants: MutableList<Plant>,
