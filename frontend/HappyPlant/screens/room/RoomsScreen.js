@@ -5,6 +5,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity } from "react-native";
 import AddRoomButton from "./AddRoomButton";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function RoomsScreen({ navigation }) {
     const handleAddRoomClick = () => {
@@ -16,7 +17,7 @@ export default function RoomsScreen({ navigation }) {
             <View style={styles.roomContainer}>
                 {roomMock.map(r =>
                     <View style={styles.roomItemContainer}>
-                        <View style={[styles.roomItemCard, styles.shadowed]}>
+                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.roomItemCard, styles.shadowed]}>
                             <View style={styles.roomItemTopContainer}>
                                 <View style={styles.iconContainer}>
                                     {RoomTypeIcons[r.category]}
@@ -42,7 +43,7 @@ export default function RoomsScreen({ navigation }) {
                                 <Text style={styles.header}>{r.name}</Text>
                                 <Text style={styles.subHeader}>{r.plants} {r.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
                             </View>
-                        </View>
+                        </LinearGradient>
                     </View>
                 )}
                 {roomMock.length % 2 == 1
