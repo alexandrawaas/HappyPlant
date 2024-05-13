@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import {StyleSheet, View, Text, Image, Platform} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
 
 import AssignmentsScreen from "../AssignmentsScreen";
 import RoomsScreen from "../RoomsScreen";
@@ -18,12 +17,12 @@ const TabNavigator = () => {
                 tabBarShowLabel: false,
                 tabBarStyle:{
                     position: 'absolute',
-                    bottom: 25,
+                    bottom: Platform.OS === 'ios' ? 30 : 25,
                     left: 20,
                     right: 20,
                     backgroundColor: '#FFFFFF',
                     borderRadius: 50,
-                    height: 70,
+                    height: Platform.OS === 'ios' ? 80 : 70,
                     ...styles.shadow,
                 } }
             }>
@@ -33,21 +32,27 @@ const TabNavigator = () => {
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                            <Image
-                                source={focused ? require('../../assets/TabNav Icons/checkliste.png') : require('../../assets/TabNav Icons/checklistegrey.png')}
-                                style={{width: 35, height: 35}}
-                            />
+                            <View style={{position: 'absolute'}}>
+                                <View style={{position: 'absolute', bottom:Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height:80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent'}} />
+                                <Image
+                                    source={focused ? require('../../assets/TabNav Icons/checkliste.png') : require('../../assets/TabNav Icons/checklistegrey.png')}
+                                    style={{width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0}}
+                                />
+                            </View>
                         </View>
                     ),
                 }}
             />
+
             <Tab.Screen name="Räume" component={RoomsScreen}
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <View style={{position: 'absolute'}} />
+                                    <View style={{position: 'absolute', bottom:Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height:80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent'}} />
                                     <Image
                                         source={focused ? require('../../assets/TabNav Icons/room.png') : require('../../assets/TabNav Icons/roomgrey.png')}
-                                        style={{width: 35, height: 35}}
+                                        style={{width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0}}
                                     />
                                 </View>
                             ),
@@ -57,9 +62,11 @@ const TabNavigator = () => {
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <View style={{position: 'absolute'}}/>
+                                    <View style={{position: 'absolute', bottom:Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height:80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent'}} />
                                     <Image
                                         source={focused ? require('../../assets/TabNav Icons/plant.png') : require('../../assets/TabNav Icons/plantgrey.png')}
-                                        style={{width: 35, height: 35}}
+                                        style={{width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0}}
                                     />
                                 </View>
                             ),
@@ -69,9 +76,11 @@ const TabNavigator = () => {
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <View style={{position: 'absolute'}} />
+                                    <View style={{position: 'absolute', bottom:Platform.OS === 'ios' ? -25 : -17, left: -22, width: 80, height:80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent'}} />
                                     <Image
                                         source={focused ? require('../../assets/TabNav Icons/book.png') : require('../../assets/TabNav Icons/bookgrey.png')}
-                                        style={{width: 35, height: 35}}
+                                        style={{width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0}}
                                     />
                                 </View>
                             ),
@@ -81,9 +90,11 @@ const TabNavigator = () => {
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <View style={{position: 'absolute'}} />
+                                    <View style={{position: 'absolute', bottom:Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 75, height:75, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent'}} />
                                     <Image
                                         source={focused ? require('../../assets/TabNav Icons/settings.png') : require('../../assets/TabNav Icons/settingsgrey.png')}
-                                        style={{width: 35, height: 35}}
+                                        style={{width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0}}
                                     />
                                 </View>
                             ),
