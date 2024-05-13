@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import SpeciesListItemAddButton from "./SpeciesListItemAddButton";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
     return (
         <TouchableWithoutFeedback onPress={onPressItem}>
             <View style={styles.container} >
                 <View style={[styles.imageContainer, styles.shadowed]}>
-                    <Image style={styles.image}
-                        source={require('../../assets/adaptive-icon.png')}
-                    />
+                    <LinearGradient colors={['#fdfbef', '#fef1ed']}>
+                        <Image style={styles.image}
+                            source={require('../../assets/adaptive-icon.png')}
+                        />
+                    </LinearGradient>
                 </View>
                 <View style={[styles.cardbox, styles.shadowed]}>
                     <View style={styles.titleContainer}>

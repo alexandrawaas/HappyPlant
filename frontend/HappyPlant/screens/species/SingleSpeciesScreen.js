@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRoute } from '@react-navigation/native';
 import { API_URL } from "../../config";
 import NeedLabelWithIcon from "./NeedLabelWithIcon";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();
@@ -17,12 +18,14 @@ export default function SingleSpeciesScreen({ navigation }) {
     }, [])
 
     return (
-        <View style={[styles.container, styles.shadowed]}>
+        <LinearGradient colors={['#fdfbef', '#f6ffed']} style={[styles.container, styles.shadowed]}>
             <View style={styles.topContainer}>
                 <View style={[styles.imageContainer, styles.shadowed]}>
-                    <Image style={styles.image}
-                        source={require('../../assets/adaptive-icon.png')}
-                    />
+                    <LinearGradient colors={['#fdfbef', '#fef1ed']} >
+                        <Image style={styles.image}
+                            source={require('../../assets/adaptive-icon.png')}
+                        />
+                    </LinearGradient>
                 </View>
                 <Text style={styles.header}>{species.name}</Text>
                 <Text style={styles.subHeader}>{species.latinName}</Text>
@@ -44,7 +47,7 @@ export default function SingleSpeciesScreen({ navigation }) {
                 <Text style={styles.header2}>Information</Text>
                 <Text style={styles.informationBlock}>Diese Pflanze gehört zur Familie der {species.family}. {species.description}</Text>
             </View>
-        </View>
+        </LinearGradient>
     );
 }
 
@@ -57,7 +60,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     container: {
-        backgroundColor: "#fef7ee",
         minHeight: "100%",
         margin: 20,
         borderRadius: 10,
@@ -66,7 +68,6 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     topContainer: {
-        backgroundColor: "#fef7ee",
         borderRadius: 10,
         display: "flex",
         flexDirection: "column",

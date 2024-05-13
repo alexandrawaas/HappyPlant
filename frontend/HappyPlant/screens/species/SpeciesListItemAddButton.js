@@ -1,18 +1,20 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { TouchableWithoutFeedback } from 'react-native';
 
 export default function SpeciesListItemAddButton({ title, onPress, style }) {
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-            <Text style={styles.buttonText}>{title}</Text>
-        </TouchableOpacity>
+        <LinearGradient colors={['#fdfbef', '#f6ffed']} style={[styles.button, style]}>
+            <TouchableOpacity onPress={onPress}>
+                <Text style={styles.buttonText}>{title}</Text>
+            </TouchableOpacity>
+        </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
     button: {
-        background: "linear-gradient(180deg, #FFFFFF 0%, #00000 100%)",
-        backgroundColor: "white",
         paddingHorizontal: 10,
         paddingVertical: 3,
         borderRadius: 12,
