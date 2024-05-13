@@ -1,24 +1,26 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { RoomTypeIcons } from "../../utils/EnumIcons";
 import { LinearGradient } from 'expo-linear-gradient';
 import RoomListItemWarnings from "./RoomListItemWarnings";
 
-export default function RoomListItem({room}) {
+export default function RoomListItem({room, onPress}) {
     return (
         <View style={styles.roomItemContainer}>
             <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.roomItemCard, styles.shadowed]}>
-                <View style={styles.roomItemTopContainer}>
-                    <View style={styles.iconContainer}>
-                        {RoomTypeIcons[room.category]}
+                <TouchableOpacity onPress={() => onPress(room.id)}>
+                    <View style={styles.roomItemTopContainer}>
+                        <View style={styles.iconContainer}>
+                            {RoomTypeIcons[room.category]}
+                        </View>
+                        {room.warnings + room.assignments !== 0
+                            ? <RoomListItemWarnings room={room} />
+                            : null}
                     </View>
-                    {room.warnings + room.assignments !== 0
-                        ? <RoomListItemWarnings room={room} />
-                        : null}
-                </View>
-                <View style={styles.roomItemBottomContainer}>
-                    <Text style={styles.header}>{room.name}</Text>
-                    <Text style={styles.subHeader}>{room.plants} {room.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
-                </View>
+                    <View style={styles.roomItemBottomContainer}>
+                        <Text style={styles.header}>{room.name}</Text>
+                        <Text style={styles.subHeader}>{room.plants} {room.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
+                    </View>
+                </TouchableOpacity>
             </LinearGradient>
         </View>
     );

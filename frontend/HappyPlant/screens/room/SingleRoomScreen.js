@@ -1,9 +1,14 @@
-import {View, Text, StyleSheet, Button} from "react-native";
+import {View, Text, StyleSheet } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
 export default function SingleRoomScreen({ navigation }) {
+    const route = useRoute();
+    const { id } = route.params;
+
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Einzelner Raum</Text>
+            <Text>id: {id}</Text>
         </View>
     );
 }

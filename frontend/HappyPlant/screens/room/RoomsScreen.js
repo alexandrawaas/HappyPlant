@@ -12,7 +12,7 @@ export default function RoomsScreen({ navigation }) {
         <View style={styles.container}>
             <View style={styles.roomContainer}>
                 {roomMock.map(r =>
-                    <RoomListItem room={r}/>
+                    <RoomListItem room={r} onPress={(id) => navigation.navigate("Einzelner Raum", {id: id})} />
                 )}
                 {roomMock.length % 2 == 1
                     ? <AddRoomButton onClick={handleAddRoomClick} displayAsCard />
