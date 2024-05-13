@@ -13,5 +13,5 @@ data class Species(
     @Column var picturePath: String,
     @Column var family: String,
     @Column var description: String,
-    @ManyToOne() @JoinColumn(name = "needs_id") var needs: Needs,
+    @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn(name = "needs_id") var needs: Needs,
 )
