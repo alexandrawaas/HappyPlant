@@ -1,8 +1,5 @@
 package com.happyplant.backend.config
 
-import com.happyplant.backend.datatransfer.CoordinatesDtoRequest
-import com.happyplant.backend.datatransfer.needs.NeedsDtoRequest
-import com.happyplant.backend.datatransfer.plant.PlantDtoRequest
 import com.happyplant.backend.model.*
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.model.types.LightingType
@@ -10,12 +7,8 @@ import com.happyplant.backend.repository.PlantRepository
 import com.happyplant.backend.repository.RoomRepository
 import com.happyplant.backend.repository.SpeciesRepository
 import com.happyplant.backend.repository.UserRepository
-import com.happyplant.backend.service.PlantService
-import com.happyplant.backend.service.RoomService
-import com.happyplant.backend.service.SpeciesService
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -30,9 +23,6 @@ class DatabaseInitializer {
     private lateinit var speciesRepository: SpeciesRepository
 
     @Autowired
-    private lateinit var roomService: RoomService
-
-    @Autowired
     private lateinit var plantRepository: PlantRepository
 
     @Autowired
@@ -43,6 +33,12 @@ class DatabaseInitializer {
     @PostConstruct
     fun initializeDatabase() {
         if(!seederEnabled) return
+
+        // drop tables
+        roomRepository.deleteAll()
+        plantRepository.deleteAll()
+        speciesRepository.deleteAll()
+        userRepository.deleteAll()
 
         println("Seeding Database...")
 
