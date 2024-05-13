@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
-import { commonStyles } from '../../utils/CommonStyles';
+import { commonStyles } from '../../utils/styles/CommonStyles';
 import axios from 'axios';
 import { API_URL } from '../../config';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Button, Switch } from 'react-native';
-import { commonStyles } from '../../utils/CommonStyles';
+import { commonStyles } from '../../utils/styles/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { saveAuthToken } from '../../utils/AuthTokenUtil';
