@@ -8,7 +8,6 @@ enum class RoomCategory {
     OFFICE,
     HALLWAY,
     BALCONY,
-    TERRACE,
     GREENHOUSE,
     OTHER
 }
