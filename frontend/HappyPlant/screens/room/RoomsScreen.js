@@ -1,47 +1,57 @@
-import {View, Text, StyleSheet, Button} from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { roomMock } from "./RoomMock";
 import { RoomTypeIcons } from "../../utils/EnumIcons";
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { TouchableOpacity } from "react-native";
+import AddRoomButton from "./AddRoomButton";
 
 export default function RoomsScreen({ navigation }) {
+    const handleAddRoomClick = () => {
+        console.log("TODO: implement add room dialog")
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.roomContainer}>
-            {roomMock.map(r => 
-                <View style={styles.roomItemContainer}>
-                    <View style={[styles.roomItemCard, styles.shadowed]}>
-                        <View style={styles.roomItemTopContainer}>
-                            <View style={styles.iconContainer}>
-                                {RoomTypeIcons[r.category]}
+                {roomMock.map(r =>
+                    <View style={styles.roomItemContainer}>
+                        <View style={[styles.roomItemCard, styles.shadowed]}>
+                            <View style={styles.roomItemTopContainer}>
+                                <View style={styles.iconContainer}>
+                                    {RoomTypeIcons[r.category]}
+                                </View>
+                                {r.warnings + r.assignments !== 0
+                                    ? <View style={styles.hintContainer}>
+                                        {r.warnings !== 0
+                                            ? <Text style={styles.hint}>
+                                                <Entypo name="warning" color="red" size={14} style={styles.icon} />
+                                                &nbsp;{r.warnings}
+                                            </Text>
+                                            : null}
+                                        {r.assignments !== 0
+                                            ? <Text style={styles.hint}>
+                                                <MaterialCommunityIcons name="checkbox-marked" color="lightblue" size={14} style={styles.icon} />
+                                                &nbsp;{r.assignments}
+                                            </Text>
+                                            : null}
+                                    </View>
+                                    : null}
                             </View>
-                            {r.warnings + r.assignments !== 0
-                            ?<View style={styles.hintContainer}>
-                                {r.warnings !== 0
-                                ?<Text style={styles.hint}>
-                                    <Entypo name="warning" color="red" size={14} style={styles.icon}/> 
-                                    &nbsp;{r.warnings}
-                                </Text>
-                                : null}
-                                {r.assignments !== 0
-                                ?<Text style={styles.hint}>
-                                    <MaterialCommunityIcons name="checkbox-marked" color="lightblue" size={14} style={styles.icon}/> 
-                                    &nbsp;{r.assignments}
-                                </Text>
-                                : null}
+                            <View style={styles.roomItemBottomContainer}>
+                                <Text style={styles.header}>{r.name}</Text>
+                                <Text style={styles.subHeader}>{r.plants} {r.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
                             </View>
-                            : null}
-                        </View>
-                        <View style={styles.roomItemBottomContainer}>
-                            <Text style={styles.header}>{r.name}</Text>
-                            <Text style={styles.subHeader}>{r.plants} {r.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
                         </View>
                     </View>
-                </View>
-            )}    
+                )}
+                {roomMock.length % 2 == 1
+                    ? <AddRoomButton onClick={handleAddRoomClick} displayAsCard />
+                : null}
             </View>
-           
+            {roomMock.length % 2 == 0
+                ? <AddRoomButton onClick={handleAddRoomClick} displayOnNewLine />
+            : null}
         </View>
     );
 }
@@ -77,7 +87,7 @@ const styles = StyleSheet.create({
         height: "100%",
         backgroundColor: "#fef7ee",
         borderRadius: 10,
-        padding: 15,
+        padding: 15,  
     },
     roomItemTopContainer: {
         display: "flex",
