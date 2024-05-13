@@ -15,7 +15,7 @@ export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
                         <Text style={styles.header}>{species.name}</Text>
                         <Text style={styles.subHeader}>{species.family}</Text>
                     </View>
-                    <SpeciesListItemAddButton style={styles.button}
+                    <SpeciesListItemAddButton
                         onPress={onPressAdd}
                         title="+"
                     />

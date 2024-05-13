@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         width: "50%",
+        marginVertical: 2,
     },
     icon: {
         paddingRight: 7,

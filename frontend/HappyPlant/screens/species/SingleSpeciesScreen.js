@@ -28,8 +28,11 @@ export default function SingleSpeciesScreen({ navigation }) {
                 <Text style={styles.subHeader}>{species.latinName}</Text>
             </View>
             <View style={styles.detailContainer}>
-                <Text style={styles.header2}>Überblick</Text>
+                <Text style={styles.header2}>Bevorzugte Lichtverhältnisse</Text>
                 <NeedLabelWithIcon assignmentType="LIGHTING" value={species?.needs?.lightingType}/>
+            </View>
+            <View style={styles.detailContainer}>
+                <Text style={styles.header2}>Überblick</Text>
                 <View style={styles.pairedNeedContainer}>
                     {species?.needs?.intervals
                     ? Object.entries(species.needs.intervals).map(([k, v]) => 
@@ -93,13 +96,13 @@ const styles = StyleSheet.create({
     header2: {
         fontSize: 16,
         fontWeight: "bold",
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 5,
     },
     pairedNeedContainer: {
         display: "flex",
         flexDirection: "row",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
     },
     informationBlock: {
         textAlign: "justify"
