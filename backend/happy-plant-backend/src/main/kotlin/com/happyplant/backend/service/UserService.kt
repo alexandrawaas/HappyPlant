@@ -34,8 +34,12 @@ class UserService (
         if (id != null) {
             var user: User = db.findById(id).get()
             user.receivePushNotifications = settings.receivePushNotifications
-            user.pushNotificationsTime = settings.pushNotificationsTime
-            user.pushNotificationToken = settings.pushNotificationToken
+            if(settings.pushNotificationsTime != null) {
+                user.pushNotificationsTime = settings.pushNotificationsTime
+            }
+            if(settings.pushNotificationToken != null) {
+                user.pushNotificationToken = settings.pushNotificationToken
+            }
             db.save(user)
         }
     }

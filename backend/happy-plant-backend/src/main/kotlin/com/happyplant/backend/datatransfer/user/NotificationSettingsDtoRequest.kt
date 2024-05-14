@@ -5,7 +5,7 @@ import java.time.LocalTime
 data class NotificationSettingsDtoRequest(
         val receivePushNotifications: Boolean,
         val pushNotificationToken: String?,
-        val pushNotificationsTime: LocalTime,
+        val pushNotificationsTime: LocalTime?,
 ) {
 
 }
