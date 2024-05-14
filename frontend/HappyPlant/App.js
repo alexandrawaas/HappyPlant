@@ -21,37 +21,36 @@ import RegisterScreen from "./screens/authentication/RegisterScreen";
 import LogoutScreen from "./screens/authentication/LogoutScreen";
 import TestScreen from "./screens/TestScreen";
 import LoadingScreen from "./screens/authentication/LoadingScreen";
-import { LinearGradient } from 'expo-linear-gradient';
+import GlobalLayout from './GlobalLayout';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="Loading" screenOptions={headerOptions}>
-              <Stack.Screen name="Loading" component={LoadingScreen}/>
-              <Stack.Screen name="Anmelden" component={LoginScreen}/>
-              <Stack.Screen name="Registrieren" component={RegisterScreen}/>
-              <Stack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen}/>
-              <Stack.Screen name="Passwort ändern" component={UpdatePasswordScreen}/>
-              <Stack.Screen name="Abmelden" component={LogoutScreen}/>
-              <Stack.Screen name="Test" component={TestScreen}/>
-              <Stack.Screen name="Aufgaben" component={AssignmentsScreen}/>
-              <Stack.Screen name="Räume" component={RoomsScreen}/>
-              <Stack.Screen name="Meine Pflanzen" component={MyPlantsScreen}/>
-              <Stack.Screen name="Lexikon" component={SpeciesScreen}/>
-              <Stack.Screen name="Einstellungen" component={SettingsScreen}/>
-              <Stack.Screen name="Einzelner Raum" component={SingleRoomScreen}/>
-              <Stack.Screen name="Pflanze erstellen" component={CreatePlantScreen}/>
-              <Stack.Screen name="Fenster platzieren" component={PlaceWindow}/>
-              <Stack.Screen name="Pflanzenprofil" component={SinglePlantScreen}/>
-              <Stack.Screen name="Einzelne Pflanzenart" component={SingleSpeciesScreen}/>
+          <Stack.Navigator initialRouteName="Räume" screenOptions={headerOptions}>
+              <Stack.Screen name="Loading" children={(props) => <GlobalLayout component={LoadingScreen} {...props} /> }/>
+              <Stack.Screen name="Anmelden" children={(props) => <GlobalLayout component={LoginScreen} {...props} /> }/>
+              <Stack.Screen name="Registrieren" children={(props) => <GlobalLayout component={RegisterScreen} {...props} /> }/>
+              <Stack.Screen name="Passwort zurücksetzen" children={(props) => <GlobalLayout component={ResetPasswordScreen} {...props} /> }/>
+              <Stack.Screen name="Passwort ändern" children={(props) => <GlobalLayout component={UpdatePasswordScreen} {...props} /> }/>
+              <Stack.Screen name="Abmelden" children={(props) => <GlobalLayout component={LogoutScreen} {...props} /> }/>
+              <Stack.Screen name="Test" children={(props) => <GlobalLayout component={TestScreen} {...props} /> }/>
+              <Stack.Screen name="Aufgaben" children={(props) => <GlobalLayout component={AssignmentsScreen} {...props} /> }/>
+              <Stack.Screen name="Räume" children={(props) => <GlobalLayout component={RoomsScreen} {...props} /> }/>
+              <Stack.Screen name="Meine Pflanzen" children={(props) => <GlobalLayout component={MyPlantsScreen} {...props} /> }/>
+              <Stack.Screen name="Lexikon" children={(props) => <GlobalLayout component={SpeciesScreen} {...props} />} />
+              <Stack.Screen name="Einstellungen" children={(props) => <GlobalLayout component={SettingsScreen} {...props} /> }/>
+              <Stack.Screen name="Einzelner Raum" children={(props) => <GlobalLayout component={SingleRoomScreen} {...props} /> }/>
+              <Stack.Screen name="Pflanze erstellen" children={(props) => <GlobalLayout component={CreatePlantScreen} {...props} /> }/>
+              <Stack.Screen name="Fenster platzieren" children={(props) => <GlobalLayout component={PlaceWindow} {...props} /> }/>
+              <Stack.Screen name="Pflanzenprofil" children={(props) => <GlobalLayout component={SinglePlantScreen} {...props} /> }/>
+              <Stack.Screen name="Einzelne Pflanzenart" children={(props) => <GlobalLayout component={SingleSpeciesScreen} {...props} /> }/>
           </Stack.Navigator>
       </NavigationContainer>
   );
 }
 
 const headerOptions = {
-    headerTransparent: true,
     headerTintColor: '#233d0c',
     headerTitleAlign: 'center',
     headerTitleStyle: {
