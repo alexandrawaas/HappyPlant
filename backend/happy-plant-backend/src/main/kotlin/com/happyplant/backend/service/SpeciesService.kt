@@ -20,9 +20,9 @@ class SpeciesService(private val db: SpeciesRepository) {
             }
 
     fun getSpecies(): List<Species> =
-        db.findAll()
+        db.findAllByOrderByNameAsc().toList()
 
     fun getSpeciesFiltered(search: String): List<Species> =
-        db.findAllByNameContainingIgnoreCase(search).toList()
+        db.findAllByNameContainingIgnoreCaseOrderByNameAsc(search).toList()
 
 }
