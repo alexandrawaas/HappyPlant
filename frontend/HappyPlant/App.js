@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet} from "react-native";
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import HeaderBackground from './screens/global/HeaderBackground';
 
 //Screens
 import LoginScreen from "./screens/authentication/LoginScreen";
@@ -21,12 +21,13 @@ import RegisterScreen from "./screens/authentication/RegisterScreen";
 import LogoutScreen from "./screens/authentication/LogoutScreen";
 import TestScreen from "./screens/TestScreen";
 import LoadingScreen from "./screens/authentication/LoadingScreen";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="Loading">
+          <Stack.Navigator initialRouteName="Loading" screenOptions={headerOptions}>
               <Stack.Screen name="Loading" component={LoadingScreen}/>
               <Stack.Screen name="Anmelden" component={LoginScreen}/>
               <Stack.Screen name="Registrieren" component={RegisterScreen}/>
@@ -47,4 +48,16 @@ export default function App() {
           </Stack.Navigator>
       </NavigationContainer>
   );
+}
+
+const headerOptions = {
+    headerTransparent: true,
+    headerTintColor: '#233d0c',
+    headerTitleAlign: 'center',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+    headerBackground: () => (
+        <HeaderBackground />
+    ),
 }

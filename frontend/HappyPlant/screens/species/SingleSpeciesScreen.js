@@ -4,11 +4,21 @@ import { useRoute } from '@react-navigation/native';
 import { API_URL } from "../../config";
 import NeedLabelWithIcon from "./NeedLabelWithIcon";
 import { LinearGradient } from 'expo-linear-gradient';
+import AddSpeciesAsPlantButton from "../global/AddSpeciesAsPlantButton";
 
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();
     const { id } = route.params;
     const [species, setSpecies] = useState({})
+
+    useEffect(() => {
+        navigation.setOptions({
+            ...navigation.options,
+            headerRight: () => (
+                <AddSpeciesAsPlantButton onPress={() => alert('This is a button!')} />
+            )
+        })
+    }, [navigation])
 
     useEffect(() => {
         fetch(`${API_URL}/species/${id}`)
