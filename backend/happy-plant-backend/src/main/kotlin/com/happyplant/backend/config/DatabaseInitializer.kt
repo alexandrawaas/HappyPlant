@@ -644,7 +644,8 @@ class DatabaseInitializer {
                 emailVerificationToken = UUID.randomUUID().toString(),
                 emailVerificationExpires = System.currentTimeMillis() + 600000,
                 receivePushNotifications = false, // TODO
-                pushNotificationsTime = null, // TODO
+                pushNotificationsTime = null, //TODO
+                pushNotificationToken = "ExponentPushToken[Wx9b-UKX5NSxWFpCb8ke4f]",
                 plants = mutableListOf(),
                 rooms = mutableListOf())
         )

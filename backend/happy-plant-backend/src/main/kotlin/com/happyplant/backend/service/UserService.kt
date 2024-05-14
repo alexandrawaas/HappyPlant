@@ -32,18 +32,22 @@ class UserService (
 
     fun alterNotificationSettings(settings: NotificationSettingsDtoRequest, authHeader: String): Unit {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
-        if (userId != null) {
-            var user: User = db.findById(userId).get()
+        if(userId != null) {
+            val user: User = db.findById(userId).get()
             user.receivePushNotifications = settings.receivePushNotifications
-            if(settings.pushNotificationsTime != null) {
+            if (settings.pushNotificationsTime != null) {
                 user.pushNotificationsTime = settings.pushNotificationsTime
             }
-            if(settings.pushNotificationToken != null) {
+            if (settings.pushNotificationToken != null) {
                 user.pushNotificationToken = settings.pushNotificationToken
             }
             db.save(user)
         }
+        else{
+            TODO("Set Error returncode")
+        }
     }
+    fun getDummyUser() = db.findByEmail("example.user@test.com") ?: throw IllegalArgumentException("Dummy User not found")
 
 
     fun getUser(userId: UUID): User? =
