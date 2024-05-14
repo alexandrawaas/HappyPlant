@@ -30,9 +30,10 @@ class UserService (
         return db.findAll()
     }
 
-    fun alterNotificationSettings(settings: NotificationSettingsDtoRequest, id: UUID?): Unit {
-        if (id != null) {
-            var user: User = db.findById(id).get()
+    fun alterNotificationSettings(settings: NotificationSettingsDtoRequest, authHeader: String): Unit {
+        val userId = authTokenUtil.getUserIdFromToken(authHeader)
+        if (userId != null) {
+            var user: User = db.findById(userId).get()
             user.receivePushNotifications = settings.receivePushNotifications
             if(settings.pushNotificationsTime != null) {
                 user.pushNotificationsTime = settings.pushNotificationsTime
