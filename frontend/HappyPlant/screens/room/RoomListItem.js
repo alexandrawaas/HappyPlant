@@ -17,7 +17,7 @@ export default function RoomListItem({room, onPress}) {
                             : null}
                     </View>
                     <View style={styles.roomItemBottomContainer}>
-                        <Text style={styles.header}>{room.name}</Text>
+                        <Text style={styles.header} numberOfLines={1}>{room.name}</Text>
                         <Text style={styles.subHeader}>{room.plants} {room.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
                     </View>
                 </TouchableOpacity>
