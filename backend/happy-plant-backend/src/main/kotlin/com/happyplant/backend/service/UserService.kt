@@ -20,6 +20,9 @@ class UserService (
         TODO("Not yet implemented")
     }
 
+    // TODO: Delete if not needed anymore
+    fun getDummyUser() = db.findByEmail("example.user@test.com") ?: throw IllegalArgumentException("Dummy User not found")
+
     fun getCurrentUser(authHeader: String): ApiResponse<UserDto> {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
         return if (userId != null) {

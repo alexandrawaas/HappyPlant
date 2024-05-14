@@ -23,6 +23,7 @@ import kotlin.jvm.optionals.getOrNull
 class PlantService(
     private val db: PlantRepository,
     private val speciesService: SpeciesService,
+    private val userService: UserService
 ) {
     fun save(plant: Plant) =
         db.save(plant)
@@ -35,7 +36,7 @@ class PlantService(
 
 
     fun addPlant(newPlant: PlantDtoRequest): Plant {
-        val plantToSave = newPlant.asEntity(speciesService)
+        val plantToSave = newPlant.asEntity(speciesService, userService)
         return db.save(plantToSave)
     }
 

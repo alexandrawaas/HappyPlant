@@ -5,6 +5,7 @@ import com.happyplant.backend.datatransfer.plant.asEntity
 import com.happyplant.backend.model.Pixel
 import com.happyplant.backend.service.RoomService
 import com.happyplant.backend.service.SpeciesService
+import com.happyplant.backend.service.UserService
 
 fun Pixel.asDtoResponse(): PixelDtoResponse =
     PixelDtoResponse(
@@ -17,7 +18,7 @@ fun Pixel.asDtoResponse(): PixelDtoResponse =
         plants = this.plants.map { it.asDtoResponse() }
     )
 
-fun PixelDtoRequest.asEntity(roomService: RoomService, speciesService: SpeciesService): Pixel =
+fun PixelDtoRequest.asEntity(roomService: RoomService, speciesService: SpeciesService, userService: UserService): Pixel =
     Pixel(
         id = this.id,
         x = this.x,
@@ -25,5 +26,5 @@ fun PixelDtoRequest.asEntity(roomService: RoomService, speciesService: SpeciesSe
         room = roomService.getRoom(this.roomId) ?: throw NoSuchElementException(),
         isWindow = this.isWindow,
         lightingType = this.lightingType,
-        plants = this.plants.map { it.asEntity(speciesService) }.toMutableList()
+        plants = this.plants.map { it.asEntity(speciesService, userService) }.toMutableList()
     )
