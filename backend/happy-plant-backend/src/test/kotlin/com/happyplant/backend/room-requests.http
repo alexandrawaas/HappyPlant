@@ -7,6 +7,7 @@ Content-Type: application/json
 
 {
   "name": "Badezimmer",
+  "category": "BATHROOM",
   "ratioValueX": 3,
   "ratioValueY": 5
 }
