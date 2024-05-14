@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { roomMock } from "./RoomMock";
 import AddRoomButton from "./AddRoomButton";
 import RoomListItem from "./RoomListItem";
@@ -9,10 +9,10 @@ export default function RoomsScreen({ navigation }) {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.roomContainer}>
                 {roomMock.map(r =>
-                    <RoomListItem room={r} onPress={(id) => navigation.navigate("Einzelner Raum", {id: id})} />
+                    <RoomListItem key={r.id} room={r} onPress={(id) => navigation.navigate("Einzelner Raum", {id: id})} />
                 )}
                 {roomMock.length % 2 == 1
                     ? <AddRoomButton onClick={handleAddRoomClick} displayAsCard />
@@ -21,14 +21,12 @@ export default function RoomsScreen({ navigation }) {
             {roomMock.length % 2 == 0
                 ? <AddRoomButton onClick={handleAddRoomClick} displayOnNewLine />
             : null}
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 15,
-        paddingHorizontal: 20,
         display: "flex",
         flexDirection: "column",
     },
