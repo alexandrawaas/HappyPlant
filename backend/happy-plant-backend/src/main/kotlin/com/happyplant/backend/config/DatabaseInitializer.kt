@@ -3,6 +3,7 @@ package com.happyplant.backend.config
 import com.happyplant.backend.model.*
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.model.types.LightingType
+import com.happyplant.backend.model.types.RoomCategory
 import com.happyplant.backend.repository.PlantRepository
 import com.happyplant.backend.repository.RoomRepository
 import com.happyplant.backend.repository.SpeciesRepository
@@ -660,7 +661,8 @@ class DatabaseInitializer {
                 name = "Living Room",
                 user = userRepository.findAll()[0],
                 ratioValueX = 3,
-                ratioValueY = 4
+                ratioValueY = 4,
+                category = RoomCategory.LIVING_ROOM
             )
         )
 
@@ -669,7 +671,8 @@ class DatabaseInitializer {
                 name = "Kitchen",
                 user = userRepository.findAll()[0],
                 ratioValueX = 5,
-                ratioValueY = 4
+                ratioValueY = 4,
+                category = RoomCategory.KITCHEN
             )
         )
 
@@ -678,7 +681,8 @@ class DatabaseInitializer {
                 name = "Balcony",
                 user = userRepository.findAll()[0],
                 ratioValueX = 2,
-                ratioValueY = 2
+                ratioValueY = 2,
+                category = RoomCategory.BALCONY
             )
         )
 
