@@ -1,21 +1,15 @@
 package com.happyplant.backend.service
 
-import com.happyplant.backend.repository.UserRepository
-import com.happyplant.backend.repository.PlantRepository
-import com.happyplant.backend.repository.AssignmentRepository
-import com.happyplant.backend.repository.NeedsRepository
-import com.happyplant.backend.repository.RoomRepository
-import com.happyplant.backend.repository.PixelRepository
 import com.happyplant.backend.datatransfer.user.NotificationSettingsDtoRequest
-import com.happyplant.backend.model.User
 import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.datatransfer.user.asDto
-import com.happyplant.backend.utility.AuthTokenUtil
+import com.happyplant.backend.model.User
+import com.happyplant.backend.repository.*
 import com.happyplant.backend.utility.ApiResponse
-import org.springframework.stereotype.Service
+import com.happyplant.backend.utility.AuthTokenUtil
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @Service
@@ -28,12 +22,24 @@ class UserService (
     private val roomRepository: RoomRepository,
     private val pixelRepository: PixelRepository
 ) {
-    fun alterNotificationSettings(settings: NotificationSettingsDtoRequest): Any {
-        TODO("Not yet implemented")
+    fun getUserById(id: UUID): User {
+        return db.findById(id).get()
     }
 
-    // TODO: Delete if not needed anymore
-    fun getDummyUser() = db.findByEmail("example.user@test.com") ?: throw IllegalArgumentException("Dummy User not found")
+    fun getAllUsers(): List<User> {
+        return db.findAll()
+    }
+
+    fun alterNotificationSettings(settings: NotificationSettingsDtoRequest, id: UUID?): Unit {
+        if (id != null) {
+            var user: User = db.findById(id).get()
+            user.receivePushNotifications = settings.receivePushNotifications
+            user.pushNotificationsTime = settings.pushNotificationsTime
+            user.pushNotificationToken = settings.pushNotificationToken
+            db.save(user)
+        }
+    }
+
 
     fun getUser(userId: UUID): User? =
         db.findById(userId).orElse(null)
@@ -59,14 +65,14 @@ class UserService (
             val userOptional: Optional<User> = db.findById(userId)
             if (userOptional.isPresent) {
                 val user: User = userOptional.get()
-                user.getAllPlants().forEach { plant -> 
+                user.getAllPlants().forEach { plant ->
                     plant.getAllAssignments().forEach { assignment ->
                         assignmentRepository.delete(assignment)
                     }
                     plantRepository.delete(plant)
                 }
-                user.getAllRooms().forEach { room -> 
-                    room.grid.forEach { pixel -> 
+                user.getAllRooms().forEach { room ->
+                    room.grid.forEach { pixel ->
                         pixelRepository.delete(pixel)
                     }
                     roomRepository.delete(room)

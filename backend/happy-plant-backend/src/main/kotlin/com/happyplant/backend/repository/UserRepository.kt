@@ -1,9 +1,8 @@
 package com.happyplant.backend.repository
 
-import org.springframework.data.jpa.repository.JpaRepository
-import java.util.UUID
 import com.happyplant.backend.model.User
-import org.springframework.stereotype.Repository
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
 interface UserRepository : JpaRepository<User, UUID> {
     fun findByEmail(email: String): User?
