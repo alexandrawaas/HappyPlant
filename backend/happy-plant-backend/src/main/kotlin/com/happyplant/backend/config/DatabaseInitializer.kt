@@ -644,7 +644,7 @@ class DatabaseInitializer {
                 rooms = mutableListOf())
         )
 
-        roomRepository.save(
+        val livingRoom = roomRepository.save(
             Room(
                 name = "Wohnzimmer",
                 user = userRepository.findAll()[0],
@@ -654,7 +654,7 @@ class DatabaseInitializer {
             )
         )
 
-        roomRepository.save(
+        val kitchen = roomRepository.save(
             Room(
                 name = "Küche",
                 user = userRepository.findAll()[0],
@@ -664,7 +664,7 @@ class DatabaseInitializer {
             )
         )
 
-        roomRepository.save(
+        val balcony = roomRepository.save(
             Room(
                 name = "Balkon",
                 user = userRepository.findAll()[0],
@@ -687,7 +687,8 @@ class DatabaseInitializer {
                     ),
                     lightingType = LightingType.PART_SHADE
                 ),
-                user = userRepository.findAll()[0]
+                user = userRepository.findAll()[0],
+                pixel = livingRoom.getPixel(0,0),
             )
         )
 
@@ -707,6 +708,7 @@ class DatabaseInitializer {
                     lightingType = LightingType.FULL_SUN
                 ),
                 user = userRepository.findAll()[0],
+                pixel = kitchen.getPixel(1,2)
             )
         )
 
@@ -724,7 +726,7 @@ class DatabaseInitializer {
                     ),
                     lightingType = LightingType.FULL_SHADE
                 ),
-                user = userRepository.findAll()[0],
+                user = userRepository.findAll()[0]
             )
         )
 
