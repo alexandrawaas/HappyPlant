@@ -54,8 +54,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     container: {
-        paddingTop: 15,
-        paddingHorizontal: 20,
         display: "flex",
         flexDirection: "column",
     },
