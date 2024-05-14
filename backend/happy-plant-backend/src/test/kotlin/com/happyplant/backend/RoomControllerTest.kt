@@ -25,7 +25,7 @@ class RoomControllerTest(@Autowired var restTemplate: TestRestTemplate) {
 
     @BeforeTest
     fun setup() {
-        val roomDtoRequest = RoomDtoRequest("bathroom", DEFAULT_X_RATIO, DEFAULT_Y_RATIO)
+        val roomDtoRequest = RoomDtoRequest("bathroom", ratioValueX = DEFAULT_X_RATIO, ratioValueY = DEFAULT_Y_RATIO)
         createdRoomResponse = this.restTemplate.postForEntity("/rooms", roomDtoRequest, RoomDtoResponse::class.java)
     }
 

@@ -19,6 +19,7 @@ class RoomService (
     private val db: RoomRepository,
     private val plantService: PlantService,
     private val speciesService: SpeciesService,
+    private val userService: UserService
 ) {
     fun save(room: Room) =
         db.save(room)
@@ -30,7 +31,7 @@ class RoomService (
         db.findAllByName(search).toList()
 
     fun addRoom(newRoom: RoomDtoRequest): Room =
-        db.save(newRoom.asEntity())
+        db.save(newRoom.asEntity(userService))
 
     fun getRoom(roomId: UUID): Room? =
         db.findById(roomId).getOrNull()
@@ -40,7 +41,7 @@ class RoomService (
 
     fun storeWindowsOnRoom(roomId: UUID, windows: List<PixelDtoRequest>): Room? {
         val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        room.storeWindows(windows.map { it.asEntity(this, speciesService ) })
+        room.storeWindows(windows.map { it.asEntity(this, speciesService, userService) })
         return db.findById(roomId)
             .map { foundEntity -> db.save(room.copy(id = foundEntity.id)) }
             .getOrNull()

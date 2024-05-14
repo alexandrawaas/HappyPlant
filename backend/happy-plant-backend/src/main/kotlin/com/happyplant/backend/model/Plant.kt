@@ -1,7 +1,5 @@
 package com.happyplant.backend.model
 
-import com.happyplant.backend.datatransfer.assignment.AssignmentDtoRequest
-import com.happyplant.backend.datatransfer.assignment.asEntity
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.model.types.LightingType
 import jakarta.persistence.*
@@ -17,9 +15,9 @@ data class Plant(
     @NotNull var picturePath: String = "DefaultPicturePath",
     @Column var notes: String?,
     @OneToMany(cascade = [CascadeType.ALL]) var assignments: Map<AssignmentType, Assignment>,
-    @ManyToOne() var species: Species,
-    @ManyToOne() private var user: User,
-    @ManyToOne() @JoinColumn(name = "pixel_id") var pixel: Pixel?,
+    @ManyToOne var species: Species,
+    @ManyToOne private var user: User,
+    @ManyToOne @JoinColumn(name = "pixel_id") var pixel: Pixel?,
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn(name = "needs_id") var needs: Needs?,
 ) {
         // Methods
@@ -59,11 +57,12 @@ data class Plant(
             notes: String?,
             species: Species,
             user: User,
+            pixel: Pixel? = null,
             needs: Needs,
-        ) : this(UUID.randomUUID(), name, picturePath, notes, mutableMapOf(), species, user, null, needs) {
+        ) : this(UUID.randomUUID(), name, picturePath, notes, mutableMapOf(), species, user, pixel, needs) {
             this.needs?.intervals?.keys?.forEach { assignmentType ->
                 this.addAssignment(assignmentType, null)
             }
-    }
+        }
 
 }
