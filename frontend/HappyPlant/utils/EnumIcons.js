@@ -22,10 +22,14 @@ export const AssignmentTypeIcons = {
 }
 
 export const RoomTypeIcons = {
-    "BATH": <FontAwesome5 name="bath" color="#000000" size={50}/>, 
-    "SLEEP": <Ionicons name="bed" color="#000000" size={50}/>, 
-    "COOK": <FontAwesome6 name="kitchen-set" color="#000000" size={50}/>, 
-    "LIVE": <FontAwesome6 name="couch" color="#000000" size={50}/>, 
-    "OTHER": <></>, 
+    "BATHROOM": <FontAwesome5 name="bath" color="#000000" size={50}/>, 
+    "BEDROOM": <Ionicons name="bed" color="#000000" size={50}/>, 
+    "KITCHEN": <FontAwesome6 name="kitchen-set" color="#000000" size={50}/>, 
+    "LIVING_ROOM": <FontAwesome6 name="couch" color="#000000" size={50}/>, 
+    "OFFICE": <FontAwesome6 name="computer" color="#000000" size={50}/>, 
+    "HALLWAY": <Ionicons name="footsteps" color="#000000" size={50}/>, 
+    "BALCONY": <MaterialIcons name="balcony" color="#000000" size={50}/>, 
+    "GREENHOUSE": <MaterialCommunityIcons name="greenhouse" color="#000000" size={50}/>, 
+    "OTHER": <MaterialIcons name="other-houses" color="#000000" size={50}/>, 
 }
 
