@@ -3,6 +3,7 @@ import SpeciesListItem from "./SpeciesListItem";
 import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
 import { API_URL } from "../../config";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 
 export default function SpeciesScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -42,7 +43,7 @@ export default function SpeciesScreen({ navigation }) {
                     />
                 )
                 : <Text style={styles.fallBackText}>Keine Spezies gefunden.</Text>}
-                <View style={styles.bottomPlaceholder}/>
+                <VerticalPlaceholder size={175}/>
             </ScrollView>
             
         </View>
@@ -79,8 +80,5 @@ const styles = StyleSheet.create({
         display: "flex",
         alignContent: "center",
         justifyContent: "center"
-    },
-    bottomPlaceholder: {
-        height: 185,
     }
 });
