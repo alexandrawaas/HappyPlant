@@ -27,11 +27,14 @@ class RoomController (
         @RequestParam(name = "search") search: String?
     ): List<RoomDtoResponse> {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
-            ?: throw throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
-        return if (search.isNullOrBlank())
-            service.getRooms(userId).map { it.asDtoResponse() }
-        else
-            service.getRoomsFiltered(search, userId).map { it.asDtoResponse() }
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+
+        val rooms = if (search.isNullOrBlank()) {
+            service.getRooms(userId)
+        } else {
+            service.getRoomsFiltered(search, userId)
+        }
+        return rooms.map{ it.asDtoResponse() }
     }
 
     @PostMapping

@@ -31,7 +31,7 @@ class RoomService (
 
     fun getRoomsFiltered(search: String, userId: UUID): List<Room> {
         val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-        return db.findAllByNameAndUser(search, user).toList()
+        return db.findAllByNameContainingIgnoreCaseAndUser(search, user).toList()
     }
 
     fun addRoom(newRoom: RoomDtoRequest, userId: UUID): Room {

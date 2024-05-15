@@ -35,10 +35,10 @@ class PlantService(
 
     fun getPlantsFiltered(search: String, userId: UUID): List<Plant> {
         val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-        val userPlants = db.findAllByUser(user)
-        return userPlants.filter { plant ->
-            plant.name.contains(search, ignoreCase = true) || plant.species.name.contains(search, ignoreCase = true)
-        }
+        return db.findAllByNameContainingIgnoreCaseOrSpeciesNameContainingIgnoreCaseAndUser(search, search, user).toList()
+//        return userPlants.filter { plant ->
+//            plant.name.contains(search, ignoreCase = true) || plant.species.name.contains(search, ignoreCase = true)
+//        }
     }
 
     fun addPlant(newPlant: PlantDtoRequest, userId: UUID): Plant {

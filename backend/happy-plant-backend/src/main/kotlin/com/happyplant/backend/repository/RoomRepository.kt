@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 interface RoomRepository: JpaRepository<Room, UUID>, JpaSpecificationExecutor<Room> {
-    fun findAllByName(name: String): Iterable<Room>
     fun findAllByUser(user: User): Iterable<Room>
-    fun findAllByNameAndUser(name: String, user: User): Iterable<Room>
+    fun findAllByNameContainingIgnoreCaseAndUser(name: String, user: User): Iterable<Room>
 }

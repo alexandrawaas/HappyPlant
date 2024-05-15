@@ -19,7 +19,7 @@ class InventoryController (
     @ResponseStatus(HttpStatus.OK)
     fun getInventory(@RequestHeader("Authorization") authHeader: String): List<PlantDtoResponse> {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
-            ?: throw throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
 
         return service.getInventory(userId)
     }

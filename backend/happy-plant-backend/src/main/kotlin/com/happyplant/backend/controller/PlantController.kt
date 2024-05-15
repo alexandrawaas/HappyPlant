@@ -28,13 +28,14 @@ class PlantController (
         @RequestParam(name = "search") search: String?
     ): List<PlantDtoResponse> {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
-            ?: throw throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
     
-        return if (search == null) {
-            service.getPlants(userId).map { plant -> plant.asDtoResponse() }
+        val plants = if (search.isNullOrBlank()) {
+            service.getPlants(userId)
         } else {
-            service.getPlantsFiltered(search, userId).map { plant -> plant.asDtoResponse() }
+            service.getPlantsFiltered(search, userId)
         }
+        return plants.map{ it.asDtoResponse() }
     }
 
     @PostMapping
