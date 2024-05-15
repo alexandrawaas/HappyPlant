@@ -4,5 +4,5 @@ enum class AssignmentType {
     WATERING,
     CUTTING,
     FERTILIZING,
-    REPOTTING,
+    REPOTTING
 }
