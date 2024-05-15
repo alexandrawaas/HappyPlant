@@ -1,14 +1,14 @@
 import React from 'react';
 import { StyleSheet, View, Image, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import RoomStackNavigator from './RoomStackNavigator';
+import PlantStackNavigator from './PlantStackNavigator';
+import AssignmentStackNavigator from './AssignmentStackNavigator';
+import SpeciesStackNavigator from './SpeciesStackNavigator';
+import headerStyleOptions from './HeaderStyle';
 
-import AssignmentsScreen from "../AssignmentsScreen";
-import RoomsScreen from "../room/RoomsScreen";
-import MyPlantsScreen from "../MyPlantsScreen";
-import SpeciesScreen from "../species/SpeciesScreen";
 import SettingsScreen from "../SettingsScreen";
 import GlobalLayout from "./GlobalLayout";
-import HeaderBackground from "./HeaderBackground";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,10 +19,10 @@ const TabNavigator = () => {
             tabBarIcon: ({ focused }) => (
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                     <View style={{ position: 'absolute' }}>
-                        <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height: 80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent' }} />
+                        <View style={[styles.selectedCircle, focused ? styles.focused : styles.unfocused]} />
                         <Image
                             source={focused ? activeIcon : greyIcon}
-                            style={{ width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0 }}
+                            style={styles.tabIcon}
                         />
                     </View>
                 </View>
@@ -44,38 +44,37 @@ const TabNavigator = () => {
                     height: Platform.OS === 'ios' ? 80 : 70,
                     ...styles.shadow,
                 },
-                headerTintColor: '#233d0c',
-                headerTitleAlign: 'center',
-                headerTitleStyle: {
-                    fontWeight: 'bold'
-                },
-                headerBackground: () => (<HeaderBackground />)
+                headerShown: false,
             }
             }>
             <Tab.Screen
-                name="Aufgaben"
-                children={(props) => <GlobalLayout component={AssignmentsScreen} {...props} />}
+                name="assignments"
+                children={AssignmentStackNavigator}
                 options={getOptionsForIcon(require('../../assets/TabNav Icons/checkliste.png'), require('../../assets/TabNav Icons/checklistegrey.png'))}
             />
-            <Tab.Screen 
-                name="Räume"
-                children={(props) => <GlobalLayout component={RoomsScreen} {...props} />}
+            <Tab.Screen
+                name="rooms"
+                component={RoomStackNavigator}
                 options={getOptionsForIcon(require('../../assets/TabNav Icons/room.png'), require('../../assets/TabNav Icons/roomgrey.png'))}
             />
-            <Tab.Screen 
-                name="Meine Pflanzen"
-                children={(props) => <GlobalLayout component={MyPlantsScreen} {...props} />}
+            <Tab.Screen
+                name="plants"
+                children={PlantStackNavigator}
                 options={getOptionsForIcon(require('../../assets/TabNav Icons/plant.png'), require('../../assets/TabNav Icons/plantgrey.png'))}
             />
-            <Tab.Screen 
-                name="Lexikon"
-                children={(props) => <GlobalLayout component={SpeciesScreen} {...props} />}
+            <Tab.Screen
+                name="species"
+                children={SpeciesStackNavigator}
                 options={getOptionsForIcon(require('../../assets/TabNav Icons/book.png'), require('../../assets/TabNav Icons/bookgrey.png'))}
             />
-            <Tab.Screen 
+            <Tab.Screen
                 name="Einstellungen"
                 children={(props) => <GlobalLayout component={SettingsScreen} {...props} />}
-                options={getOptionsForIcon(require('../../assets/TabNav Icons/settings.png'), require('../../assets/TabNav Icons/settingsgrey.png'))}
+                options={{
+                    ...getOptionsForIcon(require('../../assets/TabNav Icons/settings.png'), require('../../assets/TabNav Icons/settingsgrey.png')),
+                    headerShown: true,
+                    ...headerStyleOptions,
+                }}
             />
         </Tab.Navigator>
     );
@@ -90,7 +89,27 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 4,
         elevation: 4,
+    },
+    tabIcon: {
+        width: 35, 
+        height: 35, 
+        bottom: Platform.OS === 'ios' ? -14 : 0
+    },
+    selectedCircle: {
+        position: 'absolute', 
+        bottom: Platform.OS === 'ios' ? -25 : -17, 
+        left: Platform.OS === 'ios' ? -20 : -22,
+        width: 80, 
+        height: 80, 
+        borderRadius: 35, 
+    },
+    focused: {
+        backgroundColor: '#FFFFFF'
+    },
+    unfocused: {
+        backgroundColor: 'transparent'
     }
+    
 })
 
 export default TabNavigator;
