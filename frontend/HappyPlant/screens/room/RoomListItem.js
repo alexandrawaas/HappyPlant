@@ -4,6 +4,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import RoomListItemWarnings from "./RoomListItemWarnings";
 
 export default function RoomListItem({room, onPress}) {
+    const numberOfPlants = room.grid.map(x => x.plants.length).reduce((a,b) => Number(a) + Number(b))
+    const numberOfWarnings = room.grid.map(x => x.plants.filter(p => !p.hasOptimalLightingCondition).length).reduce((a,b) => a+b);
+    const numberOfAssignments = room.grid.map(x => x.plants.filter(p => p.assignments).length).reduce((a,b) => a+b);
+
     return (
         <View style={styles.roomItemContainer}>
             <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.roomItemCard, styles.shadowed]}>
@@ -12,13 +16,13 @@ export default function RoomListItem({room, onPress}) {
                         <View style={styles.iconContainer}>
                             {RoomTypeIcons[room.category]}
                         </View>
-                        {room.warnings + room.assignments !== 0
-                            ? <RoomListItemWarnings room={room} />
+                        {numberOfWarnings + numberOfAssignments !== 0
+                            ? <RoomListItemWarnings numberOfWarnings={numberOfWarnings} numberOfAssignments={numberOfAssignments} />
                             : null}
                     </View>
                     <View style={styles.roomItemBottomContainer}>
                         <Text style={styles.header} numberOfLines={1}>{room.name}</Text>
-                        <Text style={styles.subHeader}>{room.plants} {room.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
+                        <Text style={styles.subHeader}>{numberOfPlants} {numberOfPlants == 1 ? "Pflanze" : "Pflanzen"}</Text>
                     </View>
                 </TouchableOpacity>
             </LinearGradient>
