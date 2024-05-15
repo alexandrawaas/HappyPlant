@@ -3,10 +3,12 @@ import {StyleSheet, View, Text, Image, Platform} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import AssignmentsScreen from "../AssignmentsScreen";
-import RoomsScreen from "../RoomsScreen";
+import RoomsScreen from "../room/RoomsScreen";
 import MyPlantsScreen from "../MyPlantsScreen";
-import SpeciesScreen from "../SpeciesScreen";
+import SpeciesScreen from "../species/SpeciesScreen";
 import SettingsScreen from "../SettingsScreen";
+import GlobalLayout from "../../GlobalLayout";
+import HeaderBackground from "../global/HeaderBackground";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,11 +26,18 @@ const TabNavigator = () => {
                     borderRadius: 50,
                     height: Platform.OS === 'ios' ? 80 : 70,
                     ...styles.shadow,
-                } }
+                },
+                headerTintColor: '#233d0c',
+                headerTitleAlign: 'center',
+                headerTitleStyle: {
+                    fontWeight: 'bold'
+                },
+                headerBackground: () => (<HeaderBackground/>)
+            }
             }>
             <Tab.Screen
                 name="Aufgaben"
-                component={AssignmentsScreen}
+                children={(props) => <GlobalLayout component={AssignmentsScreen} {...props}/>}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -44,7 +53,8 @@ const TabNavigator = () => {
                 }}
             />
 
-            <Tab.Screen name="Räume" component={RoomsScreen}
+            <Tab.Screen name="Räume"
+                        children={(props) => <GlobalLayout component={RoomsScreen} {...props}/>}
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -58,7 +68,8 @@ const TabNavigator = () => {
                             ),
                         }}
             />
-            <Tab.Screen name="Meine Pflanzen" component={MyPlantsScreen}
+            <Tab.Screen name="Meine Pflanzen"
+                        children={(props) => <GlobalLayout component={MyPlantsScreen} {...props}/>}
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -72,7 +83,8 @@ const TabNavigator = () => {
                             ),
                         }}
             />
-            <Tab.Screen name="Lexikon" component={SpeciesScreen}
+            <Tab.Screen name="Lexikon"
+                        children={(props) => <GlobalLayout component={SpeciesScreen} {...props}/>}
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -86,7 +98,8 @@ const TabNavigator = () => {
                             ),
                         }}
             />
-            <Tab.Screen name="Einstellungen" component={SettingsScreen}
+            <Tab.Screen name="Einstellungen"
+                        children={(props) => <GlobalLayout component={SettingsScreen} {...props}/>}
                         options={{
                             tabBarIcon: ({focused}) => (
                                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
