@@ -24,53 +24,100 @@ class RoomService (
     fun save(room: Room) =
         db.save(room)
 
-    fun getRooms(): List<Room> =
-        db.findAll().toList()
-
-    fun getRoomsFiltered(search: String): List<Room> =
-        db.findAllByName(search).toList()
-
-    fun addRoom(newRoom: RoomDtoRequest): Room =
-        db.save(newRoom.asEntity(userService))
-
-    fun getRoom(roomId: UUID): Room? =
-        db.findById(roomId).getOrNull()
-
-    fun deleteRoom(roomId: UUID): Unit =
-        db.deleteById(roomId)
-
-    fun storeWindowsOnRoom(roomId: UUID, windows: List<PixelDtoRequest>): Room? {
-        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        room.storeWindows(windows.map { it.asEntity(this, speciesService, userService) })
-        return db.findById(roomId)
-            .map { foundEntity -> db.save(room.copy(id = foundEntity.id)) }
-            .getOrNull()
+    fun getRooms(userId: UUID): List<Room> {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        return db.findAllByUser(user).toList()
     }
 
-    fun getPlantsInRoom(roomId: UUID): List<Plant> {
-        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
-        return room.grid.flatMap { it.plants }
+    fun getRoomsFiltered(search: String, userId: UUID): List<Room> {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        return db.findAllByNameContainingIgnoreCaseAndUser(search, user).toList()
     }
 
-    fun repositionPlantInRoom(roomId: UUID, plantId: UUID, coords: CoordinatesDtoRequest): Room {
-        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
-        val plant = plantService.getPlant(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant could not be found.")
-
-        room.placePlant(plant, coords.x, coords.y)
-        save(room)
-
-        return room
+    fun addRoom(newRoom: RoomDtoRequest, userId: UUID): Room {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        return db.save(newRoom.asEntity(user))
     }
 
-    fun removePlantFromRoom(roomId: UUID, plantId: UUID): Room {
-        val room = getRoom(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
-        val plant = plantService.getPlant(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant could not be found.")
-        if(!plant.isPlaced() || plant.pixel?.room?.id != room.id) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Plant is not in Room to be removed from.")
+    fun getRoom(roomId: UUID, userId: UUID): Room? {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val room = getRoomFromDb(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found")
+        if (user.id == room.user.id) {
+            return room
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission for this room")
         }
-        plant.removeFromRoom()
-        save(room)
-
-        return room
     }
+
+    fun deleteRoom(roomId: UUID, userId: UUID): Unit {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val room = getRoomFromDb(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found")
+
+        if (user.id == room.user.id) {
+            db.deleteById(roomId)
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to delete this room")
+        }
+    }
+
+    fun storeWindowsOnRoom(roomId: UUID, windows: List<PixelDtoRequest>, userId: UUID): Room? {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val room = getRoomFromDb(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+
+        if (user.id == room.user.id) {
+            room.storeWindows(windows.map { it.asEntity(this, speciesService, user ) })
+            return db.findById(roomId)
+                .map { foundEntity -> db.save(room.copy(id = foundEntity.id)) }
+                .getOrNull()
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to place windows for this room")   
+        }
+    }
+
+    fun getPlantsInRoom(roomId: UUID, userId: UUID): List<Plant> {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val room = getRoomFromDb(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
+
+        return if (user.id == room.user.id) {
+            room.grid.flatMap { it.plants }
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to get plants for this room")    
+        }
+    }
+
+    fun repositionPlantInRoom(roomId: UUID, plantId: UUID, coords: CoordinatesDtoRequest, userId: UUID): Room {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val room = getRoomFromDb(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
+        val plant = plantService.getPlant(plantId, userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant could not be found.")
+
+        if (user.id == room.user.id) {
+            room.placePlant(plant, coords.x, coords.y)
+            save(room)
+    
+            return room
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to reposition plants in this room")              
+        }
+    }
+
+    fun removePlantFromRoom(roomId: UUID, plantId: UUID, userId: UUID): Room {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val room = getRoomFromDb(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room could not be found.")
+        val plant = plantService.getPlant(plantId, userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant could not be found.")
+
+        if (user.id == room.user.id) {
+            if(!plant.isPlaced() || plant.pixel?.room?.id != room.id) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Plant is not in Room to be removed from.")
+            }
+            plant.removeFromRoom()
+            save(room)
+    
+            return room
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to remove plants from this room")       
+        }
+    }
+
+    private fun getRoomFromDb(roomId: UUID): Room? = 
+        db.findById(roomId).getOrNull()
 }

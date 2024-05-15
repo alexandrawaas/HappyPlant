@@ -6,6 +6,7 @@ import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.datatransfer.plant.asDtoResponse
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.service.PlantService
+import com.happyplant.backend.utility.AuthTokenUtil
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -15,41 +16,89 @@ import java.util.*
 
 @RestController
 @RequestMapping("plants")
-class PlantController (private val service: PlantService) {
+class PlantController (
+    private val service: PlantService,
+    private val authTokenUtil: AuthTokenUtil
+) {
 
     @GetMapping
     @ResponseBody
-    fun getPlants(@RequestParam(name = "search") search: String?): List<PlantDtoResponse> {
-        return if (search == null) {
-            service.getPlants().map { plant -> plant.asDtoResponse() }
+    fun getPlants(
+        @RequestHeader("Authorization") authHeader: String, 
+        @RequestParam(name = "search") search: String?
+    ): List<PlantDtoResponse> {
+        val userId = authTokenUtil.getUserIdFromToken(authHeader)
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+    
+        val plants = if (search.isNullOrBlank()) {
+            service.getPlants(userId)
         } else {
-            service.getPlantsFiltered(search).map { plant -> plant.asDtoResponse() }
+            service.getPlantsFiltered(search, userId)
         }
+        return plants.map{ it.asDtoResponse() }
     }
 
     @PostMapping
     @ResponseBody
-    @ResponseStatus(HttpStatus.CREATED)
-    fun addPlant(@RequestBody newPlant: PlantDtoRequest): PlantDtoResponse =
-        service.addPlant(newPlant).asDtoResponse()
+    fun addPlant(
+        @RequestHeader("Authorization") authHeader: String, 
+        @RequestBody newPlant: PlantDtoRequest
+    ): PlantDtoResponse {
+        val userId = authTokenUtil.getUserIdFromToken(authHeader)
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+
+        val plant = service.addPlant(newPlant, userId)
+        return plant.asDtoResponse()
+    }
 
     @GetMapping("/{plantId}")
     @ResponseBody
-    fun getPlant(@PathVariable plantId: UUID): PlantDtoResponse =
-        service.getPlant(plantId)?.asDtoResponse()
+    fun getPlant(
+        @RequestHeader("Authorization") authHeader: String, 
+        @PathVariable plantId: UUID
+    ): PlantDtoResponse {
+        val userId = authTokenUtil.getUserIdFromToken(authHeader)
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token") 
+        
+        return service.getPlant(plantId, userId)?.asDtoResponse()
             ?: throw ResponseStatusException( HttpStatus.NOT_FOUND, "Plant not found")
+    }
 
     @PutMapping("/{plantId}")
     @ResponseStatus(HttpStatus.OK)
-    fun alterPlant(@PathVariable plantId: UUID, @RequestBody plant: PlantDtoRequest): PlantDtoResponse =
-        service.alterPlant(plantId, plant).asDtoResponse()
+    fun alterPlant(
+        @RequestHeader("Authorization") authHeader: String, 
+        @PathVariable plantId: UUID, 
+        @RequestBody plant: PlantDtoRequest
+    ): PlantDtoResponse {
+        val userId = authTokenUtil.getUserIdFromToken(authHeader)
+        ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+        
+        return service.alterPlant(plantId, plant, userId).asDtoResponse()
+    }
 
     @DeleteMapping("/{plantId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deletePlant(@PathVariable plantId: UUID): Unit = service.deletePlant(plantId)
+    fun deleteRoom(
+        @RequestHeader("Authorization") authHeader: String, 
+        @PathVariable plantId: UUID
+    ): Unit {
+        val userId = authTokenUtil.getUserIdFromToken(authHeader)
+            ?: throw throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")  
+            
+        service.deletePlant(plantId, userId)
+    }
 
     @PatchMapping("/{plantId}/assignments")
     @ResponseStatus(HttpStatus.OK)
-    fun setAssignmentForPlant(@PathVariable plantId: UUID, @RequestBody assignment: AssignmentDtoRequest): PlantDtoResponse
-        = service.setAssignmentForPlant(plantId, assignment).asDtoResponse()
+    fun setAssignmentForPlant(
+        @RequestHeader("Authorization") authHeader: String, 
+        @PathVariable plantId: UUID, 
+        @RequestBody assignment: AssignmentDtoRequest
+    ): PlantDtoResponse {
+        val userId = authTokenUtil.getUserIdFromToken(authHeader)
+            ?: throw throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")  
+    
+        return service.setAssignmentForPlant(plantId, assignment, userId).asDtoResponse()
+    }
 }

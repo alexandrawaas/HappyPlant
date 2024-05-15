@@ -16,7 +16,7 @@ data class Plant(
     @Column var notes: String?,
     @OneToMany(cascade = [CascadeType.ALL]) var assignments: Map<AssignmentType, Assignment>,
     @ManyToOne var species: Species,
-    @ManyToOne private var user: User,
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user_id", referencedColumnName = "id") var user: User,
     @ManyToOne @JoinColumn(name = "pixel_id") var pixel: Pixel?,
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn(name = "needs_id") var needs: Needs?,
 ) {
