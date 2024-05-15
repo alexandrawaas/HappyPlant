@@ -13,17 +13,15 @@ import HeaderBackground from "./HeaderBackground";
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-    const getOptionsForIcon = (icon) => {
-        const normalIcon = `../../assets/TabNav Icons/${icon}.png`
-        const greyIcon = `../../assets/TabNav Icons/${icon}grey.png`
-        console.log('foo')
+    const getOptionsForIcon = (activeIcon, greyIcon) => {
+        // cannot make it more generic, because the string passed to require() must be final -.-
         return {
             tabBarIcon: ({ focused }) => (
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                     <View style={{ position: 'absolute' }}>
                         <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height: 80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent' }} />
                         <Image
-                            source={focused ? require('../../assets/TabNav Icons/checkliste.png') : require('../../assets/TabNav Icons/checklistegrey.png')}
+                            source={focused ? activeIcon : greyIcon}
                             style={{ width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0 }}
                         />
                     </View>
@@ -57,80 +55,27 @@ const TabNavigator = () => {
             <Tab.Screen
                 name="Aufgaben"
                 children={(props) => <GlobalLayout component={AssignmentsScreen} {...props} />}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <View style={{ position: 'absolute' }}>
-                                <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height: 80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent' }} />
-                                <Image
-                                    source={focused ? require('../../assets/TabNav Icons/checkliste.png') : require('../../assets/TabNav Icons/checklistegrey.png')}
-                                    style={{ width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0 }}
-                                />
-                            </View>
-                        </View>
-                    ),
-                }}
+                options={getOptionsForIcon(require('../../assets/TabNav Icons/checkliste.png'), require('../../assets/TabNav Icons/checklistegrey.png'))}
             />
-
-            <Tab.Screen name="Räume"
+            <Tab.Screen 
+                name="Räume"
                 children={(props) => <GlobalLayout component={RoomsScreen} {...props} />}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <View style={{ position: 'absolute' }} />
-                            <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height: 80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent' }} />
-                            <Image
-                                source={focused ? require('../../assets/TabNav Icons/room.png') : require('../../assets/TabNav Icons/roomgrey.png')}
-                                style={{ width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0 }}
-                            />
-                        </View>
-                    ),
-                }}
+                options={getOptionsForIcon(require('../../assets/TabNav Icons/room.png'), require('../../assets/TabNav Icons/roomgrey.png'))}
             />
-            <Tab.Screen name="Meine Pflanzen"
+            <Tab.Screen 
+                name="Meine Pflanzen"
                 children={(props) => <GlobalLayout component={MyPlantsScreen} {...props} />}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <View style={{ position: 'absolute' }} />
-                            <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 80, height: 80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent' }} />
-                            <Image
-                                source={focused ? require('../../assets/TabNav Icons/plant.png') : require('../../assets/TabNav Icons/plantgrey.png')}
-                                style={{ width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0 }}
-                            />
-                        </View>
-                    ),
-                }}
+                options={getOptionsForIcon(require('../../assets/TabNav Icons/plant.png'), require('../../assets/TabNav Icons/plantgrey.png'))}
             />
-            <Tab.Screen name="Lexikon"
+            <Tab.Screen 
+                name="Lexikon"
                 children={(props) => <GlobalLayout component={SpeciesScreen} {...props} />}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <View style={{ position: 'absolute' }} />
-                            <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? -25 : -17, left: -22, width: 80, height: 80, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent' }} />
-                            <Image
-                                source={focused ? require('../../assets/TabNav Icons/book.png') : require('../../assets/TabNav Icons/bookgrey.png')}
-                                style={{ width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0 }}
-                            />
-                        </View>
-                    ),
-                }}
+                options={getOptionsForIcon(require('../../assets/TabNav Icons/book.png'), require('../../assets/TabNav Icons/bookgrey.png'))}
             />
-            <Tab.Screen name="Einstellungen"
+            <Tab.Screen 
+                name="Einstellungen"
                 children={(props) => <GlobalLayout component={SettingsScreen} {...props} />}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <View style={{ position: 'absolute' }} />
-                            <View style={{ position: 'absolute', bottom: Platform.OS === 'ios' ? -25 : -17, left: Platform.OS === 'ios' ? -20 : -22, width: 75, height: 75, borderRadius: 35, backgroundColor: focused ? '#FFFFFF' : 'transparent' }} />
-                            <Image
-                                source={focused ? require('../../assets/TabNav Icons/settings.png') : require('../../assets/TabNav Icons/settingsgrey.png')}
-                                style={{ width: 35, height: 35, bottom: Platform.OS === 'ios' ? -14 : 0 }}
-                            />
-                        </View>
-                    ),
-                }}
+                options={getOptionsForIcon(require('../../assets/TabNav Icons/settings.png'), require('../../assets/TabNav Icons/settingsgrey.png'))}
             />
         </Tab.Navigator>
     );
