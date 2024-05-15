@@ -23,6 +23,7 @@ export default function RoomsScreen({ navigation }) {
             {roomMock.length % 2 == 0
                 ? <AddRoomButton onClick={handleAddRoomClick} displayOnNewLine />
             : null}
+            <View style={styles.bottomPlaceholder}/>
         </ScrollView>
     );
 }
@@ -36,6 +37,9 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
+    },
+    bottomPlaceholder: {
+        height: 110,
     }
 });
 
