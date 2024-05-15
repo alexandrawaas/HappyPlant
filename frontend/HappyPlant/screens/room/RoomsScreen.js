@@ -9,8 +9,6 @@ export default function RoomsScreen({ navigation }) {
         console.log("TODO: implement add room dialog")
     }
 
-    console.log(navigation)
-
     return (
         <ScrollView style={styles.container}>
             <View style={styles.roomContainer}>
