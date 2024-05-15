@@ -11,6 +11,7 @@ import com.happyplant.backend.repository.UserRepository
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.security.MessageDigest
 import java.util.*
 
 
@@ -630,11 +631,15 @@ class DatabaseInitializer {
             )
         ))
 
-
+        fun hashPassword(password: String): String {
+            val md = MessageDigest.getInstance("SHA-256")
+            val hashBytes = md.digest(password.toByteArray())
+            return hashBytes.joinToString("") { "%02x".format(it) }
+        }
         userRepository.save(
             User(
                 email = "example.user@test.com",
-                passwordHash = "blablabla",
+                passwordHash = hashPassword("s3cur3P455w0rd"),
                 emailVerified = true,
                 emailVerificationToken = UUID.randomUUID().toString(),
                 emailVerificationExpires = System.currentTimeMillis() + 600000,
