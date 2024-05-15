@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import SpeciesListItem from "./SpeciesListItem";
 import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
 import { API_URL } from "../../config";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 
 export default function SpeciesScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -32,7 +33,8 @@ export default function SpeciesScreen({ navigation }) {
                 </View>
             </View>
             
-            {Array.isArray(species) && species.length !== 0
+            <ScrollView>
+                {Array.isArray(species) && species.length !== 0
                 ? species.map(i =>
                     <SpeciesListItem
                         species={i} key={i.id}
@@ -41,6 +43,9 @@ export default function SpeciesScreen({ navigation }) {
                     />
                 )
                 : <Text style={styles.fallBackText}>Keine Spezies gefunden.</Text>}
+                <VerticalPlaceholder size={175}/>
+            </ScrollView>
+            
         </View>
     );
 }
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
     },
     toolContainer: {
-        marginBottom: 30,
+        marginBottom: 20,
     },  
     searchContainer: {
         backgroundColor: "red",
@@ -77,10 +82,3 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     }
 });
-
-// NAV:
-{/* <Button title="Aufgaben" onPress={()=> navigation.navigate("Aufgaben")} />
-            <Button title="Räume" onPress={()=> navigation.navigate("Räume")} />
-            <Button title="Meine Pflanzen" onPress={()=> navigation.navigate("Meine Pflanzen")} />
-            <Button title="Einstellungen" onPress={()=> navigation.navigate("Einstellungen")} />
-            <Button title="Einzelne Pflanzenart" onPress={()=> navigation.navigate("Einzelne Pflanzenart")} /> */}

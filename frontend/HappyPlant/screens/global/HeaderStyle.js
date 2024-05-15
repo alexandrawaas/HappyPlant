@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View } from "react-native";
 
-export default function HeaderBackground() {
+function HeaderBackground() {
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -23,3 +23,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#f4feee'
     }
 })
+
+export default headerStyleOptions = {
+    headerTintColor: '#233d0c',
+    headerTitleAlign: 'center',
+    headerTitleStyle: {
+        fontWeight: 'bold'
+    },
+    headerBackground: () => (<HeaderBackground />)
+};

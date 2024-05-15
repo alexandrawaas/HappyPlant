@@ -2,13 +2,12 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import { roomMock } from "./RoomMock";
 import AddRoomButton from "./AddRoomButton";
 import RoomListItem from "./RoomListItem";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 
 export default function RoomsScreen({ navigation }) {
     const handleAddRoomClick = () => {
         console.log("TODO: implement add room dialog")
     }
-
-    console.log(navigation)
 
     return (
         <ScrollView style={styles.container}>
@@ -23,6 +22,7 @@ export default function RoomsScreen({ navigation }) {
             {roomMock.length % 2 == 0
                 ? <AddRoomButton onClick={handleAddRoomClick} displayOnNewLine />
             : null}
+            <VerticalPlaceholder size={110}/>
         </ScrollView>
     );
 }
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-    }
+    },
 });
 
 

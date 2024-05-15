@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image,} from "react-native";
+import {View, Text, StyleSheet, Image, ScrollView,} from "react-native";
 import { useEffect, useState } from "react";
 import { useRoute } from '@react-navigation/native';
 import { API_URL } from "../../config";
@@ -29,6 +29,7 @@ export default function SingleSpeciesScreen({ navigation }) {
 
     return (
         <LinearGradient colors={['#fdfbef', '#f6ffed']} style={[styles.container, styles.shadowed]}>
+            <ScrollView>
             <View style={styles.topContainer}>
                 <View style={[styles.imageContainer, styles.shadowed]}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']} >
@@ -57,6 +58,8 @@ export default function SingleSpeciesScreen({ navigation }) {
                 <Text style={styles.header2}>Information</Text>
                 <Text style={styles.informationBlock}>Diese Pflanze gehört zur Familie der {species.family}. {species.description}</Text>
             </View>
+            <View />
+            </ScrollView>
         </LinearGradient>
     );
 }
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
     },
     container: {
         minHeight: "100%",
-        margin: 20,
         borderRadius: 10,
         display: "flex",
         flexDirection: "column",

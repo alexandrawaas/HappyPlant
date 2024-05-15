@@ -3,7 +3,7 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import TabNavigator from "./screens/navigation/TabNavigator";
+import TabNavigator from "./screens/global/TabNavigator";
 import LoadingScreen from "./screens/authentication/LoadingScreen";
 import LoginScreen from "./screens/authentication/LoginScreen";
 import RegisterScreen from "./screens/authentication/RegisterScreen";
