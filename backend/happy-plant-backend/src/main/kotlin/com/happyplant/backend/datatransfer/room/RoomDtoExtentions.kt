@@ -2,7 +2,7 @@ package com.happyplant.backend.datatransfer.room
 
 import com.happyplant.backend.datatransfer.pixel.asDtoResponse
 import com.happyplant.backend.model.Room
-import com.happyplant.backend.service.UserService
+import com.happyplant.backend.model.User
 
 fun Room.asDtoResponse(): RoomDtoResponse =
     RoomDtoResponse(
@@ -19,11 +19,11 @@ fun Room.asDtoResponseShort(): RoomDtoResponseShort =
         category = this.category
     )
 
-fun RoomDtoRequest.asEntity(userService: UserService): Room =
+fun RoomDtoRequest.asEntity(user: User): Room =
      Room(
         name = this.name,
         category = this.category,
-        user = userService.getDummyUser(), //todo: get user from token
+        user = user,
         ratioValueX = this.ratioValueX,
         ratioValueY = this.ratioValueY,
     )

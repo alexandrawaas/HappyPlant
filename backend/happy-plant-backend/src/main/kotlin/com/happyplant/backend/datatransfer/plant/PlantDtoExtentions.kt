@@ -7,7 +7,7 @@ import com.happyplant.backend.datatransfer.room.asDtoResponseShort
 import com.happyplant.backend.datatransfer.species.asDtoResponse
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.service.SpeciesService
-import com.happyplant.backend.service.UserService
+import com.happyplant.backend.model.User
 
 fun Plant.asDtoResponse(): PlantDtoResponse =
     PlantDtoResponse(
@@ -24,13 +24,13 @@ fun Plant.asDtoResponse(): PlantDtoResponse =
 
 fun PlantDtoRequest.asEntity(
     speciesService: SpeciesService,
-    userService: UserService
+    user: User
 ): Plant =
     Plant(
         name = name,
         picturePath = picturePath,
         notes = notes,
         species = speciesService.getSpecies(speciesId),
-        user = userService.getDummyUser(),          // TODO: get user from token,
+        user = user,
         needs = needs?.asEntity() ?: speciesService.getSpecies(speciesId).needs,
     )

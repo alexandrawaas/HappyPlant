@@ -28,41 +28,80 @@ class PlantService(
     fun save(plant: Plant) =
         db.save(plant)
 
-    fun getPlants(): List<Plant> =
-        db.findAll().toList()   // TODO: Filter by active user ID
+    fun getPlants(userId: UUID): List<Plant> {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        return db.findAllByUser(user).toList()
+    } 
 
-    fun getPlantsFiltered(search: String): List<Plant> =
-        db.findAllByNameContainingIgnoreCaseOrSpeciesNameContainingIgnoreCase(search, search).toList()      // TODO: Filter by active user ID
+    fun getPlantsFiltered(search: String, userId: UUID): List<Plant> {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val userPlants = db.findAllByUser(user)
+        return userPlants.filter { plant ->
+            plant.name.contains(search, ignoreCase = true) || plant.species.name.contains(search, ignoreCase = true)
+        }
+    }
 
-
-    fun addPlant(newPlant: PlantDtoRequest): Plant {
-        val plantToSave = newPlant.asEntity(speciesService, userService)
+    fun addPlant(newPlant: PlantDtoRequest, userId: UUID): Plant {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val plantToSave = newPlant.asEntity(speciesService, user)
         return db.save(plantToSave)
     }
 
-    fun getPlant(id: UUID): Plant? {
-        return db.findById(id).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
+    fun getPlant(plantId: UUID, userId: UUID): Plant? {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val plant = getPlantFromDb(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
+
+        if (user.id == plant.user.id) {
+            return plant
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not own this plant")
+        }
     }
 
-    fun alterPlant(id: UUID, plant: PlantDtoRequest): Plant {
-        val plantToSave = getPlant(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
-        val patchedPlant = plantToSave.copy(
-            name = plant.name,
-            species = speciesService.getSpecies(plant.speciesId),
-            notes = plant.notes,
-            picturePath = plant.picturePath,
-            needs = plant.needs?.asEntity() ?: plantToSave.needs)
-        patchedPlant.needs?.intervals?.forEach { if (!patchedPlant.assignments.keys.contains(it.key)) patchedPlant.addAssignment(assignmentType = it.key, lastDone = null) }
-        return db.save(patchedPlant)
+    fun alterPlant(plantId: UUID, plant: PlantDtoRequest, userId: UUID): Plant {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val plantToSave = getPlantFromDb(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
+
+        if (user.id == plantToSave.user.id) {
+            val patchedPlant = plantToSave.copy(
+                name = plant.name,
+                species = speciesService.getSpecies(plant.speciesId),
+                notes = plant.notes,
+                picturePath = plant.picturePath,
+                needs = plant.needs?.asEntity() ?: plantToSave.needs)
+            patchedPlant.needs?.intervals?.forEach { if (!patchedPlant.assignments.keys.contains(it.key)) patchedPlant.addAssignment(assignmentType = it.key, lastDone = null) }
+
+            return db.save(patchedPlant)
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to alter this plant")
+        }
     }
 
-    fun deletePlant(id: UUID): Unit {
-        db.deleteById(id)
+    fun deletePlant(plantId: UUID, userId: UUID): Unit {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val plant = getPlantFromDb(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
+
+        if (user.id == plant.user.id) {
+            db.deleteById(plantId)
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to delete this plant")
+        }
     }
 
-    fun setAssignmentForPlant(plantId: UUID, assignment: AssignmentDtoRequest): Plant {
-        val plant: Plant = db.findById(plantId).getOrNull() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
-        plant.assignments[assignment.assignmentType]?.lastDone = assignment.lastDone
-        return db.save(plant)
+    fun setAssignmentForPlant(plantId: UUID, assignment: AssignmentDtoRequest, userId: UUID): Plant {
+        val user = userService.getUser(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        val plant = getPlantFromDb(plantId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Plant not found")
+
+        if (user.id == plant.user.id) {
+            plant.assignments[assignment.assignmentType]?.lastDone = assignment.lastDone
+            return db.save(plant)
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to set assignments for this plant")  
+        }
+
+    }
+
+    private fun getPlantFromDb(plantId: UUID): Plant? {
+        return db.findById(plantId).getOrNull()
     }
 }

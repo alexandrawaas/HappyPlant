@@ -27,7 +27,8 @@ data class Room(
         @Column
         val sizeY: Int,
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "user_id", referencedColumnName = "id")
         val user: User
 )
 {

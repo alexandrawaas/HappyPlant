@@ -1,6 +1,7 @@
 package com.happyplant.backend.repository
 
 import com.happyplant.backend.model.Room
+import com.happyplant.backend.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.CrudRepository
@@ -9,4 +10,6 @@ import java.util.UUID
 
 interface RoomRepository: JpaRepository<Room, UUID>, JpaSpecificationExecutor<Room> {
     fun findAllByName(name: String): Iterable<Room>
+    fun findAllByUser(user: User): Iterable<Room>
+    fun findAllByNameAndUser(name: String, user: User): Iterable<Room>
 }
