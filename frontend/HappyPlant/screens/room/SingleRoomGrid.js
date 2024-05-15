@@ -42,6 +42,7 @@ export default function SingleRoomGrid({ navigation, room }) {
                 >
                     <View>
                         <FontAwesome5 name="seedling" color={'#233d0c'} size={25} />
+                        {/* TODO: add pixel specific warning/assignment icon */}
                     </View>
                 </TouchableOpacity>
                 <PlantsOnPixelPopup
