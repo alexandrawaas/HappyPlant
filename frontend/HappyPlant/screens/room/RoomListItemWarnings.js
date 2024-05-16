@@ -1,19 +1,19 @@
 import { View, Text, StyleSheet } from "react-native";
-import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import WarnIcon from "../other/WarnIcon";
+import AssignmentIcon from "../other/AssignmentIcon";
 
 export default function RoomListItemWarnings({ numberOfWarnings, numberOfAssignments }) {
     return (
         <View style={styles.hintContainer}>
             {numberOfWarnings !== 0
                 ? <Text style={styles.hint}>
-                    <Entypo name="warning" color="red" size={14} />
+                    <WarnIcon />
                     &nbsp;{numberOfWarnings}
                 </Text>
                 : null}
             {numberOfAssignments !== 0
                 ? <Text style={styles.hint}>
-                    <MaterialCommunityIcons name="checkbox-marked" color="lightblue" size={14} />
+                    <AssignmentIcon />
                     &nbsp;{numberOfAssignments}
                 </Text>
                 : null}
