@@ -40,6 +40,7 @@ export default function SingleRoomGrid({ navigation, room }) {
             const numberOfAssignments = pixel.plants.map(x => x.assignments.length).reduce((a,b) => a + b);
             return numberOfAssignments;
         }
+        // TODO: change this so we filter for active assignments instead of all 
 
         return (<>
             {item.item.plants.length !== 0
