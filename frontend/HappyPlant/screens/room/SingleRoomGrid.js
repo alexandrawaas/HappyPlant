@@ -3,6 +3,8 @@ import { Text, View, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions
 import { useState } from "react";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import PlantsOnPixelPopup from "./PlantsOnPixelPopup";
+import RoomListItemWarnings from "./RoomListItemWarnings";
+import AssignmentIcon from "../other/AssignmentIcon";
 
 const GLOBAL_PADDING = 2 * 20;
 
@@ -37,28 +39,54 @@ export default function SingleRoomGrid({ navigation, room }) {
         }
     }
 
-    const renderItem = ({ item }) => (<>
-        {item.item.plants.length !== 0
-            ? <>
-                <TouchableOpacity
-                    style={pixelStyle(item.item)}
-                    onPress={() => handlePixelPress(item.item)}
-                >
-                    <View>
-                        <FontAwesome5 name="seedling" color={'#233d0c'} size={25} />
-                        {/* TODO: add pixel specific warning/assignment icon */}
-                    </View>
-                </TouchableOpacity>
-                <PlantsOnPixelPopup
-                    pixel={selectedPixel}
-                    visible={isPopupVisible}
-                    onClose={() => setIsPopupVisible(false)}
-                    navigation={navigation}
-                />
-            </>
-            : <View style={pixelStyle(item.item)} />
+    const renderItem = ({ item }) => {
+        const getNumberOfWarningsForPixel = (pixel) => {
+            const numberOfWarnings = pixel.plants.filter(x => !x.hasOptimalLightingCondition).length;
+            return numberOfWarnings
         }
-    </>);
+
+        const getNumberOfAssignmentsForPixel = (pixel) => {
+            const numberOfAssignments = pixel.plants.map(x => x.assignments.length).reduce((a,b) => a + b);
+            return numberOfAssignments;
+        }
+        // TODO: change this so we filter for active assignments instead of all 
+
+        return (<>
+            {item.item.plants.length !== 0
+                ? <>
+                    <TouchableOpacity
+                        style={{
+                            ...styles.cell,
+                            backgroundColor: lightColor[item.item.lightingType],
+                            width: cellSize,
+                            height: cellSize,
+                        }}
+                        onPress={() => handlePixelPress(item.item)}
+                    >
+                        <View>
+                            <FontAwesome5 name="seedling" color={'#233d0c'} size={25} />
+                            <View style={styles.icon}>
+                                {getNumberOfWarningsForPixel(item.item) !== 0 ? <WarnIcon /> : null}
+                                {getNumberOfAssignmentsForPixel(item.item) !== 0 ? <AssignmentIcon /> : null}
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <PlantsOnPixelPopup
+                        pixel={selectedPixel}
+                        visible={isPopupVisible}
+                        onClose={() => setIsPopupVisible(false)}
+                        navigation={navigation}
+                    />
+                </>
+                : <View style={{
+                    ...styles.cell,
+                    backgroundColor: lightColor[item.item.lightingType],
+                    width: cellSize,
+                    height: cellSize,
+                }} />
+            }
+        </>)
+    };
 
     return (
         <FlatList
@@ -101,4 +129,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
+    icon: {
+        position: 'absolute',
+        top: -10,
+        right: -10,
+    }
 });
