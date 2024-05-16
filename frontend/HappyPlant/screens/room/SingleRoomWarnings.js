@@ -7,6 +7,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { AssignmentTypeAsVerbTranslations } from "../../utils/EnumTranslations";
 import WarnIcon from "../other/WarnIcon";
 import AssignmentIcon from "../other/AssignmentIcon";
+import CollapsibleBar from "../other/CollapsibleBar";
 
 export default function SingleRoomWarnings({ room }) {
     const [plantIds, setPlantIds] = useState();
@@ -30,17 +31,10 @@ export default function SingleRoomWarnings({ room }) {
         })
     }, [plantIds])
 
-    const [isCollapsed, setIsCollapsed] = useState(true)
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} >
-                <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.toggleContainer}>
-                    <Text style={styles.containerTitle}>Hinweise</Text>
-                    <Entypo name={isCollapsed ? 'chevron-up' : 'chevron-down'} color={'#98948f'} size={20} />
-                </LinearGradient>
-            </TouchableOpacity>
-            <Collapsible collapsed={isCollapsed}>
+            <CollapsibleBar title="Hinweise">
                 <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                     {warnings?.length + assignments?.length === 0
                         ? <Text style={styles.hintItem}>Hier gibt es nichts zu tun.</Text>
@@ -59,8 +53,7 @@ export default function SingleRoomWarnings({ room }) {
                         </View>
                     )}
                 </LinearGradient>
-            </Collapsible>
-
+            </CollapsibleBar>
         </View>
     )
 }
