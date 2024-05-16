@@ -28,16 +28,20 @@ export default function SingleRoomGrid({ navigation, room }) {
         setIsPopupVisible(true);
     };
 
+    const pixelStyle = (pixel) => {
+        return {
+            ...(pixel.isWindow ? styles.window : styles.cell),
+            backgroundColor: lightColor[pixel.lightingType],
+            width: cellSize,
+            height: cellSize,
+        }
+    }
+
     const renderItem = ({ item }) => (<>
         {item.item.plants.length !== 0
             ? <>
                 <TouchableOpacity
-                    style={{
-                        ...styles.cell,
-                        backgroundColor: lightColor[item.item.lightingType],
-                        width: cellSize,
-                        height: cellSize,
-                    }}
+                    style={pixelStyle(item.item)}
                     onPress={() => handlePixelPress(item.item)}
                 >
                     <View>
@@ -52,12 +56,7 @@ export default function SingleRoomGrid({ navigation, room }) {
                     navigation={navigation}
                 />
             </>
-            : <View style={{
-                ...styles.cell,
-                backgroundColor: lightColor[item.item.lightingType],
-                width: cellSize,
-                height: cellSize,
-            }} />
+            : <View style={pixelStyle(item.item)} />
         }
     </>);
 
@@ -91,6 +90,13 @@ const styles = StyleSheet.create({
     cell: {
         borderWidth: 0.5,
         borderColor: 'grey',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    window: {
+        borderWidth: 2,
+        borderColor: 'lightblue',
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
