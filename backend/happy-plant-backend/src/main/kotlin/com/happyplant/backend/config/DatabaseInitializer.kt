@@ -679,6 +679,12 @@ class DatabaseInitializer {
             )
         )
 
+        kitchen.storeWindows(listOf(Pixel(kitchen, 0,0), Pixel(kitchen, 2,5)))
+        roomRepository.save(kitchen)
+
+        livingRoom.storeWindows(listOf(Pixel(livingRoom, 0,0), Pixel(livingRoom, 1,4)))
+        roomRepository.save(livingRoom)
+
         plantRepository.save(
             Plant(
                 name = "Gloria",
