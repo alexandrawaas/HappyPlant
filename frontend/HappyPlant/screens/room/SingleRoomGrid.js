@@ -55,12 +55,7 @@ export default function SingleRoomGrid({ navigation, room }) {
             {item.item.plants.length !== 0
                 ? <>
                     <TouchableOpacity
-                        style={{
-                            ...styles.cell,
-                            backgroundColor: lightColor[item.item.lightingType],
-                            width: cellSize,
-                            height: cellSize,
-                        }}
+                        style={pixelStyle(item.item)}
                         onPress={() => handlePixelPress(item.item)}
                     >
                         <View>
@@ -78,12 +73,7 @@ export default function SingleRoomGrid({ navigation, room }) {
                         navigation={navigation}
                     />
                 </>
-                : <View style={{
-                    ...styles.cell,
-                    backgroundColor: lightColor[item.item.lightingType],
-                    width: cellSize,
-                    height: cellSize,
-                }} />
+                : <View style={pixelStyle(item.item)} />
             }
         </>)
     };
