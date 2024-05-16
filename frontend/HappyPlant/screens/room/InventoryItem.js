@@ -5,7 +5,7 @@ export default function InventoryItem({plant, style}) {
     return (
         <View style={[styles.container, style]} key={plant.id}>
             <FontAwesome5 name="seedling" color={'#233d0c'} size={25} />
-            <Text>{plant.name.trim()}</Text>
+            <Text numberOfLines={1}>{plant.name.trim()}</Text>
         </View>
     )
 }
