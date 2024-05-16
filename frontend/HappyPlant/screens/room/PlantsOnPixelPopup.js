@@ -51,7 +51,7 @@ export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation
                             ))}</ScrollView>
                         <View style={styles.closeButtonContainer}>
                             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-                                <Text style={styles.closeButtonText}>Abbrechen</Text>
+                                <Text style={styles.closeButtonText}>Schließen</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
