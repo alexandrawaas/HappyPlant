@@ -41,13 +41,13 @@ export default function SingleRoomWarnings({ room }) {
                         : null
                     }
                     {warnings?.map(name =>
-                        <View style={styles.hintItem}>
+                        <View style={styles.hintItem} key={name}>
                             <WarnIcon style={styles.icon} />
                             <Text numberOfLines={1}>Standort von {name} kann verbessert werden</Text>
                         </View>
                     )}
                     {assignments?.map(a =>
-                        <View style={styles.hintItem}>
+                        <View style={styles.hintItem} key={a.id}>
                             <AssignmentIcon style={styles.icon} />
                             <Text numberOfLines={1}>{a.plantName} muss {AssignmentTypeAsVerbTranslations[a.assignmentType]} werden</Text>
                         </View>
