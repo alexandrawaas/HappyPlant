@@ -674,11 +674,14 @@ class DatabaseInitializer {
             )
         )
 
-        kitchen.storeWindows(listOf(Pixel(kitchen, 0,0), Pixel(kitchen, 2,5)))
+        kitchen.storeWindows(listOf(Pixel(kitchen, 0,1), Pixel(kitchen, 0,2), Pixel(kitchen, 1,3), Pixel(kitchen, 2,3), Pixel(kitchen, 3,3)))
         roomRepository.save(kitchen)
 
-        livingRoom.storeWindows(listOf(Pixel(livingRoom, 0,0), Pixel(livingRoom, 1,4)))
+        livingRoom.storeWindows(listOf(Pixel(livingRoom, 0,1), Pixel(livingRoom, 0,2)))
         roomRepository.save(livingRoom)
+
+        balcony.storeWindows(listOf(Pixel(balcony, 0,0), Pixel(balcony, 1,0), Pixel(balcony, 0,1), Pixel(balcony, 1,1)))
+        roomRepository.save(balcony)
 
         plantRepository.save(
             Plant(
