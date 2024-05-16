@@ -63,17 +63,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fdfbef',
         borderRadius: 15,
     },
-    toggleContainer: {
-        borderRadius: 15,
-        padding: 15,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    containerTitle: {
-        fontSize: 16,
-    },
     detailContainer: {
         borderRadius: 15,
         padding: 15,

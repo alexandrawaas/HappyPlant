@@ -25,10 +25,6 @@ export default function CollapsibleBar({ title, children }) {
 
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#fdfbef',
-        borderRadius: 15,
-    },
     toggleContainer: {
         borderRadius: 15,
         padding: 15,
@@ -39,18 +35,5 @@ const styles = StyleSheet.create({
     },
     containerTitle: {
         fontSize: 16,
-    },
-    detailContainer: {
-        borderRadius: 15,
-        padding: 15,
-    },
-    hintItem: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: 5,
-    },
-    icon: {
-        paddingRight: 5,
     }
 })
