@@ -1,6 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from 'react';
 import { View, Modal, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import WarnIcon from "../other/WarnIcon";
+import AssignmentIcon from "../other/AssignmentIcon";
 
 export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation }) {
     const handlePlantPress = (plantId) => {
@@ -17,7 +21,7 @@ export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation
             onRequestClose={onClose}
         >
             <View style={styles.modalBackground}>
-                <LinearGradient 
+                <LinearGradient
                     style={styles.modalContainer} colors={['#fdfbef', '#fef1ed']}
                 >
                     <LinearGradient
@@ -35,6 +39,14 @@ export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation
                                     onPress={() => handlePlantPress(plant.id)}
                                 >
                                     <Text style={styles.buttonText} numberOfLines={1}>{plant.name} ({plant.species.name}) </Text>
+                                    <View style={styles.warningContainer}>
+                                        {!plant.hasOptimalLightingCondition
+                                            ? <WarnIcon/>
+                                            : null}
+                                        {plant.assignments.length !== 0
+                                            ? <AssignmentIcon/>
+                                            : null}
+                                    </View>
                                 </TouchableOpacity>
                             ))}</ScrollView>
                         <View style={styles.closeButtonContainer}>
@@ -81,9 +93,17 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     plantButton: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#CCCCCC',
+    },
+    warningContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     closeButtonContainer: {
         display: 'flex',
