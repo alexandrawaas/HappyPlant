@@ -12,13 +12,13 @@ export default function RoomListItem({room, onPress}) {
                         <View style={styles.iconContainer}>
                             {RoomTypeIcons[room.category]}
                         </View>
-                        {room.warnings + room.assignments !== 0
-                            ? <RoomListItemWarnings room={room} />
+                        {room.numberOfWarnings + room.numberOfAssignments !== 0
+                            ? <RoomListItemWarnings numberOfWarnings={room.numberOfWarnings} numberOfAssignments={room.numberOfAssignments} />
                             : null}
                     </View>
                     <View style={styles.roomItemBottomContainer}>
                         <Text style={styles.header} numberOfLines={1}>{room.name}</Text>
-                        <Text style={styles.subHeader}>{room.plants} {room.plants == 1 ? "Pflanze" : "Pflanzen"}</Text>
+                        <Text style={styles.subHeader}>{room.numberOfPlants} {room.numberOfPlants == 1 ? "Pflanze" : "Pflanzen"}</Text>
                     </View>
                 </TouchableOpacity>
             </LinearGradient>
