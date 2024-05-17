@@ -22,7 +22,7 @@ export default function SingleRoomInventory({ room }) {
                 <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                     <View style={styles.plantsContainer}>
                         {inventory?.map(p =>
-                            <InventoryItem plant={p} />
+                            <InventoryItem plant={p} key={p.id} />
                         )}
                     </View>
                     <View style={styles.addButtonContainer}>
