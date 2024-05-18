@@ -12,10 +12,10 @@ import java.util.*
 data class Plant(
     @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID = UUID.randomUUID(),
     @NotNull var name: String,
-    @NotNull var picturePath: String = "DefaultPicturePath",
     @Column var notes: String?,
     @OneToMany(cascade = [CascadeType.ALL]) var assignments: Map<AssignmentType, Assignment>,
     @ManyToOne var species: Species,
+    @NotNull var imageId: UUID = species.imageId,
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user_id", referencedColumnName = "id") var user: User,
     @ManyToOne @JoinColumn(name = "pixel_id") var pixel: Pixel?,
     @ManyToOne(cascade = [CascadeType.ALL]) @JoinColumn(name = "needs_id") var needs: Needs?,
@@ -32,6 +32,7 @@ data class Plant(
                 assignments.filter { (assignmentType, assignment) ->
                         assignment.isActive(getNeedInterval(assignmentType))
                 }
+
 
         fun getAllAssignments(): List<Assignment> =
                 ArrayList(assignments.values)
@@ -53,13 +54,12 @@ data class Plant(
 
         constructor(
             name: String,
-            picturePath: String,
             notes: String?,
             species: Species,
             user: User,
             pixel: Pixel? = null,
             needs: Needs,
-        ) : this(UUID.randomUUID(), name, picturePath, notes, mutableMapOf(), species, user, pixel, needs) {
+        ) : this(UUID.randomUUID(), name, notes, mutableMapOf(), species, species.imageId, user, pixel, needs) {
             this.needs?.intervals?.keys?.forEach { assignmentType ->
                 this.addAssignment(assignmentType, null)
             }

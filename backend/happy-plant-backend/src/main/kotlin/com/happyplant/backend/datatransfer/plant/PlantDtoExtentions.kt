@@ -6,14 +6,14 @@ import com.happyplant.backend.datatransfer.needs.asEntity
 import com.happyplant.backend.datatransfer.room.asDtoResponseShort
 import com.happyplant.backend.datatransfer.species.asDtoResponse
 import com.happyplant.backend.model.Plant
-import com.happyplant.backend.service.SpeciesService
 import com.happyplant.backend.model.User
+import com.happyplant.backend.service.SpeciesService
 
 fun Plant.asDtoResponse(): PlantDtoResponse =
     PlantDtoResponse(
         id = this.id,
         name = this.name,
-        picturePath = this.picturePath,
+        imageId = this.imageId,
         notes = this.notes,
         assignments = this.assignments.map { it.value.asDtoResponse(it.key) },
         species = this.species.asDtoResponse(),
@@ -28,7 +28,6 @@ fun PlantDtoRequest.asEntity(
 ): Plant =
     Plant(
         name = name,
-        picturePath = picturePath,
         notes = notes,
         species = speciesService.getSpecies(speciesId),
         user = user,
