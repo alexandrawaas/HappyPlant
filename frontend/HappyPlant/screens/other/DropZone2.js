@@ -1,8 +1,12 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 
-export default DropZone2 = forwardRef(({ style, draggedObject }, ref) => {
-    // const zone = 
+export default DropZone2 = forwardRef(({ style, draggedObject, addMeasures, index }, ref) => {
+    useEffect(() => {
+        ref.current.measure((fx, fy, width, height, px, py) => {
+            addMeasures({ minX: px, maxX: px + width, minY: py, maxY: py + height }, index)
+        })
+    }, [ref.current])
 
     return (
         <View ref={ref} style={[style, styles.dropZone]}>
@@ -10,7 +14,6 @@ export default DropZone2 = forwardRef(({ style, draggedObject }, ref) => {
         </View>
     );
 })
-
 
 const styles = StyleSheet.create({
     dropZone: {

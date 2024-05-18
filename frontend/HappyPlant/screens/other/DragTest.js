@@ -13,40 +13,18 @@ const DROP_ZONES = [
 
 export default function DragTest() {
     const dropZones = DROP_ZONES.map(i => useRef(null));
-    const [measures, setMeasures] = useState(DROP_ZONES.map(i => ({ minX: 0, maxX: 0, minY: 0, maxY: 0 })))
+    const [measures, setMeasures] = useState([])
 
-    useEffect(() => {
-        dropZones.forEach((r, i) => {
-            r.current?.measure((fx, fy, width, height, px, py) => {
-                console.log(`${px} <= x <= ${px + width}`)
-                console.log(`${py} <= y <= ${py + height}`)
-                setMeasures(measures.map((m, idx) => {
-                    if(idx === i) {
-                        console.log(i, idx, m)
-                        return { minX: px, maxX: px + width, minY: py, maxY: py + height }
-                    }
-                    else {
-                        return m
-                    }
-                }))
-            })
-        })
-    }, [...dropZones.map(x => x.current)])
-
-    useEffect(() => {
-        console.log(measures)
-    }, [measures])
-
-    useEffect(() => {
-        console.log(dropZones)
-    }, [dropZones])
-
+    const addMeasures = (m,i) => {
+        measures[i] = m
+        setMeasures([...measures])
+    }
 
     return (
         <View style={styles.mainContainer}>
             <View style={styles.grid}>
                 {DROP_ZONES.map((c, i) =>
-                    <DropZone2 style={{ backgroundColor: c }} ref={dropZones[i]} key={i} />
+                    <DropZone2 style={{ backgroundColor: c }} ref={dropZones[i]} addMeasures={addMeasures} key={i} index={i} />
                 )}
             </View>
 
@@ -54,7 +32,7 @@ export default function DragTest() {
 
             <View style={styles.row}>
                 {DROP_ZONES.map((c, i) =>
-                    <Draggable2 dropZoneMeasures={measures} color={c} key={i} />
+                    <Draggable2 dropZoneMeasures={measures} color={c} key={i} onSuccesfulDrop={(zones, item) => console.log(item, 'in', zones)}/>
                 )}
             </View>
         </View>
@@ -66,8 +44,10 @@ const styles = StyleSheet.create({
         flex: 1
     },
     grid: {
+        // backgroundColor: 'red',
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'space-between',
         flexWrap: "wrap",
     },
     ballContainer: {
