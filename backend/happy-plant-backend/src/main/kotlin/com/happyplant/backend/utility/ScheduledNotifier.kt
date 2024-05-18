@@ -46,14 +46,12 @@ class ScheduledNotifier( private val userService: UserService) {
 
         for (arr in sizedArrays) {
             var json: String = Json.encodeToString(arr);
-            //println(json);
             val request = HttpRequest.newBuilder()
                 .uri(URI.create("https://exp.host/--/api/v2/push/send"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
             val response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            //println(response.body())
         }
     }
 
