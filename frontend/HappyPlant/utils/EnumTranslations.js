@@ -12,3 +12,10 @@ export const AssignmentTypeTranslations = {
     "REPOTTING": "Umtopfen",
     "LIGHTING": "Lichtbedürfnisse"
 }
+
+export const AssignmentTypeAsVerbTranslations = {
+    "WATERING": "gegossen",
+    "CUTTING": "geschnitten",
+    "FERTILIZING": "gedüngt",
+    "REPOTTING": "umgetopft",
+}
