@@ -1,10 +1,7 @@
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native"
+import { Text, StyleSheet, TouchableOpacity } from "react-native"
 import Collapsible from "react-native-collapsible";
 import { LinearGradient } from "expo-linear-gradient";
 import Entypo from "react-native-vector-icons/Entypo";
-import { AssignmentTypeAsVerbTranslations } from "../../utils/EnumTranslations";
-import WarnIcon from "../other/WarnIcon";
-import AssignmentIcon from "../other/AssignmentIcon";
 import { useState } from "react";
 
 export default function CollapsibleBar({ title, children }) {
