@@ -9,7 +9,7 @@ fun Species.asDtoResponse(): SpeciesDtoResponse =
         id = this.id,
         name = this.name,
         latinName = this.latinName,
-        picturePath = this.picturePath,
+        imageId = this.imageId,
         family = this.family,
         description = this.description,
         needs = this.needs.asDtoResponse(),
@@ -19,7 +19,7 @@ fun SpeciesDtoResponse.asEntity(): Species =
     Species(
         name = this.name,
         latinName = this.latinName,
-        picturePath = this.picturePath,
+        imageId = this.imageId,
         family = this.family,
         description = this.description,
         needs = this.needs.asEntity(),

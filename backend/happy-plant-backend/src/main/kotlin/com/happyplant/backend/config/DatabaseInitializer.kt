@@ -4,13 +4,12 @@ import com.happyplant.backend.model.*
 import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.model.types.LightingType
 import com.happyplant.backend.model.types.RoomCategory
-import com.happyplant.backend.repository.PlantRepository
-import com.happyplant.backend.repository.RoomRepository
-import com.happyplant.backend.repository.SpeciesRepository
-import com.happyplant.backend.repository.UserRepository
+import com.happyplant.backend.repository.*
+import com.happyplant.backend.utility.ImageUtil
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.io.File
 import java.security.MessageDigest
 import java.util.*
 
@@ -30,6 +29,9 @@ class DatabaseInitializer {
     @Autowired
     private lateinit var userRepository: UserRepository
 
+    @Autowired
+    private lateinit var imageRepository: ImageDataRepository
+
     private var seederEnabled: Boolean = true
 
     @PostConstruct
@@ -37,17 +39,32 @@ class DatabaseInitializer {
         if(!seederEnabled) return
 
         // drop tables
+        imageRepository.deleteAll()
         roomRepository.deleteAll()
         plantRepository.deleteAll()
         speciesRepository.deleteAll()
         userRepository.deleteAll()
 
+
         println("Seeding Database...")
+
+        val imagePath: String = "E:\\happy_plants\\happy-plant\\backend\\happy-plant-backend\\data\\speciesPictures\\"
+        val file: File = File("${imagePath}schlangenpflanze.jpeg")
+        val imageData: ByteArray = ImageUtil.compressImage(file.readBytes())
+        val image: Image = Image(
+            name = file.name,
+            type = file.extension,
+            imageData = imageData,
+        )
+        imageRepository.save(
+            image
+        )
+
 
         speciesRepository.save(Species(
             name = "Schlangenpflanze",
             latinName = "Sansevieria",
-            picturePath = "snake_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Spargelgewächse",
             description = "Auch bekannt als Schwiegermutterzunge, sind Schlangenpflanzen für ihre Robustheit und luftreinigenden Fähigkeiten bekannt.",
             needs = Needs(
@@ -65,7 +82,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Grünlilie",
             latinName = "Chlorophytum comosum",
-            picturePath = "spider_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Spargelgewächse",
             description = "Grünlilien sind bekannt für ihre langen, bogenförmigen Blätter, die mit weißen Streifen geschmückt sind. Sie sind leicht zu züchten und zu vermehren.",
             needs = Needs(
@@ -83,7 +100,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Friedenslilie",
             latinName = "Spathiphyllum",
-            picturePath = "peace_lily.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Friedenslilien sind beliebt für ihre eleganten weißen Blüten und dunkelgrünen Blätter. Sie gedeihen in Bedingungen mit wenig Licht.",
             needs = Needs(
@@ -101,7 +118,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Aloe Vera",
             latinName = "Aloe vera",
-            picturePath = "aloe_vera.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Asphodelaceae",
             description = "Aloe vera ist eine Sukkulentenart, die für ihre medizinischen Eigenschaften bekannt ist. Sie bevorzugt einen hellen Standort und wenig Wasser.",
             needs = Needs(
@@ -119,7 +136,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Geigenfeige",
             latinName = "Ficus lyrata",
-            picturePath = "fiddle_leaf_fig.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Moraceae",
             description = "Geigenfeigen werden wegen ihrer großen, glänzenden Blätter geschätzt. Sie bevorzugen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -136,7 +153,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Glücksfeder",
             latinName = "Zamioculcas zamiifolia",
-            picturePath = "zz_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Glücksfedern sind bekannt für ihre glänzenden, dunkelgrünen Blätter. Sie sind trockenheitstolerant und gedeihen in schlechten Lichtverhältnissen.",
             needs = Needs(
@@ -152,7 +169,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Efeutute",
             latinName = "Epipremnum aureum",
-            picturePath = "pothos.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Efeututen sind beliebt für ihre herabhängenden Ranken und herzförmigen Blätter. Sie sind pflegeleicht und gedeihen auch bei wenig Licht.",
             needs = Needs(
@@ -170,7 +187,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Philodendron",
             latinName = "Philodendron",
-            picturePath = "philodendron.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Philodendren sind vielseitige Zimmerpflanzen mit verschiedenen Blattformen und -größen. Sie bevorzugen indirektes Licht und mäßiges Gießen.",
             needs = Needs(
@@ -189,7 +206,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Chinesischer Geldbaum",
             latinName = "Pilea peperomioides",
-            picturePath = "chinese_money_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Urticaceae",
             description = "Ufopflanzen, auch bekannt als Chinesischer Geldbaum, haben runde, pfannkuchenförmige Blätter an langen Stielen. Sie bevorzugen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -207,7 +224,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Gummibaum",
             latinName = "Ficus elastica",
-            picturePath = "rubber_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Moraceae",
             description = "Gummibäume haben große, glänzende Blätter, die Innenräumen einen tropischen Touch verleihen. Sie bevorzugen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -224,7 +241,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Monstera",
             latinName = "Monstera deliciosa",
-            picturePath = "monstera_deliciosa.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Monstera deliciosa, auch bekannt als Fensterblatt, ist berühmt für seine fenestrierten Blätter. Sie bevorzugt helles, indirektes Licht und mäßiges Gießen.",
             needs = Needs(
@@ -241,7 +258,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Gitterblume",
             latinName = "Tradescantia",
-            picturePath = "spiderwort.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Commelinaceae",
             description = "Gitterblumen sind leicht zu pflegende Pflanzen mit langen, bandförmigen Blättern und zarten Blüten. Sie gedeihen bei hellem, indirektem Licht und regelmäßigem Gießen.",
             needs = Needs(
@@ -259,7 +276,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Glücksbambus",
             latinName = "Dracaena sanderiana",
-            picturePath = "lucky_bamboo.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Asparagaceae",
             description = "Glücksbambus ist eine beliebte Zimmerpflanze mit geraden Stielen und üppigem Laub. Sie gedeiht gut bei schlechten Lichtverhältnissen und benötigt minimale Pflege.",
             needs = Needs(
@@ -277,7 +294,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Jadebaum",
             latinName = "Crassula ovata",
-            picturePath = "jade_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Crassulaceae",
             description = "Jadebäume sind sukkulente Zimmerpflanzen mit dicken, fleischigen Blättern. Sie bevorzugen helles, indirektes Licht und seltenes Gießen.",
             needs = Needs(
@@ -295,7 +312,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Schmuckaralie",
             latinName = "Chamaedorea elegans",
-            picturePath = "parlor_palm.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Arecaceae",
             description = "Schmuckaralien sind kompakte Palmen mit anmutigen, bogigen Wedeln. Sie gedeihen bei wenig bis mäßigem Licht und regelmäßigem Gießen.",
             needs = Needs(
@@ -313,7 +330,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Paradiesvogelblume",
             latinName = "Strelitzia reginae",
-            picturePath = "bird_of_paradise.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Strelitziaceae",
             description = "Paradiesvogelblumen haben große, bananenähnliche Blätter und lebendige, vogelförmige Blüten. Sie benötigen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -330,7 +347,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Gusseisenpflanze",
             latinName = "Aspidistra elatior",
-            picturePath = "cast_iron_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Asparagaceae",
             description = "Gusseisenpflanzen haben robuste, lederartige Blätter, die wenig Licht und Vernachlässigung tolerieren können. Sie sind ausgezeichnete pflegeleichte Zimmerpflanzen.",
             needs = Needs(
@@ -347,7 +364,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Efeu",
             latinName = "Hedera helix",
-            picturePath = "english_ivy.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araliaceae",
             description = "Efeu ist eine schnell wachsende Kletterpflanze mit glänzenden, grünen Blättern. Sie gedeiht bei hellem, indirektem Licht und bevorzugt konstant feuchte Erde.",
             needs = Needs(
@@ -365,7 +382,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Boston-Farn",
             latinName = "Nephrolepis exaltata",
-            picturePath = "boston_fern.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Polypodiaceae",
             description = "Boston-Farne haben federartige Wedel und sind ausgezeichnete Luftreiniger. Sie benötigen helles, indirektes Licht und konstant feuchte Erde.",
             needs = Needs(
@@ -384,7 +401,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Strahlenaralie",
             latinName = "Schefflera",
-            picturePath = "schefflera.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araliaceae",
             description = "Strahlenaralien haben zusammengesetzte Blätter mit bis zu 12 Fiederblättchen. Sie bevorzugen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -402,7 +419,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Yucca-Palme",
             latinName = "Yucca",
-            picturePath = "yucca_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Spargelgewächse",
             description = "Yucca-Palmen haben schwertförmige Blätter und vertragen trockene Raumluft. Sie bevorzugen helles, indirektes Licht und seltenes Gießen.",
             needs = Needs(
@@ -419,7 +436,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Chinesischer Liebesgruß",
             latinName = "Aglaonema",
-            picturePath = "aglaonema.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Aglaonemas, auch bekannt als Chinesische Liebesgrüße, haben farbenfrohe, gemusterte Blätter. Sie gedeihen bei wenig bis mäßigem Licht und bevorzugen gleichmäßig feuchte Erde.",
             needs = Needs(
@@ -437,7 +454,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Korbmarante",
             latinName = "Calathea",
-            picturePath = "calathea.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Marantaceae",
             description = "Korbmaranten haben auffälliges Laub mit komplexen Mustern. Sie benötigen helles, indirektes Licht und konstant feuchte Erde.",
             needs = Needs(
@@ -455,7 +472,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Dieffenbachie",
             latinName = "Dieffenbachia",
-            picturePath = "dieffenbachia.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Dieffenbachien haben große, panaschierte Blätter und gedeihen leicht in Innenräumen. Sie bevorzugen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -473,7 +490,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Usambaraveilchen",
             latinName = "Saintpaulia",
-            picturePath = "african_violet.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Gesneriaceae",
             description = "Usambaraveilchen haben behaarte Blätter und lebendige, zarte Blüten. Sie bevorzugen helles, indirektes Licht und konstant feuchte Erde.",
             needs = Needs(
@@ -491,7 +508,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Fächerblume",
             latinName = "Fittonia",
-            picturePath = "nerve_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Acanthaceae",
             description = "Fächerblumen haben farbenfrohe, geäderte Blätter und eignen sich hervorragend für Terrarien. Sie benötigen helles, indirektes Licht und konstant feuchte Erde.",
             needs = Needs(
@@ -509,7 +526,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Götterpflanze",
             latinName = "Tradescantia zebrina",
-            picturePath = "wandering_jew.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Commelinaceae",
             description = "Götterpflanzen haben blau-violett gestreifte Blätter und wachsen hängend. Sie bevorzugen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -527,7 +544,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Peperomie",
             latinName = "Peperomia obtusifolia",
-            picturePath = "baby_rubber_plant.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Piperaceae",
             description = "Peperomien haben dicke, glänzende Blätter und wachsen kompakt. Sie benötigen helles, indirektes Licht und seltenes Gießen.",
             needs = Needs(
@@ -545,7 +562,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Jungfernhaar-Farn",
             latinName = "Adiantum",
-            picturePath = "maidenhair_fern.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Pteridaceae",
             description = "Jungfernhaar-Farne haben zarte, filigrane Blätter und eine grazile Erscheinung. Sie benötigen helles, indirektes Licht und konstant feuchte Erde.",
             needs = Needs(
@@ -563,7 +580,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Flamingoblume",
             latinName = "Anthurium",
-            picturePath = "anthurium.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Araceae",
             description = "Flamingoblumen haben glänzende, herzförmige Blätter und Hochblätter in verschiedenen Farben. Sie benötigen helles, indirektes Licht und konstant feuchte Erde.",
             needs = Needs(
@@ -581,7 +598,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Perlenkette",
             latinName = "Senecio rowleyanus",
-            picturePath = "string_of_pearls.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Asteraceae",
             description = "Perlenketten sind Sukkulenten mit langen, herabhängenden Trieben und runden Blättern, die an Perlen erinnern. Sie bevorzugen helles, indirektes Licht und seltenes Gießen.",
             needs = Needs(
@@ -598,7 +615,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Herzblatt",
             latinName = "Ceropegia woodii",
-            picturePath = "string_of_hearts.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Apocynaceae",
             description = "Herzblätter sind hängende Sukkulenten mit herzförmigen Blättern. Sie bevorzugen helles, indirektes Licht und seltenes Gießen.",
             needs = Needs(
@@ -617,7 +634,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Schmetterlingsorchidee",
             latinName = "Phalaenopsis",
-            picturePath = "butterfly_orchid.jpg",
+            imageId = imageRepository.findAll().get(0).id,
             family = "Orchidaceae",
             description = "Schmetterlingsorchideen haben elegante, sich bogenförmig erstreckende Blütentrauben, die Schmetterlingen ähneln. Sie bevorzugen helles, indirektes Licht und regelmäßiges Gießen.",
             needs = Needs(
@@ -692,7 +709,6 @@ class DatabaseInitializer {
         plantRepository.save(
             Plant(
                 name = "Gloria",
-                picturePath = "gloria.jpg",
                 notes = "Hat einen Kälteschaden. Nur gießen wenn trocken!",
                 species = (speciesRepository.findByName("Schmetterlingsorchidee") ?: throw Exception("Species not found")),
                 needs = Needs(
@@ -710,7 +726,7 @@ class DatabaseInitializer {
         plantRepository.save(
             Plant(
                 name = "Bob",
-                picturePath = "bob.jpg",
+
                 notes = "Geschenk von meiner Oma",
                 species = (speciesRepository.findByName("Aloe Vera") ?: throw Exception("Species not found")),
                 needs = Needs(
@@ -730,7 +746,7 @@ class DatabaseInitializer {
         plantRepository.save(
             Plant(
                 name = "Dieter",
-                picturePath = "dieter.jpg",
+
                 notes = "Hatte 2021 Spinnmilben",
                 species = (speciesRepository.findByName("Schlangenpflanze") ?: throw Exception("Species not found")),
                 needs = Needs(

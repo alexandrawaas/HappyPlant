@@ -47,15 +47,16 @@ class ImageController (private val service: ImageDataService, private val authTo
     @GetMapping("/{imageId}")
     @ResponseBody
     fun getPlant(
-        @RequestHeader("Authorization") authHeader: String,
+        //@RequestHeader("Authorization") authHeader: String,
         @PathVariable imageId: UUID
     ): ResponseEntity<ByteArray> {
-        val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+        //val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
 
-        val bytes: ByteArray = service.getImage(imageId, userId)
+        val bytes: ByteArray = service.getImage(imageId, imageId)
+
         return ResponseEntity
             .status(HttpStatus.OK)
-            .contentType(MediaType.IMAGE_PNG)
+            .contentType(MediaType.IMAGE_JPEG)
             .body(bytes)
     }
 
