@@ -3,6 +3,7 @@ import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import AddRoomButton from "../room/AddRoomButton";
 import PlantListItem from "./PlantListItem";
 import {plantMock} from "./PlantMock";
+import {roomMock} from "../room/RoomMock";
 
 export default function MyPlantsScreen({ navigation }) {
 
@@ -21,7 +22,10 @@ export default function MyPlantsScreen({ navigation }) {
                     : null
                 }
             </View>
-            <VerticalPlaceholder size={120}/>
+            {plantMock.length % 2 == 0
+                ? <AddRoomButton onClick={handleAddPlantClick} displayOnNewLine />
+                : null}
+            <VerticalPlaceholder size={130}/>
         </ScrollView>
     );
 }
