@@ -2,7 +2,7 @@ import { Text, StyleSheet, View, TouchableOpacity } from "react-native"
 import CollapsibleBar from "../other/CollapsibleBar"
 import { LinearGradient } from "expo-linear-gradient"
 import { useState, useEffect } from "react"
-import fetchURL from "./RoomService"
+import fetchURL from "../../utils/ApiService"
 import InventoryItem from "./InventoryItem"
 
 export default function SingleRoomInventory({ room }) {

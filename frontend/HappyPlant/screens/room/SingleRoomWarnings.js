@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native"
-import fetchURL from "./RoomService";
+import fetchURL from "../../utils/ApiService";
 import { useState, useEffect } from "react";
 import Collapsible from "react-native-collapsible";
 import { LinearGradient } from "expo-linear-gradient";

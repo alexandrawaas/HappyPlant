@@ -80,13 +80,13 @@ export default function SingleRoomGrid({ navigation, room }) {
 
     return (
         <FlatList
+            key={room.id}
             scrollEnabled={false}
             data={data}
             renderItem={renderItem}
             numColumns={room.x}
             contentContainerStyle={styles.grid}
             style={styles.table}
-            columnWrapperStyle
         />
     );
 }
@@ -101,6 +101,7 @@ const lightColor = {
 const styles = StyleSheet.create({
     grid: {
         alignItems: 'center',
+        paddingBottom: 15,
     },
     table: {
         flexGrow: 0,
