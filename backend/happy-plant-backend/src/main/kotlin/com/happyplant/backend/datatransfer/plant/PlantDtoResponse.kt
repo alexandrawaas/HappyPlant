@@ -10,7 +10,7 @@ import java.util.*
 data class PlantDtoResponse(
     @JsonProperty("id") val id: UUID?,
     @JsonProperty("name") var name: String,
-    @JsonProperty("imageId") var imageId: UUID,
+    @JsonProperty("imageId") var imageId: UUID?,
     @JsonProperty("notes") var notes: String?,
     @JsonProperty("room") var room: RoomDtoResponseShort?,
     @JsonProperty("hasOptimalLightingCondition") var hasOptimalLightingCondition: Boolean,
