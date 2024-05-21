@@ -1,10 +1,11 @@
 package com.happyplant.backend.controller
 
 
-import com.happyplant.backend.datatransfer.plant.asDtoResponse
 import com.happyplant.backend.datatransfer.species.SpeciesDtoResponse
 import com.happyplant.backend.datatransfer.species.asDtoResponse
 import com.happyplant.backend.service.SpeciesService
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -25,6 +26,11 @@ class SpeciesController (private val service: SpeciesService){
 
     @GetMapping("/{speciesId}")
     @ResponseBody
-    fun getPlant(@PathVariable speciesId: UUID): SpeciesDtoResponse =
-        service.getSpecies(speciesId).asDtoResponse()
+    fun getPlant(@PathVariable speciesId: UUID): EntityModel<SpeciesDtoResponse> {
+        val speciesDtoResponse: SpeciesDtoResponse = service.getSpecies(speciesId).asDtoResponse()
+        return EntityModel.of(
+            speciesDtoResponse,
+            linkTo<ImageController> {getImage(null, speciesDtoResponse.imageId)}.withRel { "image" }
+        )
+    }
 }

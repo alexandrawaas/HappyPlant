@@ -57,7 +57,7 @@ class ImageController (private val service: ImageDataService, private val authTo
 
     @GetMapping("/{imageId}")
     @ResponseBody
-    fun getPlant(
+    fun getImage(
         @RequestHeader("Authorization") authHeader: String?,
         @PathVariable imageId: UUID
     ): ResponseEntity<ByteArray> {
