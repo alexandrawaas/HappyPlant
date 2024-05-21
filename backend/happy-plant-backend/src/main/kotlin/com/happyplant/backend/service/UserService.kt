@@ -87,9 +87,8 @@ class UserService (
                     }
                     roomRepository.delete(room)
                 }
-                user.getAllImages().forEach{ image ->
-                    imageRepository.findByUserId(userId).forEach { imageRepository.delete(it) }
-                }
+                imageRepository.findByUserId(userId).forEach { imageRepository.delete(it) }
+
                 db.deleteById(user.id)
                 ApiResponse(true, "User deleted successfully", null, HttpStatus.OK)
             } else {
