@@ -42,14 +42,13 @@ class ImageDataService(
         }
     }
 
-    fun getImage(imageId: UUID, userId: UUID): ByteArray {
-        println(imageId.toString())
+    fun getImage(imageId: UUID, userId: UUID): Image {
         val dbImage: Image? = db.findById(imageId).getOrNull()
         //val dbImage: Image = db.findAll().get(0)
         if(dbImage != null) {
             if (dbImage.userId == null || dbImage.userId == userId) {
-                val image: ByteArray = ImageUtil.decompressImage(dbImage.imageData)
-                return image
+                //val image: ByteArray = ImageUtil.decompressImage(dbImage.imageData)
+                return dbImage
             } else {
                 throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
             }
@@ -61,7 +60,8 @@ class ImageDataService(
 
     fun removeImageFromPlant(plantId: UUID, userId: UUID): Plant {
         var plant: Plant =plantDb.findById(plantId).get()
-        if(plant.user.id.equals(userId)){
+        if(plant.user.id == userId && plant.imageId != plant.species.imageId){
+            db.deleteById(plant.imageId)
             plant.imageId = plant.species.imageId
             plantDb.save(plant)
             return plant

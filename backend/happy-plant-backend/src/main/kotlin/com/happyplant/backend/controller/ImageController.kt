@@ -2,9 +2,11 @@ package com.happyplant.backend.controller
 
 import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.datatransfer.plant.asDtoResponse
+import com.happyplant.backend.model.Image
 import com.happyplant.backend.model.Plant
 import com.happyplant.backend.service.ImageDataService
 import com.happyplant.backend.utility.AuthTokenUtil
+import com.happyplant.backend.utility.ImageUtil
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -24,9 +26,9 @@ class ImageController (private val service: ImageDataService, private val authTo
         @RequestBody file: MultipartFile,
         @RequestParam plantId: UUID,
     ): PlantDtoResponse {
-        val userId = authTokenUtil.getUserIdFromToken(authHeader)
-            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+        val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
 
+        //TODO check for supported MediaType and size
         val plant: Plant = service.addImageToPlant(file, plantId, userId)
         return plant.asDtoResponse()
     }
@@ -47,17 +49,33 @@ class ImageController (private val service: ImageDataService, private val authTo
     @GetMapping("/{imageId}")
     @ResponseBody
     fun getPlant(
-        //@RequestHeader("Authorization") authHeader: String,
+        @RequestHeader("Authorization") authHeader: String,
         @PathVariable imageId: UUID
     ): ResponseEntity<ByteArray> {
-        //val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+        //TODO speciesbilder wenn nicht angemeldet
+        //TODO Link bei Speciesgetter und Pflanzengetter
+        val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
 
-        val bytes: ByteArray = service.getImage(imageId, imageId)
+        val response = ResponseEntity.status(HttpStatus.OK)
 
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .contentType(MediaType.IMAGE_JPEG)
-            .body(bytes)
+        val image: Image = service.getImage(imageId, userId)
+        val imageData: ByteArray = ImageUtil.decompressImage(image.imageData)
+        var mediaType: String? = image.type
+
+        if(mediaType.equals("jpeg") || mediaType.equals("jpg")) {
+            response.contentType(MediaType.IMAGE_JPEG)
+        }
+        else if(mediaType.equals("png")) {
+            response.contentType(MediaType.IMAGE_PNG)
+        }
+        else if(mediaType.equals("gif")) {
+            response.contentType(MediaType.IMAGE_GIF)
+        }
+        else{
+            throw ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Mediatype is no image")
+        }
+
+        return response.body(imageData)
     }
 
 }
