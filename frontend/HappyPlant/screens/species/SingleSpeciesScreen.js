@@ -7,6 +7,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import AddSpeciesAsPlantButton from "../global/AddSpeciesAsPlantButton";
 import RoundPictureNameComponent from "./RoundPictureNameComponent";
 
+import ImageComponent from "../global/ImageComponent";
 
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();
