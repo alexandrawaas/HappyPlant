@@ -20,7 +20,8 @@ class UserService (
     private val assignmentRepository: AssignmentRepository,
     private val needsRepository: NeedsRepository,
     private val roomRepository: RoomRepository,
-    private val pixelRepository: PixelRepository
+    private val pixelRepository: PixelRepository,
+    private val imageRepository: ImageDataRepository
 ) {
     fun getUserById(id: UUID): User {
         return db.findById(id).get()
@@ -85,6 +86,9 @@ class UserService (
                         pixelRepository.delete(pixel)
                     }
                     roomRepository.delete(room)
+                }
+                user.getAllImages().forEach{ image ->
+                    imageRepository.findByUserId(userId).forEach { imageRepository.delete(it) }
                 }
                 db.deleteById(user.id)
                 ApiResponse(true, "User deleted successfully", null, HttpStatus.OK)

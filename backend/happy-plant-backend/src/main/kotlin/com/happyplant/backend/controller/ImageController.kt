@@ -28,9 +28,18 @@ class ImageController (private val service: ImageDataService, private val authTo
     ): PlantDtoResponse {
         val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
 
-        //TODO check for supported MediaType and size
-        val plant: Plant = service.addImageToPlant(file, plantId, userId)
-        return plant.asDtoResponse()
+        if(
+            file.contentType.equals("jpeg")
+            || file.contentType.equals("jpg")
+            || file.contentType.equals("png")
+            || file.contentType.equals("gif")
+        ) {
+            val plant: Plant = service.addImageToPlant(file, plantId, userId)
+            return plant.asDtoResponse()
+        }
+        else{
+            throw ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "only jpg, png and gif supported")
+        }
     }
 
     @PatchMapping
@@ -49,16 +58,23 @@ class ImageController (private val service: ImageDataService, private val authTo
     @GetMapping("/{imageId}")
     @ResponseBody
     fun getPlant(
-        @RequestHeader("Authorization") authHeader: String,
+        @RequestHeader("Authorization") authHeader: String?,
         @PathVariable imageId: UUID
     ): ResponseEntity<ByteArray> {
-        //TODO speciesbilder wenn nicht angemeldet
         //TODO Link bei Speciesgetter und Pflanzengetter
-        val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
+
+        var loggedIn: Boolean = false
+        var userId: UUID? = null
+        if(authHeader != null){
+            userId = authTokenUtil.getUserIdFromToken(authHeader)
+            if(userId != null){
+                loggedIn = true
+            }
+        }
 
         val response = ResponseEntity.status(HttpStatus.OK)
 
-        val image: Image = service.getImage(imageId, userId)
+        val image: Image = service.getImage(imageId, loggedIn, userId)
         val imageData: ByteArray = ImageUtil.decompressImage(image.imageData)
         var mediaType: String? = image.type
 
