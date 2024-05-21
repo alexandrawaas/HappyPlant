@@ -61,7 +61,6 @@ class ImageController (private val service: ImageDataService, private val authTo
         @RequestHeader("Authorization") authHeader: String?,
         @PathVariable imageId: UUID
     ): ResponseEntity<ByteArray> {
-        //TODO Link bei Speciesgetter und Pflanzengetter
 
         var loggedIn: Boolean = false
         var userId: UUID? = null
