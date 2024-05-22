@@ -29,7 +29,7 @@ class ImageController (private val service: ImageDataService, private val authTo
     ): EntityModel<PlantDtoResponse> {
         val userId = authTokenUtil.getUserIdFromToken(authHeader) ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
         val fileType: String? = file.originalFilename?.split('.')?.lastOrNull()
-        println(fileType)
+
         if(
             ( (file.originalFilename.equals("image/jpeg") || file.contentType.equals("image/jpg")) && (fileType.equals("jpeg") || fileType.equals("jpg")) )
             || (file.contentType.equals("image/png") && fileType.equals("png"))
