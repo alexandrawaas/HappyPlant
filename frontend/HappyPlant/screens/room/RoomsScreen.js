@@ -1,5 +1,4 @@
 import { View, StyleSheet, ScrollView, Text } from "react-native";
-import { roomMock } from "./RoomMock";
 import AddRoomButton from "./AddRoomButton";
 import RoomListItem from "./RoomListItem";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
