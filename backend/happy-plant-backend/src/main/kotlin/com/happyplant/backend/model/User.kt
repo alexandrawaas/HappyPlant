@@ -3,7 +3,6 @@ package com.happyplant.backend.model
 import jakarta.persistence.*
 import java.time.LocalTime
 import java.util.*
-import com.happyplant.backend.datatransfer.user.UserDto
 
 @Entity
 @Table(name="users")
@@ -36,10 +35,13 @@ data class User(
         var resetPasswordCode: Int? = null,
 
         @Column(name = "receive_push_notifications")
-        private var receivePushNotifications: Boolean,
+        var receivePushNotifications: Boolean,
+
+        @Column(name = "push_notification_token")
+        var pushNotificationToken: String? = null,
 
         @Column(name = "push_notifications_time")
-        private var pushNotificationsTime: LocalTime?,
+        var pushNotificationsTime: LocalTime? = LocalTime.of(10,  0),
 
         @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user", orphanRemoval = true)
         private var plants: MutableList<Plant>,
@@ -48,6 +50,19 @@ data class User(
         private var rooms: MutableList<Room>
 )
 {
+        companion object {
+                val DUMMY_USER = User(
+                        id = UUID.fromString("f789034b-737d-46e4-a3a4-72924b2138b7"),
+                        email = "foo@bar.com",
+                        passwordHash = "12345",
+                        receivePushNotifications = true,
+                        pushNotificationToken = "ExponentPushToken[Wx9b-UKX5NSxWFpCb8ke4f]",
+                        pushNotificationsTime = LocalTime.of(17, 47),
+                        plants = mutableListOf(),
+                        rooms = mutableListOf(),
+                )
+        }
+
 
         // Methods
 

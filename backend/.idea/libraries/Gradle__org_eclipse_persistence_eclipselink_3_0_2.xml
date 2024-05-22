@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: org.eclipse.persistence:eclipselink:3.0.2" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.eclipse.persistence" artifactId="eclipselink" version="3.0.2" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.persistence/eclipselink/3.0.2/ecd954b4d40146e11278446a7ecea73a09f462af/eclipselink-3.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

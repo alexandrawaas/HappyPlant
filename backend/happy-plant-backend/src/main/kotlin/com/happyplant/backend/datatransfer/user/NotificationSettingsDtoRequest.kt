@@ -1,10 +1,11 @@
 package com.happyplant.backend.datatransfer.user
 
-import java.sql.Time
+import java.time.LocalTime
 
 data class NotificationSettingsDtoRequest(
-        val receivePushNotifications: Boolean,
-        val pushNotificationsTime: Time,
+    val receivePushNotifications: Boolean,
+    val pushNotificationToken: String?,
+    val pushNotificationsTime: LocalTime?,
 ) {
 
 }

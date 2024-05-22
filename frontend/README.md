@@ -8,4 +8,5 @@
 - `cd repo\frontend\HappyPlant`
 - install required modules: `npm install`
 - to start the app: `npx expo start`
+    - on login question run: `npx expo login -u ralfmanig -p <password>` (dafür bitte ralf fragen, ich werd das pw nicht in git veröffentlichen lol)
 - scroll up and scan QR code to see our app on your mobile device
