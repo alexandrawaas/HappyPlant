@@ -15,7 +15,11 @@ const ImageComponent = (url, style) => {
         <Image
         style={style != null ? style : deafultStyle.default}
         source={{
-          uri: {url},
+          uri: url,
+          method: 'GET',
+          headers: {
+            //AuthToken if needed
+          },
         }}
       />
     </View>
