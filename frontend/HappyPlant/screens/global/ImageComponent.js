@@ -22,4 +22,4 @@ const ImageComponent = (url, style) => {
   );
 };
 
-export default DisplayAnImage;
+export default ImageComponent;
