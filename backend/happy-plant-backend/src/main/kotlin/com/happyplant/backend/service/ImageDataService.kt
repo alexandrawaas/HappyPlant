@@ -23,17 +23,16 @@ class ImageDataService(
     fun addImageToPlant(file: MultipartFile, plantId: UUID, userId: UUID): Plant {
         val plant: Plant =plantDb.findById(plantId).get()
         if(plant.user.id == userId){
-            val imageId: UUID = UUID.randomUUID()
-            db.save(
-                Image(
-                    id = imageId,
-                    name = file.originalFilename,
-                    type = file.contentType,
-                    userId = userId,
-                    imageData = ImageUtil.compressImage(file.bytes),
-                )
+            val image: Image = Image(
+                name = file.originalFilename,
+                type = file.contentType,
+                userId = userId,
+                imageData = ImageUtil.compressImage(file.bytes),
             )
-            plant.imageId = imageId
+            val imageInDb = db.save(
+                image
+            )
+            plant.imageId = imageInDb.id
             plantDb.save(plant)
             return plant
         }

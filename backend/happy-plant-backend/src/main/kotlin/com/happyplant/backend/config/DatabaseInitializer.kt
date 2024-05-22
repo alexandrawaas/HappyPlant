@@ -56,7 +56,7 @@ class DatabaseInitializer {
             imageRepository.save(
                 Image(
                     name = file.name,
-                    type = file.extension,
+                    type = "image/" + file.extension,
                     imageData = imageData,
                 )
             )
