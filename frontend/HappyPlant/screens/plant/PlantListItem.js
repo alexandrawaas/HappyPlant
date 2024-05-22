@@ -3,8 +3,8 @@ import {View, StyleSheet, TouchableOpacity} from "react-native";
 
 export default function ({plant, onPress}) {
     return <>
-        <TouchableOpacity onPress={() => onPress(plant.id)}>
-            <View style={styles.listItemContainer}>
+        <TouchableOpacity onPress={() => onPress(plant.id)} style={styles.listItemContainer}>
+            <View >
                 <RoundPictureNameComponent header={plant.name} subHeader={plant.species.name} isListItem />
             </View>
         </TouchableOpacity>
@@ -13,7 +13,7 @@ export default function ({plant, onPress}) {
 
 const styles = StyleSheet.create({
     listItemContainer: {
-        marginHorizontal: 30,
         marginVertical: 10,
+        width: "50%",
     }
 });

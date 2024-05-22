@@ -216,78 +216,7 @@ export const plantMock = [
 	},
 
 	{
-		"id": "885e9fdc-1f37-41bc-9861-842be1b54074",
-		"name": "Bob",
-		"picturePath": "bob.jpg",
-		"notes": "Geschenk von meiner Oma",
-		"room": {
-			"id": "ead0fe8b-c11c-4359-9f07-0df242b8bf3a",
-			"name": "Küche",
-			"category": "KITCHEN"
-		},
-		"hasOptimalLightingCondition": false,
-		"species": {
-			"id": "2be6b42b-78e8-4c4c-8230-678fe08a90f5",
-			"name": "Aloe Vera",
-			"latinName": "Aloe vera",
-			"picturePath": "aloe_vera.jpg",
-			"family": "Asphodelaceae",
-			"description": "Aloe vera ist eine Sukkulentenart, die für ihre medizinischen Eigenschaften bekannt ist. Sie bevorzugt einen hellen Standort und wenig Wasser.",
-			"needs": {
-				"id": "e92383eb-cfc7-486f-a9c3-ce56692ab4b0",
-				"lightingType": "FULL_SUN",
-				"intervals": {
-					"CUTTING": 365,
-					"WATERING": 21,
-					"REPOTTING": 365,
-					"FERTILIZING": 60
-				}
-			}
-		},
-		"needs": {
-			"id": "6695eefa-0b3d-4ce0-a5e0-58ce611f546d",
-			"lightingType": "FULL_SUN",
-			"intervals": {
-				"CUTTING": 365,
-				"WATERING": 21,
-				"REPOTTING": 365,
-				"FERTILIZING": 60
-			}
-		},
-		"assignments": [
-			{
-				"id": "4cc5d9e1-fedd-43f6-b00c-e39d32476612",
-				"assignmentType": "CUTTING",
-				"lastDone": null,
-				"plantId": "885e9fdc-1f37-41bc-9861-842be1b54074",
-				"plantName": "Bob"
-			},
-			{
-				"id": "5d2869a8-48dd-40b6-9522-69a84aa91c50",
-				"assignmentType": "WATERING",
-				"lastDone": null,
-				"plantId": "885e9fdc-1f37-41bc-9861-842be1b54074",
-				"plantName": "Bob"
-			},
-			{
-				"id": "343a7af9-6e4e-4d9c-9952-042f02924cf5",
-				"assignmentType": "REPOTTING",
-				"lastDone": null,
-				"plantId": "885e9fdc-1f37-41bc-9861-842be1b54074",
-				"plantName": "Bob"
-			},
-			{
-				"id": "20ab5a08-716e-415f-b910-7043d1762405",
-				"assignmentType": "FERTILIZING",
-				"lastDone": null,
-				"plantId": "885e9fdc-1f37-41bc-9861-842be1b54074",
-				"plantName": "Bob"
-			}
-		]
-	},
-
-	{
-		"id": "885e9fdc-1f37-41bc-9861-842be1b54074",
+		"id": "885e9fdc-1f37-41bc-9861-852be1b54074",
 		"name": "Bob",
 		"picturePath": "bob.jpg",
 		"notes": "Geschenk von meiner Oma",
@@ -359,7 +288,7 @@ export const plantMock = [
 
 
 	{
-		"id": "885e9fdc-1f37-41bc-9861-842be1b54074",
+		"id": "885e9fdc-1f37-41bc-9861-842bf1b54074",
 		"name": "Bob",
 		"picturePath": "bob.jpg",
 		"notes": "Geschenk von meiner Oma",
@@ -431,7 +360,7 @@ export const plantMock = [
 
 
 	{
-		"id": "885e9fdc-1f37-41bc-9861-842be1b54074",
+		"id": "885e9fda-1f37-41bc-9861-842be1b54074",
 		"name": "Bob",
 		"picturePath": "bob.jpg",
 		"notes": "Geschenk von meiner Oma",
