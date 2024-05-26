@@ -6,11 +6,16 @@ import { useEffect, useState } from "react";
 import  fetchURL  from '../../utils/ApiService'
 
 export default function RoomsScreen({ navigation }) {
+    const [searchQuery, setSearchQuery] = useState("");
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
         fetchURL('/rooms', 'GET', setRooms)
     }, [])
+
+    useEffect(() => {
+        fetchURL(`/rooms?search=${searchQuery}`, 'GET', setRooms)
+    }, [searchQuery])
 
     const handleAddRoomClick = () => {
         console.log("TODO: implement add room dialog")

@@ -5,7 +5,6 @@ import SingleRoomInventory from "./SingleRoomInventory";
 import SingleRoomWarnings from "./SingleRoomWarnings";
 import { useEffect, useState } from "react";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
-import { roomMock } from "./RoomMock";
 import fetchURL from '../../utils/ApiService'
 
 export default function SingleRoomScreen({ navigation }) {
