@@ -1,7 +1,6 @@
 import {View, Text, StyleSheet, Button} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import {roomMock} from "./room/RoomMock";
 import {plantMock} from "./plant/PlantMock";
 
 export default function SinglePlantScreen({ navigation }) {
