@@ -8,7 +8,6 @@ import java.security.MessageDigest
 import jakarta.servlet.http.HttpServletRequest
 import com.happyplant.backend.repository.UserRepository
 import com.happyplant.backend.utility.AuthTokenUtil
-import com.happyplant.backend.utility.ApiResponse
 import com.happyplant.backend.utility.AuthTokenBlacklist
 import com.happyplant.backend.datatransfer.auth.CredentialsDto
 import com.happyplant.backend.datatransfer.auth.ResetPasswordDto

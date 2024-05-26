@@ -5,7 +5,6 @@ import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.datatransfer.user.asDto
 import com.happyplant.backend.model.User
 import com.happyplant.backend.repository.*
-import com.happyplant.backend.utility.ApiResponse
 import com.happyplant.backend.utility.AuthTokenUtil
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
