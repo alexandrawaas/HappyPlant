@@ -2,6 +2,7 @@ package com.happyplant.backend.service
 
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import java.security.MessageDigest
 import jakarta.servlet.http.HttpServletRequest
@@ -23,15 +24,15 @@ class AuthService(
     private val emailService: EmailService,
     private val authTokenUtil: AuthTokenUtil
 ) {
-    fun registerUser(user: CredentialsDto): ApiResponse<UserDto> {
+    fun registerUser(user: CredentialsDto): UserDto {
         val errorMessage = validateCredentials(user)
         if (errorMessage.isNotEmpty()) {
-            return ApiResponse(false, errorMessage, null, HttpStatus.BAD_REQUEST)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage)
         }
 
         val existingUser = userRepository.findByEmail(user.email.lowercase())
         if (existingUser != null) {
-            return ApiResponse(false, "User with this email already exists", null, HttpStatus.BAD_REQUEST)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already exists")
         }
 
         val newUser = User (
@@ -50,51 +51,38 @@ class AuthService(
 
         emailService.sendEmailVerificationEmail(newUser, newUser.emailVerificationToken!!)
 
-        val userDto = newUser.asDto()
-
-        return ApiResponse(true, "User registered successfully", userDto, HttpStatus.CREATED)
+        return newUser.asDto()
     }
 
-    fun login(user: CredentialsDto): ApiResponse<Map<String, Any>> {
+    fun login(user: CredentialsDto): Map<String, Any> {
         val existingUser = userRepository.findByEmail(user.email.lowercase())
-            ?: return ApiResponse(false, "Invalid credentials", null, HttpStatus.UNAUTHORIZED)
+            ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials")
 
         if (!checkPassword(user.password, existingUser.passwordHash)) {
-            return ApiResponse(false, "Invalid credentials", null, HttpStatus.UNAUTHORIZED)
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials")
         }
 
         if (!existingUser.emailVerified) {
-            return ApiResponse(false, "Email not verified", null, HttpStatus.UNAUTHORIZED)
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials")
         }
 
         val authToken = authTokenUtil.generateToken(existingUser.id, existingUser)
         
-        val responseBody = mapOf("user" to existingUser.asDto(), "authToken" to authToken)
-
-        return ApiResponse(true, "User logged in successfully", responseBody, HttpStatus.OK)
+        return mapOf("user" to existingUser.asDto(), "authToken" to authToken)
     }
 
-    fun logout(request: HttpServletRequest): ApiResponse<String> {
+    fun logout(request: HttpServletRequest) {
         val token = extractTokenFromRequest(request)
         if (token != null) {
             AuthTokenBlacklist.addToken(token)
-            return ApiResponse(true, "Logout successful", null, HttpStatus.OK)
-        }
-        return ApiResponse(false, "No token provided in the request", null, HttpStatus.BAD_REQUEST)
-    }
-
-    private fun extractTokenFromRequest(request: HttpServletRequest): String? {
-        val authHeader = request.getHeader("Authorization")
-        return if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            authHeader.substring(7)
         } else {
-            null
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No token provided in the request")
         }
     }
 
-    fun resetPassword(request: ResetPasswordDto): ApiResponse<Map<String, String>> {
+    fun resetPassword(request: ResetPasswordDto): Map<String, String> {
         val user = userRepository.findByEmail(request.email.lowercase())
-            ?: return ApiResponse(false, "User with this email does not exist", null, HttpStatus.BAD_REQUEST)
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email does not exist")
 
         val resetPasswordToken = UUID.randomUUID().toString()
         user.resetPasswordToken = resetPasswordToken
@@ -105,20 +93,19 @@ class AuthService(
 
         emailService.sendResetPasswordEmail(user, resetPasswordCode)
 
-        val responseData = mapOf("resetPasswordToken" to resetPasswordToken)
-        return ApiResponse(true, "Reset password email sent successfully", responseData, HttpStatus.OK)
+        return mapOf("resetPasswordToken" to resetPasswordToken)
     }
 
-    fun updatePassword(request: UpdatePasswordDto): ApiResponse<String> {
+    fun updatePassword(request: UpdatePasswordDto) {
         val user = userRepository.findByResetPasswordToken(request.resetPasswordToken)
-            ?: return ApiResponse(false, "Invalid reset password token", null, HttpStatus.BAD_REQUEST)
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password token")
 
         if (user.resetPasswordExpires!! < System.currentTimeMillis()) {
-            return ApiResponse(false, "Reset password token has expired", null, HttpStatus.BAD_REQUEST)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset password token has expired")
         }
 
         if (user.resetPasswordCode != request.resetPasswordCode) {
-            return ApiResponse(false, "Invalid reset password code", null, HttpStatus.BAD_REQUEST)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password code")
         }
 
         user.passwordHash = hashPassword(request.newPassword)
@@ -126,16 +113,14 @@ class AuthService(
         user.resetPasswordExpires = null
         user.resetPasswordCode = null
         userRepository.save(user)
-
-        return ApiResponse(true, "Password updated successfully", null, HttpStatus.OK)
     }
 
-    fun verifyEmail(verifyEmailToken: String): ApiResponse<UserDto> {
+    fun verifyEmail(verifyEmailToken: String): UserDto {
         val user = userRepository.findByEmailVerificationToken(verifyEmailToken)
-            ?: return ApiResponse(false, "Invalid email verification token", null, HttpStatus.BAD_REQUEST)
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email verification token")
 
         if (user.emailVerificationExpires != null && user.emailVerificationExpires!! < System.currentTimeMillis()) {
-            return ApiResponse(false, "Email verification token has expired", null, HttpStatus.BAD_REQUEST)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Email verification token has expired")
         }
 
         user.emailVerified = true
@@ -143,9 +128,16 @@ class AuthService(
         user.emailVerificationExpires = null
         userRepository.save(user)
 
-        val userDto = user.asDto()
+        return user.asDto()
+    }
 
-        return ApiResponse(true, "Email verified successfully", userDto, HttpStatus.OK)
+    private fun extractTokenFromRequest(request: HttpServletRequest): String? {
+        val authHeader = request.getHeader("Authorization")
+        return if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            authHeader.substring(7)
+        } else {
+            null
+        }
     }
 
     private fun hashPassword(password: String): String {

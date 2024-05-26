@@ -10,6 +10,7 @@ import com.happyplant.backend.utility.AuthTokenUtil
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @Service
@@ -54,48 +55,24 @@ class UserService (
     fun getUser(userId: UUID): User? =
         db.findById(userId).orElse(null)
 
-    fun getCurrentUser(authHeader: String): ApiResponse<UserDto> {
+    fun getCurrentUser(authHeader: String): UserDto {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
-        return if (userId != null) {
-            val user: Optional<User>? = db.findById(userId)
-            if (user != null && user.isPresent) {
-                ApiResponse(true, "Current user retrieved successfully", user.get().asDto(), HttpStatus.OK)
-            } else {
-                ApiResponse(false, "User not found", null, HttpStatus.NOT_FOUND)
-            }
-        } else {
-            ApiResponse(false, "User ID not found in token", null, HttpStatus.BAD_REQUEST)
-        }
+        return userId?.let { id ->
+            val user: Optional<User> = db.findById(id)
+            user.orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "User not found") }.asDto()
+        } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User-ID not found in token")
     }
 
     @Transactional
-    fun deleteUser(authHeader: String): ApiResponse<String> {
+    fun deleteUser(authHeader: String) {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
-        return if (userId != null) {
-            val userOptional: Optional<User> = db.findById(userId)
-            if (userOptional.isPresent) {
-                val user: User = userOptional.get()
-                user.getAllPlants().forEach { plant ->
-                    plant.getAllAssignments().forEach { assignment ->
-                        assignmentRepository.delete(assignment)
-                    }
-                    plantRepository.delete(plant)
-                }
-                user.getAllRooms().forEach { room ->
-                    room.grid.forEach { pixel ->
-                        pixelRepository.delete(pixel)
-                    }
-                    roomRepository.delete(room)
-                }
-                imageRepository.findByUserId(userId).forEach { imageRepository.delete(it) }
 
-                db.deleteById(user.id)
-                ApiResponse(true, "User deleted successfully", null, HttpStatus.OK)
-            } else {
-                ApiResponse(true, "User not found in DB", null, HttpStatus.NOT_FOUND)
-            }
-        } else {
-            ApiResponse(false, "User ID not found in token", null, HttpStatus.BAD_REQUEST)
-        }
+        userId?.let { id ->
+            val userOptional: Optional<User> = db.findById(id)
+            val user = userOptional.orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "User not found") }
+
+            db.deleteById(user.id)
+
+        } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User-ID not found in token")
     }
 }

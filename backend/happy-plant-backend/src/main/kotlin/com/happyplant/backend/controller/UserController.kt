@@ -24,12 +24,10 @@ class UserController (private val service: UserService){
     }
 
     @GetMapping
-    fun getCurrentUser(@RequestHeader("Authorization") authHeader: String): ApiResponse<UserDto> {
-        return service.getCurrentUser(authHeader)
-    }
+    fun getCurrentUser(@RequestHeader("Authorization") authHeader: String): UserDto =
+        service.getCurrentUser(authHeader)
 
     @DeleteMapping
-    fun deleteUser(@RequestHeader("Authorization") authHeader: String): ApiResponse<String> {
-        return service.deleteUser(authHeader)
-    }
+    fun deleteUser(@RequestHeader("Authorization") authHeader: String) =
+        service.deleteUser(authHeader)
 }
