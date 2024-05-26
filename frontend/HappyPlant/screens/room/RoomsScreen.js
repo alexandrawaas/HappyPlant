@@ -21,25 +21,36 @@ export default function RoomsScreen({ navigation }) {
         console.log("TODO: implement add room dialog")
     }
 
-    return (<>
-        {rooms !== undefined
-            ? <ScrollView style={styles.container}>
-                <View style={styles.roomContainer}>
-                    {rooms?.map(r =>
-                        <RoomListItem key={r.id} room={r} onPress={(id) => navigation.navigate("Einzelner Raum", { id: id })} />
-                    )}
-                    {rooms?.length % 2 == 1
-                        ? <AddRoomButton onClick={handleAddRoomClick} displayAsCard />
-                        : null}
+    return (
+        <View style={styles.container}>
+            <View style={styles.toolContainer}>
+                <View style={[styles.searchContainer, styles.shadowed]}>
+                    <Searchbar style={styles.searchBar}
+                        placeholder="Suche nach einem Raum..." onChangeText={setSearchQuery} value={searchQuery}
+                    />
                 </View>
-                {rooms?.length % 2 == 0
+            </View>
+            <ScrollView>
+                <View style={styles.roomContainer}>
+                    { rooms.map(r =>
+                        <RoomListItem 
+                            key={r.id} room={r} 
+                            onPress={() => navigation.navigate("Einzelner Raum", {id: r.id})} 
+                        />   
+                    )}
+                    { rooms.length % 2 == 1
+                        ? <AddRoomButton onClick={handleAddRoomClick} displayAsCard />
+                        : null
+                    }
+                </View>
+                { rooms.length % 2 == 0
                     ? <AddRoomButton onClick={handleAddRoomClick} displayOnNewLine />
-                    : null}
-                <VerticalPlaceholder size={110} />
+                    : null
+                }
+                <VerticalPlaceholder size={110}/>
             </ScrollView>
-            : <Text></Text>
-        }
-    </>);
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -47,9 +58,28 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
     },
+    toolContainer: {
+        marginBottom: 20,
+    },  
+    searchContainer: {
+        backgroundColor: "red",
+        borderRadius: 10,
+    },
+    searchBar: {
+        background: "linear-gradient(180deg, #FFFFFF 0%, #00000 100%)",
+        backgroundColor: "#fef7ee",
+        borderRadius: 10,
+    },
     roomContainer: {
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
+    },
+    shadowed: {
+        elevation: 4,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
     },
 });

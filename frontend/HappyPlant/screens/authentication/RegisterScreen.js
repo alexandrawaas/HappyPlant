@@ -43,10 +43,10 @@ const RegisterScreen = ({ navigation }) => {
                 password: password,
                 pushNotificationToken: expoPushToken
             });
-            if (response.data.success) {
+            if (response.success) {
                 navigation.replace('RegisterSuccess');
             } else {
-                Alert.alert('Fehler', response.data.message);
+                Alert.alert('Fehler', response.message);
             }
         } catch (error) {
             console.error('Fehler bei der Registrierung:', error);

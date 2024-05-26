@@ -112,11 +112,9 @@ export default function SettingsScreen({ navigation }) {
     return (
         <ScrollView style={styles.scrollContainer}>
             <View style={styles.container}>
-                {/*
                 <View styles={styles.emailContainer}>
                     {user && ( <Text style={styles.userInfoText}>{user.email}</Text>)}
                 </View>
-                */}
                 <View style={styles.settingsContainer}> 
                     <Text style={styles.sectionHeader}>Benachrichtigungen</Text>
                     <View style={styles.areaContainer}>
