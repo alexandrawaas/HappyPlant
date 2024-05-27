@@ -1,7 +1,6 @@
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import {plantMock} from "./PlantMock";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
 import {
@@ -14,12 +13,17 @@ import {RoomTypeIcons} from "../../utils/EnumIcons";
 import {Tooltip} from "react-native-elements";
 import EditButton from "../global/EditButton";
 import Feather from "react-native-vector-icons/Feather";
+import fetchURL from "../../utils/ApiService";
 
 export default function SinglePlantScreen({ navigation }) {
 
     const route = useRoute();
-    const { id } = route.params ?? {id: "77ce460c-9dc3-463a-89a9-3b2a3803752e"};
-    const [plant, setPlant] = useState(plantMock.find(plant => plant.id === id));
+    const { id } = route.params;
+    const [plant, setPlant] = useState({});
+
+    useEffect(() => {
+        fetchURL(`/plants/${id}`, 'GET', setPlant)
+    }, [])
 
     useEffect(() => {
         navigation.setOptions({
@@ -32,59 +36,59 @@ export default function SinglePlantScreen({ navigation }) {
     }, [navigation, plant])
 
     return (
-            <ScrollView style={styles.scrollview}>
-                <View style={styles.container}>
-                    <RoundPictureNameComponent header={plant.name} subHeader={plant.species.name}></RoundPictureNameComponent>
-                    <View style={styles.containerHorizontal}>
-                        <Text style={styles.sectionTitle}>Raum</Text>
-                        <Text style={styles.link} title={"AllRoomsButton"} onPress={() => {
-                            try {navigation.navigate("rooms")}
-                            catch (e) {
-                            }
-                        }
-                        }>zu allen Räumen →</Text>
-                    </View>
-                    <View style={styles.boxContainer}>
-                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <View style={styles.roomContainer}>
-                                { plant.room != null ? <View style={styles.roomIcon}>{RoomTypeIcons[plant.room.category]}</View>: {}}
-                                <Text style={styles.text}>{plant.room?.name ?? "Noch nicht platziert"}</Text>
-                            </View>
-                        </LinearGradient>
-                    </View>
-                    <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
-                    <View style={styles.boxContainer}>
-                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text style={styles.text}>{LightingTypeTranslations[plant.needs.lightingType]}</Text>
-                            <View style={styles.badgesContainer}>
-                                <View style={styles.lightingBadge}>
-                                    <Text style={styles.text}>{LightingTypeValueTranslations[plant.needs.lightingType]}</Text>
-                                </View>
-                                <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
-                                    <Feather name="info" color="grey" size={25}/>
-                                </Tooltip>
-                            </View>
-                        </LinearGradient>
-                    </View>
-                    <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
-                    {Object.entries(plant.needs.intervals).map(([k, v]) =>
-                        <View style={styles.boxContainer} key={k}>
-                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
-                                <Text>alle {v} Tage</Text>
-                            </LinearGradient>
+        <ScrollView style={styles.scrollview}>
+            <View style={styles.container}>
+                <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
+                <View style={styles.containerHorizontal}>
+                    <Text style={styles.sectionTitle}>Raum</Text>
+                    <Text style={styles.link} title={"AllRoomsButton"} onPress={() => {
+                             try {navigation.navigate("rooms")}
+                             catch (e) {
+                             }
+                         }
+                         }>zu allen Räumen →</Text>
+                     </View>
+                <View style={styles.boxContainer}>
+                    <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                        <View style={styles.roomContainer}>
+                            { plant.room != null ? <View style={styles.roomIcon}>{RoomTypeIcons[plant.room.category]}</View>: null}
+                            <Text style={styles.text}>{plant.room?.name ?? "Noch nicht platziert"}</Text>
                         </View>
-                    )
-                    }
-                    <Text style={styles.sectionTitle}>Notizen</Text>
-                    <View style={styles.boxContainer}>
-                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text style={styles.text}>{plant.notes}</Text>
-                        </LinearGradient>
-                    </View>
+                    </LinearGradient>
                 </View>
-                <VerticalPlaceholder size={150}/>
-            </ScrollView>
+                <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
+                <View style={styles.boxContainer}>
+                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                             <Text style={styles.text}>{LightingTypeTranslations[plant.needs?.lightingType ?? "Fehler"]}</Text>
+                             <View style={styles.badgesContainer}>
+                                 <View style={styles.lightingBadge}>
+                                     <Text style={styles.text}>{LightingTypeValueTranslations[plant.needs?.lightingType ?? "Fehler"]}</Text>
+                                 </View>
+                                 <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
+                                     <Feather name="info" color="grey" size={25}/>
+                                 </Tooltip>
+                             </View>
+                         </LinearGradient>
+                     </View>
+                     <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
+                    { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
+                          <View style={styles.boxContainer} key={k}>
+                              <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                                  <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
+                                  <Text>alle {v} Tage</Text>
+                              </LinearGradient>
+                          </View>
+                      )
+                      : null }
+                     <Text style={styles.sectionTitle}>Notizen</Text>
+                     <View style={styles.boxContainer}>
+                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                             <Text style={styles.text}>{plant.notes}</Text>
+                         </LinearGradient>
+                     </View>
+                 </View>
+                 <VerticalPlaceholder size={150}/>
+             </ScrollView>
         );
 }
 
@@ -185,14 +189,3 @@ const styles = StyleSheet.create({
         backgroundColor: "#fdfbef",
     }
     });
-
-
-// <View style={styles.boxContainer}>
-//                     <CollapsibleBar title={"Raum"} children={
-//                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-//                             <View>
-//                                 <Text numberOfLines={1}> x muss y werden</Text>
-//                             </View>
-//                         </LinearGradient>
-//                     }></CollapsibleBar>
-//                 </View>
