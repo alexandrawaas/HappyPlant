@@ -10,8 +10,10 @@ import {
     AssignmentTypeTranslations
 } from "../../utils/EnumTranslations";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
-import {AssignmentTypeIcons, RoomTypeIcons} from "../../utils/EnumIcons";
+import {RoomTypeIcons} from "../../utils/EnumIcons";
 import {Tooltip} from "react-native-elements";
+import EditButton from "../global/EditButton";
+import Feather from "react-native-vector-icons/Feather";
 
 export default function SinglePlantScreen({ navigation }) {
 
@@ -22,7 +24,10 @@ export default function SinglePlantScreen({ navigation }) {
     useEffect(() => {
         navigation.setOptions({
             ...navigation.options,
-            headerTitle: "Pflanzenprofil"
+            headerTitle: "Pflanzenprofil",
+            headerRight: () => (
+                <EditButton onPress={() => alert('This is a button!')} />
+            )
         })
     }, [navigation, plant])
 
@@ -56,9 +61,7 @@ export default function SinglePlantScreen({ navigation }) {
                                     <Text style={styles.text}>{LightingTypeValueTranslations[plant.needs.lightingType]}</Text>
                                 </View>
                                 <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
-                                    <View style={styles.infoBadge}>
-                                            <Text style={styles.infoBadgeText}>i</Text>
-                                    </View>
+                                    <Feather name="info" color="grey" size={25}/>
                                 </Tooltip>
                             </View>
                         </LinearGradient>
