@@ -1,15 +1,17 @@
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import {plantMock} from "./plant/PlantMock";
-import RoundPictureNameComponent from "./species/RoundPictureNameComponent";
-import CollapsibleBar from "./other/CollapsibleBar";
-import InventoryItem from "./room/InventoryItem";
+import {plantMock} from "./PlantMock";
+import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
-import WarnIcon from "./other/WarnIcon";
-import AssignmentIcon from "./other/AssignmentIcon";
-import {AssignmentTypeAsVerbTranslations} from "../utils/EnumTranslations";
-import VerticalPlaceholder from "../utils/styles/VerticalPlaceholder";
+import {
+    LightingTypeValueTranslations,
+    LightingTypeTranslations,
+    AssignmentTypeTranslations
+} from "../../utils/EnumTranslations";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import {AssignmentTypeIcons} from "../../utils/EnumIcons";
+import {Tooltip} from "react-native-elements";
 
 export default function SinglePlantScreen({ navigation }) {
 
@@ -34,40 +36,39 @@ export default function SinglePlantScreen({ navigation }) {
                     </View>
                     <View style={styles.boxContainer}>
                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text>Wohnzimmer</Text>
+                            <Text style={styles.text}>{plant.room.name}</Text>
                         </LinearGradient>
                     </View>
-                    <Text style={styles.sectionTitle}>Lichtwert</Text>
+                    <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
                     <View style={styles.boxContainer}>
                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text>{plant.needs.lightingType}</Text>
+                            <Text style={styles.text}>{LightingTypeTranslations[plant.needs.lightingType]}</Text>
+                            <View style={styles.badgesContainer}>
+                                <View style={styles.lightingBadge}>
+                                    <Text style={styles.text}>{LightingTypeValueTranslations[plant.needs.lightingType]}</Text>
+                                </View>
+                                <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
+                                    <View style={styles.infoBadge}>
+                                            <Text style={styles.infoBadgeText}>i</Text>
+                                    </View>
+                                </Tooltip>
+                            </View>
                         </LinearGradient>
                     </View>
                     <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
-                    <View style={styles.boxContainer}>
-                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text>Gießen: alle 3 Tage</Text>
-                        </LinearGradient>
-                    </View>
-                    <View style={styles.boxContainer}>
-                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text>Düngen: alle 30 Tage</Text>
-                        </LinearGradient>
-                    </View>
-                    <View style={styles.boxContainer}>
-                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text>Umtopfen: alle 365 Tage</Text>
-                        </LinearGradient>
-                    </View>
-                    <View style={styles.boxContainer}>
-                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text>{plant.needs.intervals.CUTTING}: alle x Tage</Text>
-                        </LinearGradient>
-                    </View>
+                    {Object.entries(plant.needs.intervals).map(([k, v]) =>
+                        <View style={styles.boxContainer} key={k}>
+                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                                <Text style={styles.text}>{AssignmentTypeTranslations[k]}</Text>
+                                <Text>alle {v} Tage</Text>
+                            </LinearGradient>
+                        </View>
+                    )
+                    }
                     <Text style={styles.sectionTitle}>Notizen</Text>
                     <View style={styles.boxContainer}>
                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text>{plant.notes}</Text>
+                            <Text style={styles.text}>{plant.notes}</Text>
                         </LinearGradient>
                     </View>
                 </View>
@@ -78,7 +79,7 @@ export default function SinglePlantScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     scrollview: {
-        padding: 10
+        padding: 10,
     },
     shadowed: {
         elevation: 4,
@@ -101,9 +102,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     text: {
-        fontSize:24,
-        fontWeight: "bold",
-        marginBottom: 16,
+        fontSize: 16,
     },
     sectionTitle: {
         alignSelf: "flex-start",
@@ -125,8 +124,42 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     detailContainer: {
+        display: "flex",
+        flexDirection: "row",
         padding: 15,
-        borderRadius: 15
+        borderRadius: 15,
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    badgesContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    infoBadge: {
+        borderRadius: 50,
+        borderColor: "grey",
+        borderWidth: 1.5,
+        width: 20,
+        height: 20,
+        alignItems: "center",
+        marginHorizontal: 3,
+    },
+    infoBadgeText: {
+        color: "grey",
+        fontWeight: "bold",
+    },
+    lightingBadge: {
+        borderRadius: 8,
+        borderColor: "lightgrey",
+        borderWidth: 1,
+        width: 24,
+        height: 24,
+        alignItems: "center",
+        marginHorizontal: 8,
+        elevation: 1,
+        backgroundColor: "#fdfbef",
     }
     });
 
