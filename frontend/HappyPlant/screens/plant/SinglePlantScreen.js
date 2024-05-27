@@ -32,7 +32,14 @@ export default function SinglePlantScreen({ navigation }) {
                     <RoundPictureNameComponent header={plant.name} subHeader={plant.species.name}></RoundPictureNameComponent>
                     <View style={styles.containerHorizontal}>
                         <Text style={styles.sectionTitle}>Raum</Text>
-                        <Text style={styles.link} title={"AllRoomsButton"}>zu allen Räumen →</Text>
+                        <Text style={styles.link} title={"AllRoomsButton"} onPress={() => {
+                            try {navigation.navigate("Räume")}
+                            catch (e) {
+                                console.log("Android")
+                                navigation.navigate("rooms")
+                            }
+                        }
+                        }>zu allen Räumen →</Text>
                     </View>
                     <View style={styles.boxContainer}>
                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
