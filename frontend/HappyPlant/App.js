@@ -11,7 +11,7 @@ import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
 import SingleRoomScreen from "./screens/room/SingleRoomScreen";
 import CreatePlantScreen from "./screens/CreatePlantScreen";
 import PlaceWindow from "./screens/PlaceWindow";
-import SinglePlantScreen from "./screens/SinglePlantScreen";
+import SinglePlantScreen from "./screens/plant/SinglePlantScreen";
 import SingleSpeciesScreen from "./screens/species/SingleSpeciesScreen";
 import LogoutScreen from "./screens/authentication/LogoutScreen";
 import TestScreen from "./screens/TestScreen";
