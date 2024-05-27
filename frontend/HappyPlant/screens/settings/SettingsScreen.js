@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, ScrollView, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import axios from 'axios';
-import { getAuthToken, removeAuthToken } from '../../utils/AuthTokenUtil';
-import { API_URL } from '../../config';
+import { removeAuthToken } from '../../utils/AuthTokenUtil';
 import fetchURL from '../../utils/fetchURL';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SettingsScreen({ navigation }) {
     const [remindersEnabled, setRemindersEnabled] = useState(false);
     const [vibrationEnabled, setVibrationEnabled] = useState(false);
     const [soundEnabled, setSoundEnabled] = useState(false);
+    const [badgeEnabled, setBadgeEnabled] = useState(false);
     const [notificationTime, setNotificationTime] = useState(new Date());
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [user, setUser] = useState(null);
@@ -22,6 +22,7 @@ export default function SettingsScreen({ navigation }) {
         });
 
         fetchUserData();
+        loadNotificationSettings();
 
         return () => {
             unsubscribe();
@@ -34,8 +35,6 @@ export default function SettingsScreen({ navigation }) {
             if (data) {
                 setUser(data);
                 setRemindersEnabled(data.receivePushNotifications);
-                setVibrationEnabled(data.receivePushNotifications); // TODO
-                setSoundEnabled(data.receivePushNotifications); // TODO
                 setNotificationTime(new Date(data.pushNotificationsTime));
             }
         });
@@ -45,23 +44,52 @@ export default function SettingsScreen({ navigation }) {
         const payload = {
             receivePushNotifications: remindersEnabled,
             pushNotificationsTime: notificationTime.toISOString().substring(11, 16),
-            pushNotificationToken: null,
+            pushNotificationToken: null, // TODO
         };
         fetchURL('/user', 'PATCH', (data) => {
             if (!data) {
                 console.error('Fehler beim Aktualisieren der Benachrichtigungseinstellungen');
             }
         }, payload);
+        saveNotificationSettings();
+    };
+
+    const saveNotificationSettings = async () => {
+        try {
+            await AsyncStorage.setItem('notificationSettings', JSON.stringify({
+                shouldShowAlert: remindersEnabled,
+                shouldVibrate: vibrationEnabled,
+                shouldPlaySound: soundEnabled,
+                shouldSetBadge: badgeEnabled,
+            }));
+        } catch (error) {
+            console.error('Fehler beim Speichern der Benachrichtigungseinstellungen:', error);
+        }
+    };
+
+    const loadNotificationSettings = async () => {
+        try {
+            const settings = await AsyncStorage.getItem('notificationSettings');
+            if (settings !== null) {
+                const parsedSettings = JSON.parse(settings);
+                setRemindersEnabled(parsedSettings.shouldShowAlert);
+                setVibrationEnabled(parsedSettings.shouldVibrate);
+                setSoundEnabled(parsedSettings.shouldPlaySound);
+                setBadgeEnabled(parsedSettings.shouldSetBadge);
+            }
+        } catch (error) {
+            console.error('Fehler beim Laden der Benachrichtigungseinstellungen:', error);
+        }
     };
     
     const handleAction = async (endpoint, method, successMessage) => {
-        fetchURL(endpoint, method, async (data) => {
-            if (data.success) {
+        fetchURL(endpoint, method, async (response) => {
+            if (response.success) {
                 await removeAuthToken();
                 navigation.replace('Anmelden');
                 Alert.alert('Erfolg', successMessage);
             } else {
-                Alert.alert('Fehler', data.message);
+                Alert.alert('Fehler', response.message);
             }
         });
     };
@@ -137,6 +165,13 @@ export default function SettingsScreen({ navigation }) {
                             <Switch
                                 value={soundEnabled}
                                 onValueChange={setSoundEnabled}
+                            />
+                        </View>
+                        <View style={[styles.settingRow, styles.bottomBorder]}>
+                            <Text style={styles.todoText}>// Badge</Text>
+                            <Switch
+                                value={badgeEnabled}
+                                onValueChange={setBadgeEnabled}
                             />
                         </View>
                         <View style={styles.settingRow}>
@@ -247,6 +282,10 @@ const styles = StyleSheet.create({
     },
     settingText: {
         fontSize: 15,
+    },
+    todoText: {
+        fontSize: 15,
+        color: '#008000',
     },
     timeInput: {
         borderWidth: 1,
