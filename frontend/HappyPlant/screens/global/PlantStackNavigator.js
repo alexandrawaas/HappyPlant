@@ -4,7 +4,6 @@ import CreatePlantScreen from '../CreatePlantScreen'
 import SinglePlantScreen from '../plant/SinglePlantScreen'
 import GlobalLayout from './GlobalLayout';
 import headerStyleOptions from './HeaderStyle';
-import RoomsScreen from "../room/RoomsScreen";
 
 const PlantStack = createNativeStackNavigator();
 
@@ -14,7 +13,6 @@ export default function PlantStackNavigator() {
         <PlantStack.Screen name="Meine Pflanzen" children={(props) => <GlobalLayout component={MyPlantsScreen} {...props} />} />
         <PlantStack.Screen name="Pflanzenprofil" children={(props) => <GlobalLayout component={SinglePlantScreen} {...props} />} />
         <PlantStack.Screen name="Pflanze erstellen" children={(props) => <GlobalLayout component={CreatePlantScreen} {...props} />} />
-        <PlantStack.Screen name="rooms" children={(props) => <GlobalLayout component={RoomsScreen} {...props} />} />
         </PlantStack.Navigator>
   );
 }

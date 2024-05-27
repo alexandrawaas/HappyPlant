@@ -33,17 +33,15 @@ export default function SinglePlantScreen({ navigation }) {
                     <View style={styles.containerHorizontal}>
                         <Text style={styles.sectionTitle}>Raum</Text>
                         <Text style={styles.link} title={"AllRoomsButton"} onPress={() => {
-                            try {navigation.navigate("Räume")}
+                            try {navigation.navigate("rooms")}
                             catch (e) {
-                                console.log("Android")
-                                navigation.navigate("rooms")
                             }
                         }
                         }>zu allen Räumen →</Text>
                     </View>
                     <View style={styles.boxContainer}>
                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text style={styles.text}>{plant.room.name}</Text>
+                            <Text style={styles.text}>{plant.room?.name ?? "Noch nicht platziert"}</Text>
                         </LinearGradient>
                     </View>
                     <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
