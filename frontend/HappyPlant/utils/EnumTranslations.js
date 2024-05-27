@@ -5,6 +5,13 @@ export const LightingTypeTranslations = {
     "FULL_SUN": "Volle Sonne",
 }
 
+export const LightingTypeValueTranslations = {
+    "FULL_SHADE": 0,
+    "PART_SHADE": 1,
+    "SUN": 2,
+    "FULL_SUN": 3,
+}
+
 export const AssignmentTypeTranslations = {
     "WATERING": "Gießen",
     "CUTTING": "Schneiden",
