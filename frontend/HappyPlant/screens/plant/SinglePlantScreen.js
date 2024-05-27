@@ -10,7 +10,7 @@ import {
     AssignmentTypeTranslations
 } from "../../utils/EnumTranslations";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
-import {AssignmentTypeIcons} from "../../utils/EnumIcons";
+import {AssignmentTypeIcons, RoomTypeIcons} from "../../utils/EnumIcons";
 import {Tooltip} from "react-native-elements";
 
 export default function SinglePlantScreen({ navigation }) {
@@ -41,7 +41,10 @@ export default function SinglePlantScreen({ navigation }) {
                     </View>
                     <View style={styles.boxContainer}>
                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                            <Text style={styles.text}>{plant.room?.name ?? "Noch nicht platziert"}</Text>
+                            <View style={styles.roomContainer}>
+                                { plant.room != null ? <View style={styles.roomIcon}>{RoomTypeIcons[plant.room.category]}</View>: {}}
+                                <Text style={styles.text}>{plant.room?.name ?? "Noch nicht platziert"}</Text>
+                            </View>
                         </LinearGradient>
                     </View>
                     <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
@@ -64,7 +67,7 @@ export default function SinglePlantScreen({ navigation }) {
                     {Object.entries(plant.needs.intervals).map(([k, v]) =>
                         <View style={styles.boxContainer} key={k}>
                             <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                <Text style={styles.text}>{AssignmentTypeTranslations[k]}</Text>
+                                <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
                                 <Text>alle {v} Tage</Text>
                             </LinearGradient>
                         </View>
@@ -85,6 +88,14 @@ export default function SinglePlantScreen({ navigation }) {
 const styles = StyleSheet.create({
     scrollview: {
         padding: 10,
+    },
+    roomIcon: {
+        marginRight: 25,
+    },
+    roomContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
     },
     shadowed: {
         elevation: 4,
@@ -108,6 +119,10 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
+    },
+    boldText: {
+        fontSize: 14,
+        fontWeight: "bold",
     },
     sectionTitle: {
         alignSelf: "flex-start",
