@@ -24,7 +24,7 @@ export default function MyPlantsScreen({ navigation }) {
                 <View>
                     <View style={styles.plantContainer}>
                     {
-                        plants.length === 3
+                        plants.length === 0
                                 ? <Text style={{alignSelf: "center", textAlign: "center", marginTop: "80%", width: "100%"}}>Keine Pflanzen angelegt</Text>
                                 :
                         plants.map(plant =>
