@@ -48,7 +48,7 @@ class DatabaseInitializer {
 
         println("Seeding Database...")
 
-        val imageDirectory: File = File("E:\\happy_plants\\happy-plant\\backend\\happy-plant-backend\\data\\speciesPictures")
+        val imageDirectory: File = File(".\\data\\speciesPictures")
         val files = imageDirectory.listFiles()
 
         for(file in files!!) {
