@@ -26,7 +26,7 @@ class PlantController (
     fun getPlants(
         @RequestHeader("Authorization") authHeader: String, 
         @RequestParam(name = "search") search: String?
-    ): List<PlantDtoResponse> {
+    ): List<EntityModel<PlantDtoResponse>>{
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
             ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
     
@@ -35,7 +35,12 @@ class PlantController (
         } else {
             service.getPlantsFiltered(search, userId)
         }
-        return plants.map{ it.asDtoResponse() }
+        return plants.map{
+            EntityModel.of(
+                it.asDtoResponse(),
+                linkTo<ImageController> {getImage(null, it.asDtoResponse().imageId)}.withRel { "image" }
+            )
+        }
     }
 
     @PostMapping
