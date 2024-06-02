@@ -11,6 +11,7 @@ const LoadingScreen = ({ navigation }) => {
     }, []);
 
     const checkRememberMe = async () => {
+        console.log("Loading Screen")
         try {
             const rememberMeValue = 
                 typeof window !== 'undefined' && window.localStorage ?
@@ -26,7 +27,7 @@ const LoadingScreen = ({ navigation }) => {
                         }
                     });
                     if (response.data.success) {
-                        navigation.replace('Aufgaben');
+                        navigation.replace('Home');
                     } else {
                         await removeAuthToken();
                         navigation.replace('Anmelden');
