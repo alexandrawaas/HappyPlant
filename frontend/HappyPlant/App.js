@@ -16,8 +16,10 @@ import SingleSpeciesScreen from "./screens/species/SingleSpeciesScreen";
 import LogoutScreen from "./screens/authentication/LogoutScreen";
 import TestScreen from "./screens/TestScreen";
 import UpdatePasswordScreen from "./screens/authentication/UpdatePasswordScreen";
+import MyOnboarding from "./screens/OnboardingScreen";
 //Utils
 import { useNotification } from "./utils/useNotification";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -27,7 +29,8 @@ export default function App() {
 
   return (
       <NavigationContainer>
-          <TabNavigator />
+        <Stack.Navigator initialRouteName="Onboarding">
+          <Stack.Screen options={{headerShown: false}} name="Onboarding" component={MyOnboarding} />
           <Stack.Screen name="Loading" component={LoadingScreen}/>
           <Stack.Screen name="Anmelden" component={LoginScreen}/>
           <Stack.Screen name="Registrieren" component={RegisterScreen}/>
@@ -40,6 +43,7 @@ export default function App() {
           <Stack.Screen name="Fenster platzieren" component={PlaceWindow}/>
           <Stack.Screen name="Pflanzenprofil" component={SinglePlantScreen}/>
           <Stack.Screen name="Einzelne Pflanzenart" component={SingleSpeciesScreen}/>
+        </Stack.Navigator>
       </NavigationContainer>
   );
 }
