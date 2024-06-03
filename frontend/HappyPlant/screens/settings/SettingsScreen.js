@@ -32,7 +32,10 @@ export default function SettingsScreen({ navigation }) {
             if (data) {
                 setUser(data);
                 setRemindersEnabled(data.receivePushNotifications);
-                setNotificationTime(new Date(data.pushNotificationsTime));
+                const time = new Date(data.pushNotificationsTime);
+                if (!isNaN(time.getTime())) {
+                    setNotificationTime(time);
+                }
             }
         });
     };
@@ -102,6 +105,9 @@ export default function SettingsScreen({ navigation }) {
             return;
         }
         const currentTime = selectedTime || notificationTime;
+        if (!isNaN(currentTime.getTime())) {
+            setNotificationTime(currentTime);
+        }
         setShowTimePicker(Platform.OS === 'ios');
         setNotificationTime(currentTime);
     };

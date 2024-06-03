@@ -2,6 +2,7 @@ import { View, StyleSheet, ScrollView, Text } from "react-native";
 import AddRoomButton from "./AddRoomButton";
 import RoomListItem from "./RoomListItem";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
 import  fetchURL  from '../../utils/ApiService'
 
