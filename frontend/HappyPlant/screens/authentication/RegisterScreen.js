@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert, Button, StyleSheet, Image} from 'react-native';
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import axios from 'axios';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
-import Constants from "expo-constants";
-import {Platform} from 'react-native';
 import { API_URL } from '../../config';
+import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
 
 
 const RegisterScreen = ({ navigation }) => {

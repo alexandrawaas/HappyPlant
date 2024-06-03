@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, ScrollView, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { removeAuthToken } from '../../utils/AuthTokenUtil';
-import fetchURL from '../../utils/fetchURL';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import fetchURL from '../../utils/ApiService';
+import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
 
 export default function SettingsScreen({ navigation }) {
     const [remindersEnabled, setRemindersEnabled] = useState(false);
-    const [vibrationEnabled, setVibrationEnabled] = useState(false);
-    const [soundEnabled, setSoundEnabled] = useState(false);
-    const [badgeEnabled, setBadgeEnabled] = useState(false);
     const [notificationTime, setNotificationTime] = useState(new Date());
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [user, setUser] = useState(null);
+    const [expoPushToken, setExpoPushToken] = useState();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('beforeRemove', (e) => {
@@ -22,7 +20,6 @@ export default function SettingsScreen({ navigation }) {
         });
 
         fetchUserData();
-        loadNotificationSettings();
 
         return () => {
             unsubscribe();
@@ -41,45 +38,21 @@ export default function SettingsScreen({ navigation }) {
     };
 
     const updateNotificationSettings = async () => {
+        await registerForPushNotificationsAsync()
+        .then(
+            (token) => { setExpoPushToken(token); }
+        );
+
         const payload = {
             receivePushNotifications: remindersEnabled,
             pushNotificationsTime: notificationTime.toISOString().substring(11, 16),
-            pushNotificationToken: null, // TODO
+            pushNotificationToken: expoPushToken
         };
         fetchURL('/user', 'PATCH', (data) => {
             if (!data) {
                 console.error('Fehler beim Aktualisieren der Benachrichtigungseinstellungen');
             }
         }, payload);
-        saveNotificationSettings();
-    };
-
-    const saveNotificationSettings = async () => {
-        try {
-            await AsyncStorage.setItem('notificationSettings', JSON.stringify({
-                shouldShowAlert: remindersEnabled,
-                shouldVibrate: vibrationEnabled,
-                shouldPlaySound: soundEnabled,
-                shouldSetBadge: badgeEnabled,
-            }));
-        } catch (error) {
-            console.error('Fehler beim Speichern der Benachrichtigungseinstellungen:', error);
-        }
-    };
-
-    const loadNotificationSettings = async () => {
-        try {
-            const settings = await AsyncStorage.getItem('notificationSettings');
-            if (settings !== null) {
-                const parsedSettings = JSON.parse(settings);
-                setRemindersEnabled(parsedSettings.shouldShowAlert);
-                setVibrationEnabled(parsedSettings.shouldVibrate);
-                setSoundEnabled(parsedSettings.shouldPlaySound);
-                setBadgeEnabled(parsedSettings.shouldSetBadge);
-            }
-        } catch (error) {
-            console.error('Fehler beim Laden der Benachrichtigungseinstellungen:', error);
-        }
     };
     
     const handleAction = async (endpoint, method, successMessage) => {
@@ -151,27 +124,6 @@ export default function SettingsScreen({ navigation }) {
                             <Switch
                                 value={remindersEnabled}
                                 onValueChange={setRemindersEnabled}
-                            />
-                        </View>
-                        <View style={[styles.settingRow, styles.bottomBorder]}>
-                            <Text style={styles.settingText}>Vibration</Text>
-                            <Switch
-                            value={vibrationEnabled}
-                                onValueChange={setVibrationEnabled}
-                            />
-                        </View>
-                        <View style={[styles.settingRow, styles.bottomBorder]}>
-                            <Text style={styles.settingText}>Ton</Text>
-                            <Switch
-                                value={soundEnabled}
-                                onValueChange={setSoundEnabled}
-                            />
-                        </View>
-                        <View style={[styles.settingRow, styles.bottomBorder]}>
-                            <Text style={styles.todoText}>// Badge</Text>
-                            <Switch
-                                value={badgeEnabled}
-                                onValueChange={setBadgeEnabled}
                             />
                         </View>
                         <View style={styles.settingRow}>
@@ -257,7 +209,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     settingsContainer: {
-        // marginTop: 20,
+        marginTop: 20,
         width: '100%'
     },
     sectionHeader: {
