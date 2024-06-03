@@ -1,20 +1,14 @@
 import {useState, useEffect, useRef} from "react";
 import * as Notifications from 'expo-notifications';
-import { AsyncStorage } from 'react-native';
 
 
 export const useNotification = () => {
     Notifications.setNotificationHandler({
-        handleNotification: async () => {
-            const notificationSettings = await AsyncStorage.getItem('notificationSettings');
-            const settings = notificationSettings ? JSON.parse(notificationSettings) : {};
-            return {
-                shouldShowAlert: settings.shouldShowAlert === 'true',
-                // TODO: Vibrations
-                shouldPlaySound: settings.shouldPlaySound === 'true',
-                shouldSetBadge: settings.shouldSetBadge === 'true',
-            };
-        }
+        handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+        })
     })
 
     const [notification, setNotification] = useState();
