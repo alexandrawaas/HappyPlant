@@ -45,7 +45,7 @@ const LoginScreen = ({ navigation }) => {
                     }
                 }
 
-                navigation.replace('Aufgaben');
+                navigation.replace('MainApp');
             } else {
                 Alert.alert('Fehler', response.data.message);
             }
