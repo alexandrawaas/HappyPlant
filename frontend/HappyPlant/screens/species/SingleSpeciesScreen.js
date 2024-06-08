@@ -9,6 +9,7 @@ import RoundPictureNameComponent from "./RoundPictureNameComponent";
 
 import ImageComponent from "../global/ImageComponent_alt";
 import ImageWithAuth from "../global/ImageComponent";
+import ImageComponent from "../global/ImageComponent";
 
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();

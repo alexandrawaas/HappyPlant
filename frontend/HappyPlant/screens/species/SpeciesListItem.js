@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import SpeciesListItemAddButton from "./SpeciesListItemAddButton";
 import { LinearGradient } from 'expo-linear-gradient';
-import ImageComponent from "../global/ImageComponent_alt";
+import ImageComponent from "../global/ImageComponent";
 
 export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
     return (

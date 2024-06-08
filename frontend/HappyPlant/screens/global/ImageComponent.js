@@ -19,18 +19,19 @@ const ImageComponent = ({ imageId, authToken, style }) => {
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const response = await fetch(API_URL + "/images/" + imageId, {
+        const response = await fetch(API_URL + "/images/" + imageId, authToken != null ?{
           headers: {
-            'Authorization': `Bearer ${authToken}`
+             'Authorization': `Bearer ${authToken}`
           }
-        });
-
+        }: {});
+        console.log(`test ${imageId} ${authToken}`);
         if (response.ok) {
-          console.log(JSON.stringify(response, null, 2));
+          console.log("test2");
           const blob = await response.blob();
           const base64Image = await blobToBase64(blob);
           setImageBase64(base64Image);
         } else {
+          console.log("test3");
           console.error('Failed to fetch image:', response.status, response.statusText);
         }
       } catch (error) {
@@ -39,6 +40,11 @@ const ImageComponent = ({ imageId, authToken, style }) => {
         setLoading(false);
       }
     };
+
+    if (!imageId) {
+      setLoading(false);
+      return;
+    }
 
     fetchImage();
   }, [imageId, authToken]);
