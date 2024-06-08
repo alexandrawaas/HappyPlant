@@ -34,15 +34,19 @@ const LoadingScreen = ({ navigation }) => {
                     });
                     if (response.data.success) {
                         navigation.replace('Home');
+                        return;
                     } else {
                         await removeAuthToken();
                         navigation.replace('Anmelden');
+                        return;
                     }
                 } else {
                     navigation.replace('Anmelden');
+                    return;
                 }
             } else {
                 navigation.replace('Anmelden');
+                return;
             }
         } catch (error) {
             navigation.replace('Anmelden');
