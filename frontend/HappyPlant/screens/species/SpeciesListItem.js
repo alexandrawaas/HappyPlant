@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
 import SpeciesListItemAddButton from "./SpeciesListItemAddButton";
 import { LinearGradient } from 'expo-linear-gradient';
+import ImageComponent from "../global/ImageComponent_alt";
 
 export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
     return (
@@ -8,9 +9,7 @@ export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
             <View style={styles.container} >
                 <View style={[styles.imageContainer, styles.shadowed]}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']}>
-                        <Image style={styles.image}
-                            source={require('../../assets/adaptive-icon.png')}
-                        />
+                        <ImageComponent imageId={species.imageId} style={styles.ImageComponent}/>
                     </LinearGradient>
                 </View>
                 <View style={[styles.cardbox, styles.shadowed]}>
@@ -51,6 +50,10 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 0,
         backgroundColor: "white",
+    },
+    ImageComponent:{
+        width: 100,
+        height: 100,
     },
     image: {
         width: "100%",

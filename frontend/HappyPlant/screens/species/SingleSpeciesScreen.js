@@ -7,7 +7,8 @@ import {LinearGradient} from 'expo-linear-gradient';
 import AddSpeciesAsPlantButton from "../global/AddSpeciesAsPlantButton";
 import RoundPictureNameComponent from "./RoundPictureNameComponent";
 
-import ImageComponent from "../global/ImageComponent";
+import ImageComponent from "../global/ImageComponent_alt";
+import ImageWithAuth from "../global/ImageComponent";
 
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();
@@ -65,6 +66,37 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         padding: 20,
+    },
+    topContainer: {
+        borderRadius: 10,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginBottom: 5,
+    },
+    imageContainer: {
+        borderRadius: 100,
+        width: 200,
+        height: 200,
+        overflow: "hidden",
+        backgroundColor: "white",
+    },
+    imageComponent:{
+        width: 200,
+        height: 200,
+    },
+    image: {
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+    },
+    header: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginTop: 10,
+    },
+    subHeader: {
+        fontSize: 14,
     },
     header2: {
         fontSize: 16,
