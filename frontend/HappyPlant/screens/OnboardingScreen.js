@@ -2,6 +2,7 @@ import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import { Image, StyleSheet, View, Text} from 'react-native';
 import { useNavigation } from "@react-navigation/native"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPage = ({title = '', subtitle = '', image = null}) => (
     <View style={styles.page}>
@@ -14,10 +15,15 @@ const MyPage = ({title = '', subtitle = '', image = null}) => (
 const MyOnboarding = () => {
     const navigation = useNavigation();
 
+    const handleOnboardingFinish = async () => {
+        await AsyncStorage.setItem('hasOnboarded', 'true');
+        navigation.navigate('Registrieren');
+    }
+
     return (
         <Onboarding
-            onSkip={() => navigation.navigate('Registrieren')}
-            onDone={() => navigation.navigate('Registrieren')}
+            onSkip={handleOnboardingFinish}
+            onDone={handleOnboardingFinish}
             pages={[
                 {
                     backgroundColor: '#BDEEB5',

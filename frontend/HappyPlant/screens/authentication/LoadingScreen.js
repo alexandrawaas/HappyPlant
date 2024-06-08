@@ -7,12 +7,18 @@ import { API_URL } from '../../config';
 
 const LoadingScreen = ({ navigation }) => {
     useEffect(() => {
-        checkRememberMe();
+        checkFlags();
     }, []);
 
-    const checkRememberMe = async () => {
-        console.log("Loading Screen")
+    const checkFlags = async () => {
+        console.log("Loading...")
         try {
+            const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');
+            if (!hasOnboarded) {
+                navigation.replace('Onboarding');
+                return;
+            }
+
             const rememberMeValue = 
                 typeof window !== 'undefined' && window.localStorage ?
                 window.localStorage.getItem('rememberMe') :
