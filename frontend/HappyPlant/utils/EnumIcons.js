@@ -33,3 +33,14 @@ export const RoomTypeIcons = {
     "OTHER": <MaterialIcons name="other-houses" color="#000000" size={50}/>, 
 }
 
+export const RoomTypeNames = {
+    "BATHROOM": "Badezimmer", 
+    "BEDROOM":  "Schlafzimmer",
+    "KITCHEN": "Küche",
+    "LIVING_ROOM": "Wohnzimmer",
+    "OFFICE": "Büro",
+    "HALLWAY": "Flur",
+    "BALCONY": "Balkon",
+    "GREENHOUSE": "Gewächshaus",
+    "OTHER": "Raum"
+}

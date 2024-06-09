@@ -32,7 +32,7 @@ export default function RoomCreationScreen({ navigation }) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTc4OTE3NzEsInVzZXJJZCI6ImNkNDE3MTg2LTFmNDUtNGY2NS1hNWYyLTE2NmIzMmFmMTZjYSIsImlhdCI6MTcxNzg4OTE3OX0.adR5wmg1X9CflDRRmptRqRwkDA3LAlnoRBJ_y1PULzIgcWAxY0KcTkIz7w3hI6dkqq16U1gzT1pcUUs2lPlM7Q`,
+                'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTc5Njc1ODMsInVzZXJJZCI6ImRiZjVmOGViLTNlNWItNDUwMC1hZDU1LWY3YjU1NGNlZDc3ZSIsImlhdCI6MTcxNzk2NDk5MX0.sRWPYhP0TAKQnibLfOrN1WkbVuiYI0EiP0jnfbGcoV3WcVotR3bqyIlcBBqy8qJcWiYoh6h4UVEJsK0sp49QOw`,
               },
               body:
               JSON.stringify({ 
@@ -45,7 +45,7 @@ export default function RoomCreationScreen({ navigation }) {
       
             if (response.ok) {
               const result  = await response.json();
-              console.log('Success:', result  );
+              //console.log('Success:', result  );
               navigation.navigate('Fenster platzieren', {result });
             } else {
               console.error('Failed to post data:', response.status, response.statusText);
@@ -87,10 +87,6 @@ export default function RoomCreationScreen({ navigation }) {
                             placeholderTextColor={"ligthgrey"}
                         />
                     </View>
-
-                     <Text>{name}</Text>
-                     <Text>{x}</Text>
-                     <Text>{y}</Text>
                 </ScrollView>
 
                 <View style={styles.buttonView}>
