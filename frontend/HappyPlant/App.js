@@ -7,6 +7,9 @@ import LoadingScreen from "./screens/authentication/LoadingScreen";
 import LoginScreen from "./screens/authentication/LoginScreen";
 import RegisterScreen from "./screens/authentication/RegisterScreen";
 import TabNavigator from "./screens/global/TabNavigator";
+import headerStyle from "./screens/global/HeaderStyle";
+import Onboarding from "react-native-onboarding-swiper";
+import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
 
 const RootStack = createNativeStackNavigator();
 
@@ -24,13 +27,13 @@ export default function App() {
 
 const OnboardingStack = () => {
   const OnboardingStack = createNativeStackNavigator();
-
   return (
     <OnboardingStack.Navigator initialRouteName="Onboarding">
       <OnboardingStack.Screen  options={{headerShown: false}}  name="Onboarding" component={MyOnboarding} />
       <OnboardingStack.Screen name="Loading" component={LoadingScreen} />
-      <OnboardingStack.Screen name="Anmelden" component={LoginScreen} />
-      <OnboardingStack.Screen name="Registrieren" component={RegisterScreen} />
+      <OnboardingStack.Screen name="Anmelden" component={LoginScreen} options={{headerTransparent: true, headerTitle:''}}/>
+      <OnboardingStack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen} options={{headerTransparent: true, headerTitle:'Passwort vergessen?'}}/>
+      <OnboardingStack.Screen name="Registrieren" component={RegisterScreen} options={{headerTransparent: true, headerTitle:''}}/>
     </OnboardingStack.Navigator>
   );
 };
