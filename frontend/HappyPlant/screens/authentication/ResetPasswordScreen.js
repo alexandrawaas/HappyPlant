@@ -41,6 +41,9 @@ const ResetPasswordScreen = ({ navigation, route }) => {
                     value={email}
                     onChangeText={setEmail}
                 />
+                <TouchableOpacity onPress={() => navigation.navigate('Registrieren')}>
+                    <Text style={styles.button2Text}>Konto erstellen</Text>
+                </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
                 <Text style={styles.buttonText}>Passwort zurücksetzen</Text>
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         width: '100%',
         textAlign: 'center',
-        top: -290,
+        top: -260,
     },
     text: {
         fontSize: 16,
@@ -82,7 +85,7 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     button: {
-        top: Platform.OS === 'ios' ? -100 : -80,
+        top: -80,
         zIndex: 1,
         elevation: 5,
         backgroundColor: '#BEF5B5',
@@ -92,6 +95,12 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.5,
         shadowRadius: 2,
+    },
+    button2Text: {
+        top: 30,
+        color: '#9D9B9B',
+        fontSize: 16,
+        textDecorationLine: 'underline',
     },
     buttonText: {
         color: 'black',
