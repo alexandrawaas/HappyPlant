@@ -7,32 +7,55 @@ import { fetchURL } from '../utils/ApiService';
 export default function AssignmentsScreen({ navigation }) {
     const [assignments, setAssignments] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [completedAssignments, setCompletedAssignment] = useState({});
+    const [completedAssignments, setCompletedAssignments] = useState({});
+    const [updatedAssignments, setUpdatedAssignments] = useState([]);
+
+    const fetchAssignments = () => {
+        setLoading(true);
+        fetchURL('/assignments', 'GET', data => {
+            setAssignments(data);
+            setLoading(false);
+        });
+    };
 
     useEffect(() => {
-        // fetchURL('/assignments', 'GET', data => {
-        //     setAssignments(data);
-        //     setLoading(false);
-        // })
+        fetchAssignments();
 
-        // Dummy assignments for testing
-        const dummyData = [
-            { id: '1', plantName: 'Gerold', assignmentType: 'WATERING', lastDone: new Date('2024-06-01') },
-            { id: '2', plantName: 'Peter', assignmentType: 'WATERING', lastDone: new Date('2024-06-05') },
-            { id: '3', plantName: 'Clara', assignmentType: 'CUTTING', lastDone: new Date('2024-06-02') },
-            { id: '4', plantName: 'Tomm', assignmentType: 'FERTILIZING', lastDone: new Date('2024-05-30') },
-            { id: '5', plantName: 'Lala', assignmentType: 'REPOTTING', lastDone: new Date('2024-06-03') },
-            { id: '6', plantName: 'Timi', assignmentType: 'REPOTTING', lastDone: new Date('2024-06-07') },
-        ];
-        setAssignments(dummyData);
-        setLoading(false);
-    }, []);
+        const unsubscribeFocus = navigation.addListener('focus', () => {
+            fetchAssignments();
+        });
 
-    const toggleAssignmentCompletion = (id) => {
-        setCompletedAssignment(prevState => ({
+        const unsubscribeBlur = navigation.addListener('blur', () => {
+            updatedAssignments.forEach(assignment => {
+                const updatedAssignment = {
+                    assignmentType: assignment.assignmentType,
+                    lastDone: new Date()
+                };
+
+                fetchURL(`/plants/${assignment.plantId}/assignments`, 'PATCH', updatedAssignment, (response) => {
+                    // handle response
+                });
+            });
+        });
+
+        return () => {
+            unsubscribeFocus();
+            unsubscribeBlur();
+        };
+    }, [navigation, updatedAssignments]);
+
+    const toggleAssignmentCompletion = (assignment) => {
+        const isCompleted = !completedAssignments[assignment.id];
+        setCompletedAssignments(prevState => ({
             ...prevState,
-            [id]: !prevState[id]
+            [assignment.id]: isCompleted
         }));
+
+        if (isCompleted) {
+            setUpdatedAssignments(prevState => [...prevState, assignment]);
+        } else {
+            setUpdatedAssignments(prevState => prevState.filter(a => a.id !== assignment.id));
+        }
     };
 
     const translateAssignmentType = (type) => {
@@ -46,16 +69,16 @@ export default function AssignmentsScreen({ navigation }) {
     };
 
     const isDue = (lastDone) => {
-        const SEVEN_DAYS_IN_MS = 7 * 24 * 26* 60 * 1000;
+        const SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1000;
         const now = new Date();
-        return now - lastDone > SEVEN_DAYS_IN_MS;
-    }
+        return now - new Date(lastDone) > SEVEN_DAYS_IN_MS;
+    };
 
     const renderAssignmentItem = ({ item }) => {
         const isCompleted = completedAssignments[item.id];
         const translatedType = translateAssignmentType(item.assignmentType);
         const due = isDue(item.lastDone);
-        const formattedDate = `${('0' + item.lastDone.getDate()).slice(-2)}.${('0' + (item.lastDone.getMonth() + 1)).slice(-2)}.${item.lastDone.getFullYear()}`;
+        const formattedDate = `${('0' + new Date(item.lastDone).getDate()).slice(-2)}.${('0' + (new Date(item.lastDone).getMonth() + 1)).slice(-2)}.${new Date(item.lastDone).getFullYear()}`;
 
         return (
             <View style={[styles.listItem, isCompleted ? styles.itemCompleted : due ? styles.itemDue : null]}>
@@ -63,7 +86,7 @@ export default function AssignmentsScreen({ navigation }) {
                     <Text style={styles.itemText}>{`${item.plantName} ${translatedType.toLowerCase()}`}</Text>
                     {due && !isCompleted && <Text style={styles.itemDueText}>{`seit ${formattedDate}`}</Text>}
                 </View>
-                <TouchableOpacity onPress={() => toggleAssignmentCompletion(item.id)}>
+                <TouchableOpacity onPress={() => toggleAssignmentCompletion(item)}>
                     <MaterialCommunityIcons 
                         name={isCompleted ? 'checkbox-marked-circle-outline' : 'checkbox-blank-circle-outline'}
                         size={39}
@@ -220,15 +243,16 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: 'regular',
-        fontSize: 20,
-        lineHeight: 24,
-        color: '#9f9d9d',
+        fontSize: 16,
+        lineHeight: 20,
+        color: '#7e7a7a',
     },
     categoryText: {
-        fontWeight: 'regular',
-        fontSize: 20,
-        lineHeight: 24,
-        color: '#9f9d9d',
-        marginBottom: 5,
+        fontWeight: 'bold',
+        fontSize: 18,
+        lineHeight: 21,
+        color: '#000000',
+        marginVertical: 10,
+        marginHorizontal: 5,
     },
 });
