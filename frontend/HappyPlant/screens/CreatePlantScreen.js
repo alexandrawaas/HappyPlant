@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Button, ScrollView} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import fetchURL from "../utils/ApiService";
@@ -30,7 +30,9 @@ export default function CreatePlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <Button title="Done" onPress={() => console.log("submit Button pressed")} />
+                <TouchableOpacity onPress={() => console.log("submit Button pressed")} style={{margin: 8}}>
+                    <Feather name="check" color="grey" size={25}/>
+                </TouchableOpacity>
             )
         })
     }, [navigation, plant])
@@ -55,15 +57,21 @@ export default function CreatePlantScreen({ navigation }) {
                         <View style={styles.boxContainer} key={k}>
                             <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                                 <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
-                                <Text style={styles.numberInputContainer}>alle <Input inputMode={"numeric"} style={styles.numberInput}>{v}</Input> Tage</Text>
+                                <View style={styles.numberInputContainer}>
+                                    <Text>alle</Text>
+                                    <View style={styles.numberInputInnerContainer}>
+                                        <Input inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v}</Input>
+                                    </View>
+                                    <Text>Tage</Text>
+                                </View>
                             </LinearGradient>
                         </View>
                     )
                     : null }
                 <Text style={styles.sectionTitle}>Notizen</Text>
                 <View style={styles.boxContainer}>
-                    <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                        <Input numberOfLines={20} style={styles.text}>{plant.notes}</Input>
+                    <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.detailContainer, styles.notesContainer]}>
+                        <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400}>{plant.notes}</Input>
                     </LinearGradient>
                 </View>
             </View>
@@ -169,11 +177,40 @@ const styles = StyleSheet.create({
         backgroundColor: "#fdfbef",
     },
     numberInput: {
-        width: 300,
+        width: 20,
+        maxWidth: 60,
         fontSize: 16,
+        textAlign: "center",
+        textAlignVertical: "bottom",
+        marginBottom: 5,
+        paddingBottom: 10,
     },
     numberInputContainer: {
         width: 200,
-        alignItems: "space-between",
+        maxWidth: 300,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
     },
+    numberInputInnerContainer : {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "bottom",
+        justifyContent: "center",
+        width: 60,
+        height: 30,
+        backgroundColor: "#f5eae7",
+        borderRadius: 10,
+        marginHorizontal: 10,
+    },
+    notesText: {
+        fontSize: 16,
+        textAlignVertical: "bottom",
+        paddingTop: 15,
+    },
+    notesContainer: {
+        paddingTop: 10,
+        paddingBottom: 2,
+    }
 });
