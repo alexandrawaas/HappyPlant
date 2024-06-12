@@ -28,7 +28,7 @@ data class Pixel(
         @ManyToOne @JoinColumn(name = "room_id")
         val room: Room,
 
-        @OneToMany(cascade=[CascadeType.ALL], mappedBy = "pixel")
+        @OneToMany(mappedBy = "pixel", cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH], orphanRemoval = false)
         val plants: MutableList<Plant>
 ) {
         constructor(room: Room, x: Int, y: Int)

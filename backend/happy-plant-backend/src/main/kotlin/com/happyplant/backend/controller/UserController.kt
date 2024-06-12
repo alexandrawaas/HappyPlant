@@ -4,7 +4,6 @@ import com.happyplant.backend.datatransfer.user.NotificationSettingsDtoRequest
 import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.repository.UserRepository
 import com.happyplant.backend.service.UserService
-import com.happyplant.backend.utility.ApiResponse
 import com.happyplant.backend.utility.AuthTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -24,12 +23,10 @@ class UserController (private val service: UserService){
     }
 
     @GetMapping
-    fun getCurrentUser(@RequestHeader("Authorization") authHeader: String): ApiResponse<UserDto> {
-        return service.getCurrentUser(authHeader)
-    }
+    fun getCurrentUser(@RequestHeader("Authorization") authHeader: String): UserDto =
+        service.getCurrentUser(authHeader)
 
     @DeleteMapping
-    fun deleteUser(@RequestHeader("Authorization") authHeader: String): ApiResponse<String> {
-        return service.deleteUser(authHeader)
-    }
+    fun deleteUser(@RequestHeader("Authorization") authHeader: String) =
+        service.deleteUser(authHeader)
 }

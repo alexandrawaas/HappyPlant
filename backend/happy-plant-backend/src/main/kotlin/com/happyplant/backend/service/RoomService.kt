@@ -54,6 +54,10 @@ class RoomService (
         val room = getRoomFromDb(roomId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found")
 
         if (user.id == room.user.id) {
+            val plantsInRoom = getPlantsInRoom(roomId, userId)
+            for (plant in plantsInRoom) {
+                removePlantFromRoom(roomId, plant.id, userId)
+            }
             db.deleteById(roomId)
         } else {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to delete this room")
