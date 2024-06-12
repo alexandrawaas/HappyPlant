@@ -1,21 +1,14 @@
 package com.happyplant.backend.service
 
 import com.happyplant.backend.datatransfer.assignment.AssignmentDtoRequest
-import com.happyplant.backend.datatransfer.assignment.asEntity
 import com.happyplant.backend.datatransfer.needs.asEntity
 import com.happyplant.backend.datatransfer.plant.PlantDtoRequest
 import com.happyplant.backend.datatransfer.plant.asEntity
-import com.happyplant.backend.datatransfer.species.asEntity
-import com.happyplant.backend.model.Assignment
-import com.happyplant.backend.model.Needs
 import com.happyplant.backend.model.Plant
-import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.repository.PlantRepository
-import com.happyplant.backend.repository.SpeciesRepository
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -67,7 +60,6 @@ class PlantService(
                 name = plant.name,
                 species = speciesService.getSpecies(plant.speciesId),
                 notes = plant.notes,
-                picturePath = plant.picturePath,
                 needs = plant.needs?.asEntity() ?: plantToSave.needs)
             patchedPlant.needs?.intervals?.forEach { if (!patchedPlant.assignments.keys.contains(it.key)) patchedPlant.addAssignment(assignmentType = it.key, lastDone = null) }
 

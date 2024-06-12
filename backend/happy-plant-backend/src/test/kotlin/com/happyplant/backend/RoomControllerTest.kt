@@ -3,6 +3,7 @@ package com.happyplant.backend
 import com.happyplant.backend.datatransfer.room.RoomDtoRequest
 import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.model.Room
+import com.happyplant.backend.model.types.RoomCategory
 import com.happyplant.backend.utility.Coordinate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -25,7 +26,7 @@ class RoomControllerTest(@Autowired var restTemplate: TestRestTemplate) {
 
     @BeforeTest
     fun setup() {
-        val roomDtoRequest = RoomDtoRequest("bathroom", ratioValueX = DEFAULT_X_RATIO, ratioValueY = DEFAULT_Y_RATIO)
+        val roomDtoRequest = RoomDtoRequest("bathroom", ratioValueX = DEFAULT_X_RATIO, ratioValueY = DEFAULT_Y_RATIO,category = RoomCategory.LIVING_ROOM)
         createdRoomResponse = this.restTemplate.postForEntity("/rooms", roomDtoRequest, RoomDtoResponse::class.java)
     }
 
@@ -40,7 +41,7 @@ class RoomControllerTest(@Autowired var restTemplate: TestRestTemplate) {
         val room1Name = "bathroom"
         val x = 5
         val y = 3
-        val roomDtoRequest1 = RoomDtoRequest(room1Name, ratioValueX = x, ratioValueY = y);
+        val roomDtoRequest1 = RoomDtoRequest(room1Name, ratioValueX = x, ratioValueY = y, category = RoomCategory.LIVING_ROOM);
         val response = this.restTemplate.postForEntity("/rooms", roomDtoRequest1, RoomDtoResponse::class.java)
 
         assertTrue { response.body?.name.equals(room1Name) }

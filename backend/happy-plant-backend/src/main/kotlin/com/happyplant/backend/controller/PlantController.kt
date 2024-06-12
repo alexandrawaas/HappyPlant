@@ -4,13 +4,13 @@ import com.happyplant.backend.datatransfer.assignment.AssignmentDtoRequest
 import com.happyplant.backend.datatransfer.plant.PlantDtoRequest
 import com.happyplant.backend.datatransfer.plant.PlantDtoResponse
 import com.happyplant.backend.datatransfer.plant.asDtoResponse
-import com.happyplant.backend.model.types.AssignmentType
 import com.happyplant.backend.service.PlantService
 import com.happyplant.backend.utility.AuthTokenUtil
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.server.mvc.linkTo
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import java.time.LocalDateTime
 import java.util.*
 
 
@@ -26,7 +26,7 @@ class PlantController (
     fun getPlants(
         @RequestHeader("Authorization") authHeader: String, 
         @RequestParam(name = "search") search: String?
-    ): List<PlantDtoResponse> {
+    ): List<EntityModel<PlantDtoResponse>>{
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
             ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
     
@@ -35,7 +35,12 @@ class PlantController (
         } else {
             service.getPlantsFiltered(search, userId)
         }
-        return plants.map{ it.asDtoResponse() }
+        return plants.map{
+            EntityModel.of(
+                it.asDtoResponse(),
+                linkTo<ImageController> {getImage(null, it.asDtoResponse().imageId)}.withRel { "image" }
+            )
+        }
     }
 
     @PostMapping
@@ -56,12 +61,17 @@ class PlantController (
     fun getPlant(
         @RequestHeader("Authorization") authHeader: String, 
         @PathVariable plantId: UUID
-    ): PlantDtoResponse {
+    ): EntityModel<PlantDtoResponse> {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
             ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token") 
         
-        return service.getPlant(plantId, userId)?.asDtoResponse()
+        val plantDtoResponse = service.getPlant(plantId, userId)?.asDtoResponse()
             ?: throw ResponseStatusException( HttpStatus.NOT_FOUND, "Plant not found")
+
+        return EntityModel.of(
+            plantDtoResponse,
+            linkTo<ImageController> {getImage(null, plantDtoResponse.imageId)}.withRel { "image" }
+        )
     }
 
     @PutMapping("/{plantId}")
