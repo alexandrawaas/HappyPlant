@@ -31,7 +31,7 @@ const OnboardingStack = () => {
   const OnboardingStack = createNativeStackNavigator();
   return (
     <OnboardingStack.Navigator initialRouteName="Onboarding">
-      <OnboardingStack.Screen name="Onboarding" component={MyOnboarding} />
+      <OnboardingStack.Screen name="Onboarding" component={MyOnboarding} options={{headerTransparent: true, headerTitle:''}}/>
       <OnboardingStack.Screen name="Loading" component={LoadingScreen} />
       <OnboardingStack.Screen name="Anmelden" component={LoginScreen} options={{headerTransparent: true, headerTitle:''}}/>
       <OnboardingStack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen} options={headerStyleOptions}/>
