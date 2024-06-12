@@ -34,10 +34,10 @@ class DatabaseInitializer {
 
     private var seederEnabled: Boolean = true
 
-    fun saveImage(plantName: String): UUID {
+    fun saveImage(imageFileName: String): UUID {
         val imageBaseUrl = ".${File.separator}data${File.separator}speciesPictures${File.separator}"
 
-        val file = File("${imageBaseUrl}${plantName}.jpg")
+        val file = File("${imageBaseUrl}${imageFileName}")
         val imageData = ImageUtil.compressImage(file.readBytes())
         val savedImage = imageRepository.save(
             Image(
@@ -66,7 +66,7 @@ class DatabaseInitializer {
         speciesRepository.save(Species(
             name = "Schlangenpflanze",
             latinName = "Sansevieria",
-            imageId = saveImage("schlangenpflanze"),
+            imageId = saveImage("schlangenpflanze.jpg"),
             family = "Spargelgewächse",
             description = "Auch bekannt als Schwiegermutterzunge, sind Schlangenpflanzen für ihre Robustheit und luftreinigenden Fähigkeiten bekannt.",
             needs = Needs(
