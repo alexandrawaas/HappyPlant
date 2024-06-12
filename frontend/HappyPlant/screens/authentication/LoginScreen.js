@@ -12,9 +12,8 @@ import {
 } from 'react-native';
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import { saveAuthToken } from '../../utils/AuthTokenUtil';
-import { API_URL } from '../../config';
+import { fetchURL } from '../../utils/ApiService';
 import ResetPasswordScreen from "./ResetPasswordScreen";
 
 const LoginScreen = ({ navigation }) => {
@@ -34,22 +33,25 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post(`${API_URL}/auth/login`, {
+            const payload = {
                 email: email,
                 password: password
-            });
-            if (response.status === 200) {
-                const authToken = response.data.authToken;
-                await saveAuthToken(authToken);
-                if (rememberMe) {
-                    await AsyncStorage.setItem('rememberMe', 'true');
+            };
+    
+            fetchURL('/auth/login', 'POST', payload, async (data) => {
+                if (data && data.authToken) {
+                    const authToken = data.authToken;
+                    await saveAuthToken(authToken);
+                    if (rememberMe) {
+                        await AsyncStorage.setItem('rememberMe', 'true');
+                    } else {
+                        await AsyncStorage.removeItem('rememberMe');
+                    }
+                    navigation.replace('MainApp');
                 } else {
-                    await AsyncStorage.removeItem('rememberMe');
+                    Alert.alert('Fehler', data.message || 'Login fehlgeschlagen');
                 }
-                navigation.replace('MainApp');
-            } else {
-                Alert.alert('Fehler', response.data.message);
-            }
+            });
         } catch (error) {
             console.error('Fehler beim Login:', error);
             Alert.alert('Fehler', 'Es ist ein Fehler beim Login aufgetreten.');
@@ -69,6 +71,7 @@ const LoginScreen = ({ navigation }) => {
                     onChangeText={setEmail}
                     autoCorrect={false}
                     autoCapitalize="none"
+                    keyboardType="email-address"
                     style={styles.input}
                 />
                 <Text style={styles.text2}> Passwort </Text>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, ScrollView, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { removeAuthToken } from '../../utils/AuthTokenUtil';
-import fetchURL from '../../utils/ApiService';
+import { fetchURL } from '../../utils/ApiService'
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
 
 export default function SettingsScreen({ navigation }) {
@@ -28,7 +28,7 @@ export default function SettingsScreen({ navigation }) {
 
 
     const fetchUserData = async () => {
-        fetchURL('/user', 'GET', (data) => {
+        fetchURL('/user', 'GET', null, (data) => {
             if (data) {
                 setUser(data);
                 setRemindersEnabled(data.receivePushNotifications);
@@ -51,15 +51,15 @@ export default function SettingsScreen({ navigation }) {
             pushNotificationsTime: notificationTime.toISOString().substring(11, 16),
             pushNotificationToken: expoPushToken
         };
-        fetchURL('/user', 'PATCH', (data) => {
+        fetchURL('/user', 'PATCH', payload, (data) => {
             if (!data) {
                 console.error('Fehler beim Aktualisieren der Benachrichtigungseinstellungen');
             }
-        }, payload);
+        });
     };
     
     const handleAction = async (endpoint, method, successMessage) => {
-        fetchURL(endpoint, method, async () => {
+        fetchURL(endpoint, method, null, async () => {
             await removeAuthToken();
             navigation.replace('OnboardingStack', { screen: 'Anmelden' });
             Alert.alert('Erfolg', successMessage);

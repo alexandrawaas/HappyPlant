@@ -12,7 +12,7 @@ export default function AssignmentsScreen({ navigation }) {
 
     const fetchAssignments = () => {
         setLoading(true);
-        fetchURL('/assignments', 'GET', data => {
+        fetchURL('/assignments', 'GET', null, data => {
             setAssignments(data);
             setLoading(false);
         });
@@ -32,8 +32,8 @@ export default function AssignmentsScreen({ navigation }) {
                     lastDone: new Date()
                 };
 
-                fetchURL(`/plants/${assignment.plantId}/assignments`, 'PATCH', updatedAssignment, (response) => {
-                    // handle response
+                fetchURL(`/plants/${assignment.plantId}/assignments`, 'PATCH', updatedAssignment, (data) => {
+                    // handle data ?
                 });
             });
         });
