@@ -25,7 +25,7 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
                 Alert.alert('Erfolgreich', 'Passwort erfolgreich aktualisiert.');
                 navigation.navigate('Anmelden');
             } else {
-                Alert.alert('Fehler', response.message);
+                Alert.alert('Fehler', response.data);
             }
         } catch (error) {
             console.error('Fehler beim Aktualisieren des Passworts:', error);

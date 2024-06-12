@@ -48,7 +48,7 @@ const LoginScreen = ({ navigation }) => {
                 }
                 navigation.replace('MainApp');
             } else {
-                Alert.alert('Fehler', response.message);
+                Alert.alert('Fehler', response.data.message);
             }
         } catch (error) {
             console.error('Fehler beim Login:', error);

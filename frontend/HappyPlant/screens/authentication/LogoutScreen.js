@@ -18,7 +18,7 @@ const LogoutScreen = ({ navigation }) => {
                 await removeAuthToken();
                 navigation.replace('Anmelden');
             } else {
-                Alert.alert('Fehler', response.message);
+                Alert.alert('Fehler', response.data);
             }
         } catch (error) {
             console.error('Fehler beim Logout:', error);

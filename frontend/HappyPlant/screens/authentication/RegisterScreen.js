@@ -43,7 +43,7 @@ const RegisterScreen = ({ navigation }) => {
             if (response.status === 201) {
                 navigation.replace('RegisterSuccess');
             } else {
-                Alert.alert('Fehler', response.message);
+                Alert.alert('Fehler', response.data);
             }
         } catch (error) {
             console.error('Fehler bei der Registrierung:', error);

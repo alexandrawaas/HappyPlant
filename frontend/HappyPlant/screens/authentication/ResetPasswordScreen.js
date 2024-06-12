@@ -23,7 +23,7 @@ const ResetPasswordScreen = ({ navigation, route }) => {
                 navigation.navigate('Passwort ändern', { resetPasswordToken });
                 navigation.replace('ResetPasswordSuccess');
             } else {
-                Alert.alert('Fehler', response.message);
+                Alert.alert('Fehler', response.data);
             }
         } catch (error) {
             console.error('Fehler beim Zurücksetzen des Passworts:', error);
