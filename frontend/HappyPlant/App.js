@@ -1,6 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StyleSheet } from "react-native";
+import {Platform, StyleSheet} from "react-native";
+import headerStyleOptions from './screens/global/HeaderStyle';
+
 
 import MyOnboarding from "./screens/OnboardingScreen";
 import LoadingScreen from "./screens/authentication/LoadingScreen";
@@ -29,11 +31,22 @@ const OnboardingStack = () => {
   const OnboardingStack = createNativeStackNavigator();
   return (
     <OnboardingStack.Navigator initialRouteName="Onboarding">
-      <OnboardingStack.Screen  options={{headerShown: false}}  name="Onboarding" component={MyOnboarding} />
+      <OnboardingStack.Screen name="Onboarding" component={MyOnboarding} />
       <OnboardingStack.Screen name="Loading" component={LoadingScreen} />
       <OnboardingStack.Screen name="Anmelden" component={LoginScreen} options={{headerTransparent: true, headerTitle:''}}/>
-      <OnboardingStack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen} options={{headerTransparent: true, headerTitle:'Passwort vergessen?'}}/>
+      <OnboardingStack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen} options={headerStyleOptions}/>
       <OnboardingStack.Screen name="Registrieren" component={RegisterScreen} options={{headerTransparent: true, headerTitle:''}}/>
     </OnboardingStack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0, height: 4
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 4,
+    }});

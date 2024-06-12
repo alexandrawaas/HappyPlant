@@ -44,11 +44,7 @@ const RegisterScreen = ({ navigation }) => {
                 pushNotificationToken: expoPushToken
             });
             if (response.data.success) {
-                Alert.alert(
-                    'Fast geschafft!',
-                    'Wir haben eine Verifizierungs-E-Mail an Ihre Adresse gesendet. Bitte überprüfen Sie Ihren Posteingang.',
-                    [{ text: 'OK', onPress: () => navigation.replace('Anmelden') }]
-                );
+                navigation.replace('RegisterSuccess');
             } else {
                 Alert.alert('Fehler', response.data.message);
             }

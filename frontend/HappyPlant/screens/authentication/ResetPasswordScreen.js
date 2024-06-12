@@ -21,6 +21,7 @@ const ResetPasswordScreen = ({ navigation, route }) => {
             if (response.data.success) {
                 const resetPasswordToken = response.data.data.resetPasswordToken;
                 navigation.navigate('Passwort ändern', { resetPasswordToken });
+                navigation.replace('ResetPasswordSuccess');
             } else {
                 Alert.alert('Fehler', response.data.message);
             }
@@ -32,7 +33,6 @@ const ResetPasswordScreen = ({ navigation, route }) => {
 
     return (
         <View style={commonStyles.container}>
-            <Text style={styles.title}></Text>
             <View style={styles.background}>
                 <Text style={styles.text}> Gib hier deine E-Mail Adresse ein, um dein Passwort zurückzusetzen. </Text>
                 <Text style={styles.text2}> E-Mail </Text>
@@ -53,18 +53,6 @@ const ResetPasswordScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        backgroundColor: '#BEF5B5',
-        padding: 40,
-        paddingTop: 120,
-        borderRadius: 20,
-        width: '100%',
-        textAlign: 'center',
-        top: -260,
-    },
     text: {
         fontSize: 16,
         textAlign: 'center',
@@ -85,7 +73,7 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     button: {
-        top: -80,
+        top: -40,
         zIndex: 1,
         elevation: 5,
         backgroundColor: '#BEF5B5',
@@ -119,7 +107,7 @@ const styles = StyleSheet.create({
     },
     background: {
         backgroundColor: 'white',
-        top: -100,
+        top: -60,
         height: 230,
         borderRadius: 20,
         width: 360,
