@@ -15,7 +15,7 @@ const LoadingScreen = ({ navigation }) => {
         try {
             const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');
             if (!hasOnboarded) {
-                navigation.replace('Onboarding');
+                navigation.replace('OnboardingStack');
                 return;
             }
 
