@@ -24,14 +24,11 @@ const ImageComponent = ({ imageId, authToken, style }) => {
              'Authorization': `Bearer ${authToken}`
           }
         }: {});
-        console.log(`test ${imageId} ${authToken}`);
         if (response.ok) {
-          console.log("test2");
           const blob = await response.blob();
           const base64Image = await blobToBase64(blob);
           setImageBase64(base64Image);
         } else {
-          console.log("test3");
           console.error('Failed to fetch image:', response.status, response.statusText);
         }
       } catch (error) {
@@ -58,7 +55,7 @@ const ImageComponent = ({ imageId, authToken, style }) => {
   }
 
   return (
-    <View>
+    <View style={styles.view}>
       {imageBase64 && <Image source={{ uri: imageBase64 }} style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />}
     </View>
   );
@@ -69,6 +66,9 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
   },
+  view:{
+    
+  }
 });
 
 export default ImageComponent;
