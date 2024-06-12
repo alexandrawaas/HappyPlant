@@ -7,11 +7,18 @@ import { API_URL } from '../../config';
 
 const LoadingScreen = ({ navigation }) => {
     useEffect(() => {
-        checkRememberMe();
+        checkFlags();
     }, []);
 
-    const checkRememberMe = async () => {
+    const checkFlags = async () => {
+        console.log("Loading...")
         try {
+            const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');
+            if (!hasOnboarded) {
+                navigation.replace('OnboardingStack');
+                return;
+            }
+
             const rememberMeValue = 
                 typeof window !== 'undefined' && window.localStorage ?
                 window.localStorage.getItem('rememberMe') :
@@ -26,16 +33,20 @@ const LoadingScreen = ({ navigation }) => {
                         }
                     });
                     if (response.data.success) {
-                        navigation.replace('Aufgaben');
+                        navigation.replace('Home');
+                        return;
                     } else {
                         await removeAuthToken();
                         navigation.replace('Anmelden');
+                        return;
                     }
                 } else {
                     navigation.replace('Anmelden');
+                    return;
                 }
             } else {
                 navigation.replace('Anmelden');
+                return;
             }
         } catch (error) {
             navigation.replace('Anmelden');
