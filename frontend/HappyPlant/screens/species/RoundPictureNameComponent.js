@@ -1,13 +1,13 @@
 import {Image, StyleSheet, Text, View} from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
+import ImageComponent from "../global/ImageComponent";
 
-export default function RoundPictureNameComponent({header, subHeader, isListItem}) {
+export default function RoundPictureNameComponent({header, subHeader, isListItem, imageId}) {
     return <>
         <View style={styles.topContainer}>
             <View style={[styles.imageContainer, styles.shadowed]}>
                 <LinearGradient colors={["#fdfbef", "#fef1ed"]}>
-                    <Image style={styles.image}
-                           source={require("../../assets/adaptive-icon.png")}
+                    <ImageComponent style={styles.image} imageId={imageId}
                     />
                 </LinearGradient>
             </View>

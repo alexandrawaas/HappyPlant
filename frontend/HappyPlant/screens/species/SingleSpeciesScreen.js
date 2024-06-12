@@ -7,10 +7,6 @@ import {LinearGradient} from 'expo-linear-gradient';
 import AddSpeciesAsPlantButton from "../global/AddSpeciesAsPlantButton";
 import RoundPictureNameComponent from "./RoundPictureNameComponent";
 
-import ImageComponent from "../global/ImageComponent_alt";
-import ImageWithAuth from "../global/ImageComponent";
-import ImageComponent from "../global/ImageComponent";
-
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();
     const { id } = route.params;
@@ -35,7 +31,7 @@ export default function SingleSpeciesScreen({ navigation }) {
     return (
         <LinearGradient colors={['#fdfbef', '#f6ffed']} style={[styles.container, styles.shadowed]}>
             <ScrollView>
-                <RoundPictureNameComponent header={species.name} subHeader={species.latinName}/>
+                <RoundPictureNameComponent header={species.name} subHeader={species.latinName} imageId={species.imageId}/>
                 <View style={styles.detailContainer}>
                     <Text style={styles.header2}>Bevorzugte Lichtverhältnisse</Text>
                     <NeedLabelWithIcon assignmentType="LIGHTING" value={species?.needs?.lightingType}/>
