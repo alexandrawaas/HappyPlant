@@ -59,14 +59,10 @@ export default function SettingsScreen({ navigation }) {
     };
     
     const handleAction = async (endpoint, method, successMessage) => {
-        fetchURL(endpoint, method, async (response) => {
-            if (response.success) {
-                await removeAuthToken();
-                navigation.replace('Anmelden');
-                Alert.alert('Erfolg', successMessage);
-            } else {
-                Alert.alert('Fehler', response.message);
-            }
+        fetchURL(endpoint, method, async () => {
+            await removeAuthToken();
+            navigation.replace('OnboardingStack', { screen: 'Anmelden' });
+            Alert.alert('Erfolg', successMessage);
         });
     };
 
@@ -163,7 +159,7 @@ export default function SettingsScreen({ navigation }) {
                     <View style={styles.areaContainer}>
                         <TouchableOpacity 
                             style={[styles.button, styles.bottomBorder]} 
-                            onPress={() => navigation.navigate("Passwort zurücksetzen")}
+                            onPress={() => navigation.navigate('OnboardingStack', { screen: 'Passwort zurücksetzen' })}
                         >
                             <Text style={styles.settingText}>Passwort zurücksetzen</Text>
                             <Image source={require('../../assets/arrow_right.png')} style={styles.icon}/>

@@ -32,7 +32,7 @@ const LoadingScreen = ({ navigation }) => {
                             Authorization: `Bearer ${authToken}`
                         }
                     });
-                    if (response.success) {
+                    if (response.ok) {
                         navigation.replace('Home');
                     } else {
                         await removeAuthToken();

@@ -38,7 +38,7 @@ const LoginScreen = ({ navigation }) => {
                 email: email,
                 password: password
             });
-            if (response.success) {
+            if (response.status === 200) {
                 const authToken = response.data.authToken;
                 await saveAuthToken(authToken);
                 if (rememberMe) {

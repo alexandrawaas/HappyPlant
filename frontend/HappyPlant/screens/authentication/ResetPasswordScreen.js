@@ -18,7 +18,7 @@ const ResetPasswordScreen = ({ navigation, route }) => {
             const response = await axios.post(`${API_URL}/auth/password/reset`, {
                 email: email
             });
-            if (response.success) {
+            if (response.ok) {
                 const resetPasswordToken = response.data.resetPasswordToken;
                 navigation.navigate('Passwort ändern', { resetPasswordToken });
                 navigation.replace('ResetPasswordSuccess');

@@ -40,7 +40,7 @@ const RegisterScreen = ({ navigation }) => {
                 password: password,
                 pushNotificationToken: expoPushToken
             });
-            if (response.success) {
+            if (response.status === 201) {
                 navigation.replace('RegisterSuccess');
             } else {
                 Alert.alert('Fehler', response.message);

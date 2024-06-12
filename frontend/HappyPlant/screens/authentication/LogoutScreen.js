@@ -14,7 +14,7 @@ const LogoutScreen = ({ navigation }) => {
                 }
             });
 
-            if (response.success) {
+            if (response.ok) {
                 await removeAuthToken();
                 navigation.replace('Anmelden');
             } else {
