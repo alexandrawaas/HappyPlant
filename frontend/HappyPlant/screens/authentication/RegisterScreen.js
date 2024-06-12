@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert, Button, StyleSheet, Image} from 'react-native';
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import axios from 'axios';
-import * as Device from 'expo-device';
-import * as Notifications from 'expo-notifications';
-import Constants from "expo-constants";
-import {Platform} from 'react-native';
 import { API_URL } from '../../config';
+import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
 
 
 const RegisterScreen = ({ navigation }) => {
@@ -43,10 +40,10 @@ const RegisterScreen = ({ navigation }) => {
                 password: password,
                 pushNotificationToken: expoPushToken
             });
-            if (response.data.success) {
+            if (response.status === 201) {
                 navigation.replace('RegisterSuccess');
             } else {
-                Alert.alert('Fehler', response.data.message);
+                Alert.alert('Fehler', response.data);
             }
         } catch (error) {
             console.error('Fehler bei der Registrierung:', error);
@@ -100,43 +97,6 @@ const RegisterScreen = ({ navigation }) => {
     );
 };
 
-const registerForPushNotificationsAsync = async () => {
-    if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-
-      let finalStatus = existingStatus;
-
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-
-      if (finalStatus !== 'granted') {
-        //handleRegistrationError('Permission not granted to get push token for push notification!');
-        return;
-      }
-
-      if (Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default', {
-          name: 'default',
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#FF231F7C',
-        });
-      }
-
-      token = await Notifications.getExpoPushTokenAsync({
-        projectId: Constants.expoConfig?.extra?.eas?.projectId,
-      });
-
-      //TODO remove log
-      console.log(token);
-      return token;
-
-    } else {
-        console.log("ERROR: No physical device used")
-    }
-  }
 
 const styles = StyleSheet.create({
 

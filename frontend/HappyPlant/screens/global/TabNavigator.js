@@ -5,9 +5,8 @@ import RoomStackNavigator from './RoomStackNavigator';
 import PlantStackNavigator from './PlantStackNavigator';
 import AssignmentStackNavigator from './AssignmentStackNavigator';
 import SpeciesStackNavigator from './SpeciesStackNavigator';
+import SettingStackNavigator from './SettingsStackNavigator';
 import headerStyleOptions from './HeaderStyle';
-
-import SettingsScreen from "../SettingsScreen";
 import GlobalLayout from "./GlobalLayout";
 
 const Tab = createBottomTabNavigator();
@@ -68,13 +67,9 @@ const TabNavigator = () => {
                 options={getOptionsForIcon(require('../../assets/TabNav Icons/book.png'), require('../../assets/TabNav Icons/bookgrey.png'))}
             />
             <Tab.Screen
-                name="Einstellungen"
-                children={(props) => <GlobalLayout component={SettingsScreen} {...props} />}
-                options={{
-                    ...getOptionsForIcon(require('../../assets/TabNav Icons/settings.png'), require('../../assets/TabNav Icons/settingsgrey.png')),
-                    headerShown: true,
-                    ...headerStyleOptions,
-                }}
+                name="settings"
+                children={SettingStackNavigator}
+                options={getOptionsForIcon(require('../../assets/TabNav Icons/settings.png'), require('../../assets/TabNav Icons/settingsgrey.png'))}
             />
         </Tab.Navigator>
     );

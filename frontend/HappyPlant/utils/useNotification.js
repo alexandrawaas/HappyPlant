@@ -2,7 +2,6 @@ import {useState, useEffect, useRef} from "react";
 import * as Notifications from 'expo-notifications';
 
 
-
 export const useNotification = () => {
     Notifications.setNotificationHandler({
         handleNotification: async () => ({

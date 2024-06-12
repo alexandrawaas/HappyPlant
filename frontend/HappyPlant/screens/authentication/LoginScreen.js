@@ -34,9 +34,12 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-            if (response.data.success) {
-                const authToken = response.data.data.authToken;
+            const response = await axios.post(`${API_URL}/auth/login`, {
+                email: email,
+                password: password
+            });
+            if (response.status === 200) {
+                const authToken = response.data.authToken;
                 await saveAuthToken(authToken);
                 if (rememberMe) {
                     await AsyncStorage.setItem('rememberMe', 'true');

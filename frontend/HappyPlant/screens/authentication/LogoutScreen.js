@@ -14,11 +14,11 @@ const LogoutScreen = ({ navigation }) => {
                 }
             });
 
-            if (response.data.success) {
+            if (response.ok) {
                 await removeAuthToken();
                 navigation.replace('Anmelden');
             } else {
-                Alert.alert('Fehler', response.data.message);
+                Alert.alert('Fehler', response.data);
             }
         } catch (error) {
             console.error('Fehler beim Logout:', error);

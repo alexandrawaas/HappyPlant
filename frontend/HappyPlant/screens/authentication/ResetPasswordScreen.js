@@ -18,12 +18,12 @@ const ResetPasswordScreen = ({ navigation, route }) => {
             const response = await axios.post(`${API_URL}/auth/password/reset`, {
                 email: email
             });
-            if (response.data.success) {
-                const resetPasswordToken = response.data.data.resetPasswordToken;
+            if (response.ok) {
+                const resetPasswordToken = response.data.resetPasswordToken;
                 navigation.navigate('Passwort ändern', { resetPasswordToken });
                 navigation.replace('ResetPasswordSuccess');
             } else {
-                Alert.alert('Fehler', response.data.message);
+                Alert.alert('Fehler', response.data);
             }
         } catch (error) {
             console.error('Fehler beim Zurücksetzen des Passworts:', error);

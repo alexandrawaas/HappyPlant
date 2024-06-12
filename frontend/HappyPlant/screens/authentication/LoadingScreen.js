@@ -32,9 +32,8 @@ const LoadingScreen = ({ navigation }) => {
                             Authorization: `Bearer ${authToken}`
                         }
                     });
-                    if (response.data.success) {
+                    if (response.ok) {
                         navigation.replace('Home');
-                        return;
                     } else {
                         await removeAuthToken();
                         navigation.replace('Anmelden');
