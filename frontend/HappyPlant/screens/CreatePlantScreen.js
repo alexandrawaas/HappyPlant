@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import fetchURL from "../utils/ApiService";
@@ -60,7 +60,7 @@ export default function CreatePlantScreen({ navigation }) {
                                 <View style={styles.numberInputContainer}>
                                     <Text>alle</Text>
                                     <View style={styles.numberInputInnerContainer}>
-                                        <Input inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v}</Input>
+                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v}</TextInput>
                                     </View>
                                     <Text>Tage</Text>
                                 </View>
@@ -177,13 +177,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#fdfbef",
     },
     numberInput: {
-        width: 20,
-        maxWidth: 60,
+        width: 40,
         fontSize: 16,
         textAlign: "center",
         textAlignVertical: "bottom",
-        marginBottom: 5,
-        paddingBottom: 10,
+        paddingBottom: 5,
     },
     numberInputContainer: {
         width: 200,
