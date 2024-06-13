@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Pressable} from "react-native";
+import {View, Text, StyleSheet, Pressable, BackHandler} from "react-native";
 import WindowSelectionGrid from "./room/WindowSelectionGrid";
 import { useEffect, useState } from "react";
 import { API_URL } from '../config';
@@ -6,6 +6,37 @@ import { API_URL } from '../config';
 export default function PlaceWindow({ route, navigation }) {
     const { result } = route.params;
     const [pixels, setPixels] = useState(null)
+
+    useEffect(() => {
+        const backAction = async () => {
+            try {
+                //console.log(result.id);
+                const response = await fetch(`${API_URL}/rooms/${result.id}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTgyNzkwNjMsInVzZXJJZCI6IjQ2Yzg3MGY2LTgwNTQtNDQ3Zi05ZDZiLWQxMzc0YWE2YmUzZSIsImlhdCI6MTcxODI3NjQ3MX0.1vF6Baon_EecBaDzTRfm0AMbfj1xYH4w2SudkmUF2ybQhBw8g5liqDCIDds2bMaKZnWykzJy5kPQOM8pJTm0dQ`
+                  }, 
+                });
+            
+                if (response.ok) {
+
+                  //navigation.navigate('Räume');
+                } else {
+                  console.error('Failed to post data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error posting data:', error);
+            }
+          return true;
+        };
+    
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+    
+        return () => backHandler.remove();
+      }, []);
 
     const handleDone = async () =>{
         if(pixels != null){
@@ -18,7 +49,7 @@ export default function PlaceWindow({ route, navigation }) {
                   method: 'PUT',
                   headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTc4OTE3NzEsInVzZXJJZCI6ImNkNDE3MTg2LTFmNDUtNGY2NS1hNWYyLTE2NmIzMmFmMTZjYSIsImlhdCI6MTcxNzg4OTE3OX0.adR5wmg1X9CflDRRmptRqRwkDA3LAlnoRBJ_y1PULzIgcWAxY0KcTkIz7w3hI6dkqq16U1gzT1pcUUs2lPlM7Q`,
+                    'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTgyNzkwNjMsInVzZXJJZCI6IjQ2Yzg3MGY2LTgwNTQtNDQ3Zi05ZDZiLWQxMzc0YWE2YmUzZSIsImlhdCI6MTcxODI3NjQ3MX0.1vF6Baon_EecBaDzTRfm0AMbfj1xYH4w2SudkmUF2ybQhBw8g5liqDCIDds2bMaKZnWykzJy5kPQOM8pJTm0dQ`,
                   },
                   body: JSON.stringify( pixelValues),
                      

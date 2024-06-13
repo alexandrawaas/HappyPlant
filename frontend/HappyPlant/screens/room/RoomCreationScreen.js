@@ -49,7 +49,7 @@ export default function RoomCreationScreen({ navigation }) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTc5Njc1ODMsInVzZXJJZCI6ImRiZjVmOGViLTNlNWItNDUwMC1hZDU1LWY3YjU1NGNlZDc3ZSIsImlhdCI6MTcxNzk2NDk5MX0.sRWPYhP0TAKQnibLfOrN1WkbVuiYI0EiP0jnfbGcoV3WcVotR3bqyIlcBBqy8qJcWiYoh6h4UVEJsK0sp49QOw`,
+                'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTgyNzkwNjMsInVzZXJJZCI6IjQ2Yzg3MGY2LTgwNTQtNDQ3Zi05ZDZiLWQxMzc0YWE2YmUzZSIsImlhdCI6MTcxODI3NjQ3MX0.1vF6Baon_EecBaDzTRfm0AMbfj1xYH4w2SudkmUF2ybQhBw8g5liqDCIDds2bMaKZnWykzJy5kPQOM8pJTm0dQ`,
               },
               body:
               JSON.stringify({ 
