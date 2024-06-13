@@ -8,6 +8,8 @@ export default function RoomCreationScreen({ navigation }) {
     const [category, setRoomCategory] = useState("OTHER")
     const [x, setX] = useState("")
     const [y, setY] = useState("")
+    const [nameWarningEnabled, setNameWarningEnabled] = useState(false)
+    const [proportionWarningEnabled, setProportionWarningEnabled] = useState(false)
 
     const handleXinput = (input) => { 
         // Allow only numbers 
@@ -26,6 +28,21 @@ export default function RoomCreationScreen({ navigation }) {
     }
 
     const handleContinue = async () =>{
+        setNameWarningEnabled(false);
+        setProportionWarningEnabled(false);
+
+        let shouldCancel = false;
+        if(name.length < 1 || name.length > 50){
+            setNameWarningEnabled(true);
+            shouldCancel = true;
+        }
+        currX = parseInt(x); currY = parseInt(y);
+        if( x.length < 1 || y.length < 1 || currX == 0 || currY == 0 || currX > 50 || currY > 50 ){
+            setProportionWarningEnabled(true);
+            shouldCancel = true;
+        }
+        if(shouldCancel){ return;}
+
         //TODO authToken????
         try {
             const response = await fetch(`${API_URL}/rooms`, {
@@ -67,6 +84,9 @@ export default function RoomCreationScreen({ navigation }) {
                         placeholder="mein neuer Raum"
                         placeholderTextColor={"ligthgrey"}
                     />
+                    {nameWarningEnabled &&
+                        <Text style={styles.warning}>Der Raumname muss zwischen 1 und 50 Zeichen lang sein</Text>
+                    }
                     <Text style={styles.text}>Seitenverhältnis</Text>
                     <View style={styles.proportionView}>
                         <TextInput
@@ -87,6 +107,9 @@ export default function RoomCreationScreen({ navigation }) {
                             placeholderTextColor={"ligthgrey"}
                         />
                     </View>
+                    {proportionWarningEnabled &&
+                        <Text style={styles.warning}>Das Verhältnis muss aus zwei Zahlen zwischen 1 und 50 bestehen</Text>
+                    }
                 </ScrollView>
 
                 <View style={styles.buttonView}>
@@ -109,6 +132,9 @@ export default function RoomCreationScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    warning:{
+        color: "red"
+    },
     container: {
         flex: 1,
     },
@@ -163,12 +189,12 @@ const styles = StyleSheet.create({
     },
     buttonView: {
         flexDirection: 'row',
-        marginBottom: 125,
+        marginBottom: 120,
     },
     button:{
         flex:1,
         padding: 20,
-        marginHorizontal: 20,
+        marginHorizontal: 10,
         minWidth: 120,
         backgroundColor: '#bef5b5',
         borderRadius: 50,
