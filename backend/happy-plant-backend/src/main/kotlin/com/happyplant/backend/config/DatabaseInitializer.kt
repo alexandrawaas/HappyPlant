@@ -55,8 +55,8 @@ class DatabaseInitializer {
 
         // drop tables
         imageRepository.deleteAll()
-        roomRepository.deleteAll()
         plantRepository.deleteAll()
+        roomRepository.deleteAll()
         speciesRepository.deleteAll()
         userRepository.deleteAll()
 
