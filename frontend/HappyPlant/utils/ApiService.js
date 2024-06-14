@@ -1,9 +1,6 @@
 import { API_URL } from "../config";
 import { getAuthToken } from "./AuthTokenUtil";
 
-const token = `
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTYwMTgyNjIsInVzZXJJZCI6IjI3OWU3MmJiLWZkOWEtNDNlNy05ODcxLTFjZWU3ODdhMGRjOCIsImlhdCI6MTcxNjAxNTY3MH0.xD2Ytcg5SXtKKmi7K6N2l8sef1kqbxvA5hts3RPH8b9WN5gDLv56SBumB58Gk6yFbATIYVJAN27Rcrz5dKDvMg`
-
 export const fetchURL = async (url, method='GET', payload=null, callback) => {
     try {
         const authToken = await getAuthToken();
@@ -40,5 +37,3 @@ export const fetchURL = async (url, method='GET', payload=null, callback) => {
         callback([]);
     }
 }
-
-// export default fetchURL;

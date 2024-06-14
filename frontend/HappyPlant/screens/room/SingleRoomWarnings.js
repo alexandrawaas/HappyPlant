@@ -1,9 +1,7 @@
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native"
+import { Text, View, StyleSheet } from "react-native"
 import { fetchURL } from '../../utils/ApiService'
 import { useState, useEffect } from "react";
-import Collapsible from "react-native-collapsible";
 import { LinearGradient } from "expo-linear-gradient";
-import Entypo from "react-native-vector-icons/Entypo";
 import { AssignmentTypeAsVerbTranslations } from "../../utils/EnumTranslations";
 import WarnIcon from "../other/WarnIcon";
 import AssignmentIcon from "../other/AssignmentIcon";

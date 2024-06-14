@@ -4,6 +4,7 @@ import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
 import { API_URL } from "../../config";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 export default function SpeciesScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -26,7 +27,7 @@ export default function SpeciesScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.toolContainer}>
-                <View style={[styles.searchContainer, styles.shadowed]}>
+                <View style={[styles.searchContainer, commonStyles.shadow]}>
                     <Searchbar style={styles.searchBar}
                         placeholder="Suche nach einer Spezies..." onChangeText={setSearchQuery} value={searchQuery}
                     />
@@ -51,13 +52,6 @@ export default function SpeciesScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    shadowed: {
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-    },
     container: {
         display: "flex",
         flexDirection: "column",

@@ -1,8 +1,9 @@
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 export default function AddRoomButton({ onClick, displayAsCard, displayOnNewLine }) {
     const button = (
-        <TouchableOpacity onPress={onClick} style={styles.button}>
+        <TouchableOpacity onPress={onClick} style={[styles.button, commonStyles.shadow]}>
             <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
     );
@@ -46,12 +47,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderRadius: 10,
         alignItems: 'center',
-        justifyContent: 'center',
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
+        justifyContent: 'center'
     },
     buttonText: {
         color: 'black',

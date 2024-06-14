@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { useState, useEffect } from "react"
 import { fetchURL } from '../../utils/ApiService'
 import InventoryItem from "./InventoryItem"
+import { commonStyles } from "../../utils/styles/CommonStyles"
 
 export default function SingleRoomInventory({ room }) {
     const [inventory, setInventory] = useState();
@@ -27,7 +28,7 @@ export default function SingleRoomInventory({ room }) {
                     </View>
                     <View style={styles.addButtonContainer}>
                         <TouchableOpacity onPress={handleAddPlantToInventoryPress}>
-                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.button, styles.shadowed]}>
+                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.button, commonStyles.shadow]}>
                                 <Text>+</Text>
                             </LinearGradient>
                         </TouchableOpacity>
@@ -39,13 +40,6 @@ export default function SingleRoomInventory({ room }) {
 }
 
 const styles = StyleSheet.create({
-    shadowed: {
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-    },
     container: {
         backgroundColor: '#fdfbef',
         borderRadius: 15,

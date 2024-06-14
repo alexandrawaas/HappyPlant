@@ -2,11 +2,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { RoomTypeIcons } from "../../utils/EnumIcons";
 import { LinearGradient } from 'expo-linear-gradient';
 import RoomListItemWarnings from "./RoomListItemWarnings";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 export default function RoomListItem({room, onPress}) {
     return (
         <View style={styles.roomItemContainer}>
-            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.roomItemCard, styles.shadowed]}>
+            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.roomItemCard, commonStyles.shadow]}>
                 <TouchableOpacity onPress={() => onPress(room.id)}>
                     <View style={styles.roomItemTopContainer}>
                         <View style={styles.iconContainer}>
@@ -28,13 +29,6 @@ export default function RoomListItem({room, onPress}) {
 
 
 const styles = StyleSheet.create({
-    shadowed: {
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-    },
     roomItemContainer: {
         display: "flex",
         flexDirection: "row",

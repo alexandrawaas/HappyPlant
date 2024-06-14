@@ -4,6 +4,7 @@ import AddRoomButton from "../room/AddRoomButton";
 import PlantListItem from "./PlantListItem";
 import {plantMock} from "./PlantMock";
 
+// TODO: remove plant mock and use fetch instead
 export default function MyPlantsScreen({ navigation }) {
 
     let handleAddPlantClick = () => {
@@ -30,22 +31,9 @@ export default function MyPlantsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
-    shadowed: {
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-    },
     container: {
         display: "flex",
         flexDirection: "column",
-    },
-    text: {
-        fontSize:24,
-        fontWeight: "bold",
-        marginBottom: 16,
     },
     plantContainer: {
         display: "flex",
