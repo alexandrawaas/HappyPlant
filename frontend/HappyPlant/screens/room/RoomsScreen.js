@@ -49,7 +49,7 @@ export default function RoomsScreen({ navigation }) {
                     ? <AddRoomButton onClick={handleAddRoomClick} displayOnNewLine />
                     : null
                 }
-                <VerticalPlaceholder size={110}/>
+                <VerticalPlaceholder size={190}/>
             </ScrollView>
         </View>
     );
