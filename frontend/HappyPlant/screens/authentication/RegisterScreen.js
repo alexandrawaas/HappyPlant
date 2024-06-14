@@ -46,7 +46,7 @@ const RegisterScreen = ({ navigation }) => {
                 } else {
                     Alert.alert('Fehler', data.message || 'Registrierung fehlgeschlagen');
                 }
-            })
+            }, needsAuth=false)
         } catch (error) {
             console.error('Fehler bei der Registrierung:', error);
             Alert.alert('Fehler', 'Es ist ein Fehler bei der Registrierung aufgetreten.');

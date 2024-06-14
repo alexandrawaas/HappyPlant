@@ -50,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
                 } else {
                     Alert.alert('Fehler', data.message || 'Login fehlgeschlagen');
                 }
-            });
+            }, needsAuth=false);
         } catch (error) {
             console.error('Fehler beim Login:', error);
             Alert.alert('Fehler', 'Es ist ein Fehler beim Login aufgetreten.');
