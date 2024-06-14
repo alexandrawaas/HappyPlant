@@ -1,9 +1,13 @@
 import { API_URL } from "../config";
 import { getAuthToken } from "./AuthTokenUtil";
 
-export const fetchURL = async (url, method='GET', payload=null, callback) => {
+export const fetchURL = async (url, method='GET', payload=null, callback, needsAuth=true) => {
     try {
-        const authToken = await getAuthToken();
+        let authToken
+        if(needsAuth) {
+            console.log('trying to retrieve auth token', needsAuth)
+            authToken = await getAuthToken();
+        }
         const options = {
             headers: {
                 'Authorization': `Bearer ${authToken}`,
