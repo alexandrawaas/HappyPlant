@@ -6,8 +6,7 @@ import PlantStackNavigator from './PlantStackNavigator';
 import AssignmentStackNavigator from './AssignmentStackNavigator';
 import SpeciesStackNavigator from './SpeciesStackNavigator';
 import SettingStackNavigator from './SettingsStackNavigator';
-import headerStyleOptions from './HeaderStyle';
-import GlobalLayout from "./GlobalLayout";
+import { commonStyles } from '../../utils/styles/CommonStyles';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +40,7 @@ const TabNavigator = () => {
                     backgroundColor: '#FFFFFF',
                     borderRadius: 50,
                     height: Platform.OS === 'ios' ? 80 : 70,
-                    ...styles.shadow,
+                    ...commonStyles.shadow,
                 },
                 headerShown: false,
             }
@@ -76,15 +75,6 @@ const TabNavigator = () => {
 }
 
 const styles = StyleSheet.create({
-    shadow: {
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0, height: 4
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-        elevation: 4,
-    },
     tabIcon: {
         width: 35, 
         height: 35, 

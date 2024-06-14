@@ -5,6 +5,7 @@ import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
 import { fetchURL } from '../../utils/ApiService'
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 export default function RoomsScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -25,7 +26,7 @@ export default function RoomsScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.toolContainer}>
-                <View style={[styles.searchContainer, styles.shadowed]}>
+                <View style={[styles.searchContainer, commonStyles.shadow]}>
                     <Searchbar style={styles.searchBar}
                         placeholder="Suche nach einem Raum..." onChangeText={setSearchQuery} value={searchQuery}
                     />
@@ -75,12 +76,5 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-    },
-    shadowed: {
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
     },
 });

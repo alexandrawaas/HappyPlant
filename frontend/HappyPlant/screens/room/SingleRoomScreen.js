@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import SingleRoomGrid from "./SingleRoomGrid";
 import SingleRoomInventory from "./SingleRoomInventory";
@@ -36,10 +36,5 @@ export default function SingleRoomScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    text: {
-        fontSize:24,
-        fontWeight: "bold",
-        marginBottom: 16,
     },
 });

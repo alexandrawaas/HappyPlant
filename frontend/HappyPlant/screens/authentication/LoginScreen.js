@@ -14,7 +14,6 @@ import { commonStyles } from '../../utils/styles/CommonStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveAuthToken } from '../../utils/AuthTokenUtil';
 import { fetchURL } from '../../utils/ApiService';
-import ResetPasswordScreen from "./ResetPasswordScreen";
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');

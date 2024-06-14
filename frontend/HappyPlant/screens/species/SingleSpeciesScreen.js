@@ -6,6 +6,7 @@ import NeedLabelWithIcon from "./NeedLabelWithIcon";
 import {LinearGradient} from 'expo-linear-gradient';
 import AddSpeciesAsPlantButton from "../global/AddSpeciesAsPlantButton";
 import RoundPictureNameComponent from "./RoundPictureNameComponent";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();
@@ -29,7 +30,7 @@ export default function SingleSpeciesScreen({ navigation }) {
     }, [])
 
     return (
-        <LinearGradient colors={['#fdfbef', '#f6ffed']} style={[styles.container, styles.shadowed]}>
+        <LinearGradient colors={['#fdfbef', '#f6ffed']} style={[styles.container, commonStyles.shadow]}>
             <ScrollView>
                 <RoundPictureNameComponent header={species.name} subHeader={species.latinName} imageId={species.imageId}/>
                 <View style={styles.detailContainer}>

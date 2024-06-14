@@ -1,8 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from 'react';
 import { View, Modal, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import WarnIcon from "../other/WarnIcon";
 import AssignmentIcon from "../other/AssignmentIcon";
 

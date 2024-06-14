@@ -1,21 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {Platform, StyleSheet} from "react-native";
 import headerStyleOptions from './screens/global/HeaderStyle';
-
 
 import MyOnboarding from "./screens/OnboardingScreen";
 import LoadingScreen from "./screens/authentication/LoadingScreen";
 import LoginScreen from "./screens/authentication/LoginScreen";
 import RegisterScreen from "./screens/authentication/RegisterScreen";
 import TabNavigator from "./screens/global/TabNavigator";
-import headerStyle from "./screens/global/HeaderStyle";
-import Onboarding from "react-native-onboarding-swiper";
 import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
 
 const RootStack = createNativeStackNavigator();
-
-// TODO: on reload dont start in onboarding again 
 export default function App() {
   return (
       <NavigationContainer>
@@ -39,14 +33,3 @@ const OnboardingStack = () => {
     </OnboardingStack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-    shadow: {
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0, height: 4
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-        elevation: 4,
-    }});

@@ -1,11 +1,12 @@
 import {Image, StyleSheet, Text, View} from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import ImageComponent from "../global/ImageComponent";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 export default function RoundPictureNameComponent({header, subHeader, isListItem, imageId}) {
     return <>
         <View style={styles.topContainer}>
-            <View style={[styles.imageContainer, styles.shadowed]}>
+            <View style={[styles.imageContainer, commonStyles.shadow]}>
                 <LinearGradient colors={["#fdfbef", "#fef1ed"]}>
                     <ImageComponent style={styles.image} imageId={imageId}
                     />
@@ -18,13 +19,6 @@ export default function RoundPictureNameComponent({header, subHeader, isListItem
 }
 
 const styles = StyleSheet.create({
-        shadowed: {
-            elevation: 4,
-            shadowColor: 'black',
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
-        },
         topContainer: {
             borderRadius: 10,
             display: "flex",
