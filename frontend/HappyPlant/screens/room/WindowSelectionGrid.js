@@ -19,10 +19,6 @@ export default function WindowSelectionGrid({ room, callback }) {
         }        
     }, [room])
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
     let cellSize = (width - GLOBAL_PADDING) / room?.x;
     if (cellSize * room?.y > 0.4 * height) {
         cellSize = (0.4 * height) / room?.y

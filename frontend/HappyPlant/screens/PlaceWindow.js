@@ -16,25 +16,7 @@ export default function PlaceWindow({ navigation }) {
 
     useEffect(() => {
         const backAction = async () => {
-            try {
-                //console.log(result.id);
-                const response = await fetch(`${API_URL}/rooms/${room?.id}`, {
-                  method: 'DELETE',
-                  headers: {
-                    'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJleGFtcGxlLnVzZXJAdGVzdC5jb20iLCJleHAiOjE3MTgyNzkwNjMsInVzZXJJZCI6IjQ2Yzg3MGY2LTgwNTQtNDQ3Zi05ZDZiLWQxMzc0YWE2YmUzZSIsImlhdCI6MTcxODI3NjQ3MX0.1vF6Baon_EecBaDzTRfm0AMbfj1xYH4w2SudkmUF2ybQhBw8g5liqDCIDds2bMaKZnWykzJy5kPQOM8pJTm0dQ`
-                  }, 
-                });
-            
-                if (response.ok) {
-
-                  //navigation.navigate('Räume');
-                } else {
-                  console.error('Failed to post data:', response.status, response.statusText);
-                }
-            } catch (error) {
-                console.error('Error posting data:', error);
-            }
-          return true;
+          fetchURL(`/rooms/${room?.id}`, 'DELETE', callback = () => true)
         };
     
         const backHandler = BackHandler.addEventListener(
@@ -48,7 +30,6 @@ export default function PlaceWindow({ navigation }) {
     const handleDone = async () =>{
         if(pixels != null){
             const pixelValues = pixels.map(p => p.item);
-            console.log(pixelValues)
             fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, () => {
                 navigation.navigate('Räume');
             });
