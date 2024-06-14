@@ -1,15 +1,11 @@
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import fetchURL from "../utils/ApiService";
-import EditButton from "./global/EditButton";
+import { fetchURL } from '../utils/ApiService'
 import RoundPictureNameComponent from "./species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
-import {RoomTypeIcons} from "../utils/EnumIcons";
 import {
     AssignmentTypeTranslations,
-    LightingTypeTranslations,
-    LightingTypeValueTranslations
 } from "../utils/EnumTranslations";
 import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
@@ -22,7 +18,7 @@ export default function CreatePlantScreen({ navigation }) {
     const [plant, setPlant] = useState({});
 
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', setPlant)
+        fetchURL(`/plants/${id}`, 'GET', null, setPlant)
     }, [])
 
     useEffect(() => {
@@ -182,6 +178,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         textAlignVertical: "bottom",
         paddingBottom: 5,
+        paddingTop: 5,
     },
     numberInputContainer: {
         width: 200,

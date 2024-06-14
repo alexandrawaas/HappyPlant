@@ -2,12 +2,9 @@ import {ScrollView, StyleSheet, Text, View} from "react-native";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import AddRoomButton from "../room/AddRoomButton";
 import PlantListItem from "./PlantListItem";
-import {plantMock} from "./PlantMock";
-import {roomMock} from "../room/RoomMock";
 import {useEffect, useState} from "react";
-import fetchURL from "../../utils/ApiService";
+import { fetchURL } from '../../utils/ApiService'
 import {Searchbar} from "react-native-paper";
-import {API_URL} from "../../config";
 
 // TODO: remove plant mock and use fetch instead
 export default function MyPlantsScreen({ navigation }) {
@@ -16,12 +13,12 @@ export default function MyPlantsScreen({ navigation }) {
     const [plants, setPlants] = useState([]);
 
     useEffect(() => {
-        fetchURL('/plants', 'GET', setPlants)
+        fetchURL('/plants', 'GET', null, setPlants)
     }, [])
 
     useEffect(() => {
         let url = '/plants?search=' + searchQuery
-        fetchURL(url, 'GET', setPlants)
+        fetchURL(url, 'GET', null, setPlants)
     }, [searchQuery])
 
     let handleAddPlantClick = () => {

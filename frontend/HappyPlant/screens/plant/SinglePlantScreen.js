@@ -13,7 +13,7 @@ import {RoomTypeIcons} from "../../utils/EnumIcons";
 import {Tooltip} from "react-native-elements";
 import EditButton from "../global/EditButton";
 import Feather from "react-native-vector-icons/Feather";
-import fetchURL from "../../utils/ApiService";
+import { fetchURL } from '../../utils/ApiService'
 
 export default function SinglePlantScreen({ navigation }) {
 
@@ -22,7 +22,7 @@ export default function SinglePlantScreen({ navigation }) {
     const [plant, setPlant] = useState({});
 
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', setPlant)
+        fetchURL(`/plants/${id}`, 'GET', null, setPlant)
     }, [])
 
     useEffect(() => {
