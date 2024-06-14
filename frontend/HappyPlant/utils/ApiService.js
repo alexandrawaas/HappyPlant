@@ -5,7 +5,6 @@ export const fetchURL = async (url, method='GET', payload=null, callback, needsA
     try {
         let authToken
         if(needsAuth) {
-            console.log('trying to retrieve auth token', needsAuth)
             authToken = await getAuthToken();
         }
         const options = {
