@@ -5,6 +5,7 @@ import PlantListItem from "./PlantListItem";
 import {useEffect, useState} from "react";
 import { fetchURL } from '../../utils/ApiService'
 import {Searchbar} from "react-native-paper";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 // TODO: remove plant mock and use fetch instead
 export default function MyPlantsScreen({ navigation }) {
@@ -28,7 +29,7 @@ export default function MyPlantsScreen({ navigation }) {
     return (
         <View>
             <View style={styles.toolContainer}>
-                <View style={[styles.searchContainer, styles.shadowed]}>
+                <View style={[styles.searchContainer, commonStyles.shadow]}>
                     <Searchbar style={styles.searchBar}
                                placeholder="Suche nach einer Pflanze..." onChangeText={setSearchQuery} value={searchQuery}
                     />

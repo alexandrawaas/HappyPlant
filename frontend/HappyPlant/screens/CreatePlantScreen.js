@@ -88,13 +88,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
     },
-    shadowed: {
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-    },
     container: {
         flex: 1,
         alignItems:"center",
