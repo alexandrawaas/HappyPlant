@@ -20,7 +20,7 @@ export default function RoomsScreen({ navigation }) {
     }, [searchQuery])
 
     const handleAddRoomClick = () => {
-        console.log("TODO: implement add room dialog")
+        navigation.navigate('Neuen Raum erstellen');
     }
 
     return (
@@ -49,7 +49,7 @@ export default function RoomsScreen({ navigation }) {
                     ? <AddRoomButton onClick={handleAddRoomClick} displayOnNewLine />
                     : null
                 }
-                <VerticalPlaceholder size={110}/>
+                <VerticalPlaceholder size={190}/>
             </ScrollView>
         </View>
     );

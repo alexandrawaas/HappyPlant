@@ -4,6 +4,7 @@ import SingleRoomScreen from '../room/SingleRoomScreen';
 import PlaceWindow from '../PlaceWindow';
 import GlobalLayout from './GlobalLayout';
 import headerStyleOptions from './HeaderStyle';
+import RoomCreationScreen from '../room/RoomCreationScreen';
 
 const RoomStack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export default function RoomStackNavigator() {
             <RoomStack.Screen name="Räume" children={(props) => <GlobalLayout component={RoomsScreen} {...props} />} />
             <RoomStack.Screen name="Einzelner Raum" children={(props) => <GlobalLayout component={SingleRoomScreen} {...props} />} />
             <RoomStack.Screen name="Fenster platzieren" children={(props) => <GlobalLayout component={PlaceWindow} {...props} />} />
+            <RoomStack.Screen name="Neuen Raum erstellen" children={(props) => <GlobalLayout component={RoomCreationScreen} {...props} />} />
         </RoomStack.Navigator>
     );
 }
