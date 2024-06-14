@@ -25,7 +25,7 @@ export const fetchURL = async (url, method='GET', payload=null, callback, needsA
         if (response.ok) {
             const data = await response.json();
             if (data.error) {
-                console.log('error: ', data);
+                console.error('error: ', data);
                 window.alert(data.error);
                 callback([]);
             } else {
