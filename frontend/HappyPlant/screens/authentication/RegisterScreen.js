@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert, Button, StyleSheet, Image} from 'react-native';
 import { commonStyles } from '../../utils/styles/CommonStyles';
-import axios from 'axios';
-import { API_URL } from '../../config';
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
+import { fetchURL } from '../../utils/ApiService';
 
 
 const RegisterScreen = ({ navigation }) => {
@@ -35,16 +34,19 @@ const RegisterScreen = ({ navigation }) => {
                 (token) => { setExpoPushToken(token); }
             );
 
-            const response = await axios.post(`${API_URL}/auth/register`, {
+            const payload = {
                 email: email,
                 password: password,
                 pushNotificationToken: expoPushToken
-            });
-            if (response.status === 201) {
-                navigation.replace('RegisterSuccess');
-            } else {
-                Alert.alert('Fehler', response.data);
             }
+
+            fetchURL('/auth/register', 'POST', payload, (data) => {
+                if (data && data.status === 201) {
+                    navigation.replace('RegisterSuccess');
+                } else {
+                    Alert.alert('Fehler', data.message || 'Registrierung fehlgeschlagen');
+                }
+            })
         } catch (error) {
             console.error('Fehler bei der Registrierung:', error);
             Alert.alert('Fehler', 'Es ist ein Fehler bei der Registrierung aufgetreten.');
@@ -64,6 +66,7 @@ const RegisterScreen = ({ navigation }) => {
                     onChangeText={setEmail}
                     autoCorrect={false}
                     autoCapitalize="none"
+                    keyboardType="email-address"
                     style={styles.input}
                 />
                 <Text style={styles.text2}> Passwort </Text>

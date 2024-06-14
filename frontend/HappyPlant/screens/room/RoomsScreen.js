@@ -4,18 +4,18 @@ import RoomListItem from "./RoomListItem";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
-import  fetchURL  from '../../utils/ApiService'
+import { fetchURL } from '../../utils/ApiService'
 
 export default function RoomsScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        fetchURL('/rooms', 'GET', setRooms)
+        fetchURL('/rooms', 'GET', null, setRooms)
     }, [])
 
     useEffect(() => {
-        fetchURL(`/rooms?search=${searchQuery}`, 'GET', setRooms)
+        fetchURL(`/rooms?search=${searchQuery}`, 'GET', null, setRooms)
     }, [searchQuery])
 
     const handleAddRoomClick = () => {

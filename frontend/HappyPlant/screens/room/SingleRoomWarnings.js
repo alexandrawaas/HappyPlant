@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native"
-import fetchURL from "../../utils/ApiService";
+import { fetchURL } from '../../utils/ApiService'
 import { useState, useEffect } from "react";
 import Collapsible from "react-native-collapsible";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,7 +16,7 @@ export default function SingleRoomWarnings({ room }) {
 
     useEffect(() => {
         if (room.id) {
-            fetchURL(`/rooms/${room.id}/plants`, 'GET',
+            fetchURL(`/rooms/${room.id}/plants`, 'GET', null, 
                 (plantsInRoom) => {
                     setPlantIds(plantsInRoom.map(x => x.id));
                     setWarnings(plantsInRoom.filter(x => !x.hasOptimalLightingCondition).map(x => x.name))
@@ -26,7 +26,7 @@ export default function SingleRoomWarnings({ room }) {
     }, [room])
 
     useEffect(() => {
-        fetchURL(`/assignments`, 'GET', (list) => {
+        fetchURL(`/assignments`, 'GET', null, (list) => {
             setAssignments(list.filter(i => plantIds?.includes(i.plantId)))
         })
     }, [plantIds])

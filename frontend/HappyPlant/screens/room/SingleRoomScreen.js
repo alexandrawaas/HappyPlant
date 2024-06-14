@@ -5,7 +5,7 @@ import SingleRoomInventory from "./SingleRoomInventory";
 import SingleRoomWarnings from "./SingleRoomWarnings";
 import { useEffect, useState } from "react";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
-import fetchURL from '../../utils/ApiService'
+import { fetchURL } from '../../utils/ApiService'
 
 export default function SingleRoomScreen({ navigation }) {
     const route = useRoute();
@@ -13,7 +13,7 @@ export default function SingleRoomScreen({ navigation }) {
     const [room, setRoom] = useState({});
 
     useEffect(() => {
-        fetchURL(`/rooms/${id}`, 'GET', setRoom)
+        fetchURL(`/rooms/${id}`, 'GET', null, setRoom)
     }, [])
 
     useEffect(() => {
