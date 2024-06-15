@@ -49,7 +49,7 @@ export default function SingleSpeciesScreen({ navigation }) {
                     <Text style={styles.informationBlock}>Diese Pflanze gehört zur Familie
                         der {species.family}. {species.description}</Text>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Neue Pflanze erstellen", {id: species.id})}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Neue Pflanze erstellen", {id: species})}>
                     <Text style={styles.buttonText}>Als neue Pflanze hinzufügen</Text>
                 </TouchableOpacity>
             </ScrollView>

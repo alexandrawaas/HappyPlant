@@ -1,8 +1,11 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert} from "react-native";
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView} from "react-native";
 import {useEffect, useState} from "react";
-import {Input, Tooltip} from "react-native-elements";
 import {API_URL} from "../../config";
 import {useRoute} from "@react-navigation/native";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import Feather from "react-native-vector-icons/Feather";
+import CollapsibleBar from "../other/CollapsibleBar";
+import {LinearGradient} from "expo-linear-gradient";
 
 export default function NewPlantScreen({ navigation }) {
 
@@ -12,6 +15,21 @@ export default function NewPlantScreen({ navigation }) {
     let route = useRoute();
     const { id } = route.params;
 
+    const [chosenSpecies, setChosenSpecies] = useState(id);
+
+
+    useEffect(() => {
+        navigation.setOptions({
+            ...navigation.options,
+            headerTitle: "Neue Pflanze",
+            headerRight: () => (
+                <TouchableOpacity onPress={() => console.log("submit Button pressed")} style={{margin: 8}}>
+                    <Feather name="check" color="grey" size={25}/>
+                </TouchableOpacity>
+            )
+        })
+    });
+
     useEffect(() => {
         fetch(`${API_URL}/species`)
             .catch(err => console.dir(err))
@@ -19,15 +37,47 @@ export default function NewPlantScreen({ navigation }) {
             .then(data => setSpecies(data))
     }, [species])
 
+    useEffect(() => {
+        if(chosenSpecies === undefined || chosenSpecies === null)
+        {
+            (id !== null ? setChosenSpecies(species.filter(x => x.id === id)) : setChosenSpecies(species[0]))
+        }
+    }, [species])
+
 
     return (
         <View style={styles.container}>
-            <Input style={styles.searchBar} inputMode={"text"} placeholder="Name deiner Pflanze" onChangeText={setName} value={name}/>
-            <Text>{species !== [] || species !== undefined ?
-                ( id != null ? (
-                    species.filter(s => s.id === id).length > 0 ? species.filter(s => s.id === id)[0].name : "SpeciesName"
-                ) : (species.at(0) !== undefined ? species.at(0).name : "SpeciesName"))
-                : "SpeciesName"}</Text>
+            <VerticalPlaceholder size={50}/>
+            <Text style={styles.sectionTitle}>Name der Pflanze:</Text>
+            <View style={styles.numberInputContainer}>
+                <View style={styles.numberInputInnerContainer}>
+                    <TextInput style={styles.numberInput} inputMode={"text"} placeholder="Gib einen Namen ein..." onChangeText={setName} value={name}/>
+                </View>
+            </View>
+            <Text style={styles.sectionTitle}>Spezies:</Text>
+            <View style={styles.dropdownContainer}>
+                <CollapsibleBar style={styles.dropdown} title={
+                    (chosenSpecies !== undefined && chosenSpecies !== null) ?
+                        chosenSpecies.name
+                    : "Spezies auswählen"}>
+                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                            <ScrollView style={styles.scrollDropdown}>
+                            {species?.length === 0
+                                ? <Text>Keine Spezies gefunden</Text>
+                                : null
+                            }
+                            {species?.map(item =>
+                                <View key={item.id}>
+                                    <TouchableOpacity onPress={() => setChosenSpecies(item)}>
+                                        <Text numberOfLines={1}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )}
+                                <VerticalPlaceholder size={8}/>
+                            </ScrollView>
+                        </LinearGradient>
+                </CollapsibleBar>
+            </View>
         </View>
     );
 }
@@ -59,92 +109,42 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
+        alignSelf: "flex-start",
+        marginLeft: 25,
     },
     boldText: {
         fontSize: 14,
         fontWeight: "bold",
     },
-    sectionTitle: {
-        alignSelf: "flex-start",
-        fontSize: 18,
-        color: "grey",
-        marginBottom: 10,
-    },
-    link: {
-        color: "grey",
-        fontSize: 16,
-        textDecorationLine: "underline",
-        textDecorationStyle: "solid",
-        textDecorationColor: "grey"
-    },
-    boxContainer: {
-        width: "100%",
-        backgroundColor: '#fdfbef',
-        borderRadius: 15,
-        marginBottom: 10,
-    },
-    detailContainer: {
-        display: "flex",
-        flexDirection: "row",
-        padding: 15,
-        borderRadius: 15,
-        alignItems: "center",
-        justifyContent: "space-between",
-    },
-    badgesContainer: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-    },
-    infoBadge: {
-        borderRadius: 50,
-        borderColor: "grey",
-        borderWidth: 1.5,
-        width: 20,
-        height: 20,
-        alignItems: "center",
-        marginHorizontal: 3,
-    },
-    infoBadgeText: {
-        color: "grey",
-        fontWeight: "bold",
-    },
-    lightingBadge: {
-        borderRadius: 8,
-        borderColor: "lightgrey",
-        borderWidth: 1,
-        width: 24,
-        height: 24,
-        alignItems: "center",
-        marginHorizontal: 8,
-        elevation: 1,
-        backgroundColor: "#fdfbef",
-    },
     numberInput: {
-        width: 40,
-        fontSize: 16,
+        width: 280,
+        fontSize: 18,
         textAlign: "center",
         textAlignVertical: "bottom",
         paddingBottom: 5,
         paddingTop: 5,
     },
     numberInputContainer: {
-        width: 200,
-        maxWidth: 300,
+        width: 280,
+        maxWidth: 280,
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+        margin: 10,
+        marginTop: 5,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowColor: "#000",
     },
     numberInputInnerContainer : {
         display: "flex",
         flexDirection: "row",
-        alignItems: "bottom",
+        alignItems: "center",
         justifyContent: "center",
-        width: 60,
-        height: 30,
-        backgroundColor: "#f5eae7",
+        width: 300,
+        height: 40,
+        backgroundColor: "white",
         borderRadius: 10,
         marginHorizontal: 10,
     },
@@ -156,5 +156,32 @@ const styles = StyleSheet.create({
     notesContainer: {
         paddingTop: 10,
         paddingBottom: 2,
-    }
+    },
+    sectionTitle: {
+        alignSelf: "flex-start",
+        fontSize: 18,
+        color: "grey",
+        marginTop: 20,
+        marginLeft: 25,
+        marginBottom: 5,
+    },
+    dropdown: {
+        marginTop: 10,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowColor: "#000",
+    },
+    detailContainer: {
+        borderRadius: 15,
+        padding: 10,
+        paddingBottom: 20,
+        width: 300,
+    },
+    scrollDropdown: {
+        padding: 10,
+        maxHeight: 300,
+    },
+    dropdownContainer: {
+        width: 300,
+    },
 });
