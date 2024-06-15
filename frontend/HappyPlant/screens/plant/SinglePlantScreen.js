@@ -30,7 +30,7 @@ export default function SinglePlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Pflanzenprofil",
             headerRight: () => (
-                <EditButton onPress={() => navigation.navigate("Pflanze erstellen", {id: plant.id})} />
+                <EditButton onPress={() => navigation.navigate("Pflanze bearbeiten", {id: plant.id})} />
             )
         })
     }, [navigation, plant])

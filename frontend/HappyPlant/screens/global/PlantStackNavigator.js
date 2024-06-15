@@ -1,9 +1,10 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MyPlantsScreen from '../plant/MyPlantsScreen'
-import CreatePlantScreen from '../CreatePlantScreen'
+import EditPlantScreen from '../plant/EditPlantScreen'
 import SinglePlantScreen from '../plant/SinglePlantScreen'
 import GlobalLayout from './GlobalLayout';
 import headerStyleOptions from './HeaderStyle';
+import NewPlantScreen from "../plant/NewPlantScreen";
 
 const PlantStack = createNativeStackNavigator();
 
@@ -12,7 +13,8 @@ export default function PlantStackNavigator() {
       <PlantStack.Navigator screenOptions={headerStyleOptions}>
         <PlantStack.Screen name="Meine Pflanzen" children={(props) => <GlobalLayout component={MyPlantsScreen} {...props} />} />
         <PlantStack.Screen name="Pflanzenprofil" children={(props) => <GlobalLayout component={SinglePlantScreen} {...props} />} />
-        <PlantStack.Screen name="Pflanze erstellen" children={(props) => <GlobalLayout component={CreatePlantScreen} {...props} />} />
-        </PlantStack.Navigator>
+        <PlantStack.Screen name="Pflanze bearbeiten" children={(props) => <GlobalLayout component={EditPlantScreen} {...props} />} />
+        <PlantStack.Screen name="Neue Pflanze erstellen" children={(props) => <GlobalLayout component={NewPlantScreen} {...props} />} />
+      </PlantStack.Navigator>
   );
 }

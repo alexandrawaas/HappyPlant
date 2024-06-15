@@ -23,10 +23,14 @@ export default function SingleRoomScreen({ navigation }) {
         })
     }, [navigation, room])
 
+    const handleAddPlantToInventoryPress = () => {
+        navigation.navigate('Neue Pflanze erstellen', {id: null})
+    }
+
     return (
         <ScrollView style={styles.container}>
             <SingleRoomGrid room={room} navigation={navigation}/>
-            <SingleRoomInventory room={room}/>
+            <SingleRoomInventory room={room} handleAddPlantToInventoryPress={handleAddPlantToInventoryPress}/>
             <SingleRoomWarnings room={room}/>
             <VerticalPlaceholder size={120}/>
         </ScrollView>

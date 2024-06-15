@@ -1,17 +1,17 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import { fetchURL } from '../utils/ApiService'
-import RoundPictureNameComponent from "./species/RoundPictureNameComponent";
+import { fetchURL } from '../../utils/ApiService'
+import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
 import {
     AssignmentTypeTranslations,
-} from "../utils/EnumTranslations";
+} from "../../utils/EnumTranslations";
 import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
-import VerticalPlaceholder from "../utils/styles/VerticalPlaceholder";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 
-export default function CreatePlantScreen({ navigation }) {
+export default function EditPlantScreen({ navigation }) {
 
     const route = useRoute();
     const { id } = route.params;
@@ -32,6 +32,20 @@ export default function CreatePlantScreen({ navigation }) {
             )
         })
     }, [navigation, plant])
+
+
+    const createTwoButtonAlert = () =>
+        Alert.alert('Pflanze löschen', 'Bist du sicher, dass du diese Pflanze löschen möchtest? Sie wird automatisch aus allen Räumen entfernt. Alle Daten und Aufgaben werden nicht mehr einsehbar sein.', [
+            {
+                text: 'Abbrechen',
+                style: 'cancel',
+            },
+            {text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, null).then(() => {
+                navigation.navigate("Meine Pflanzen")
+                reload();
+                })},
+        ]);
+
 
     return (
         <ScrollView style={styles.scrollview}>
@@ -70,6 +84,7 @@ export default function CreatePlantScreen({ navigation }) {
                         <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400}>{plant.notes}</Input>
                     </LinearGradient>
                 </View>
+                <Button title={"Pflanze löschen"} onPress={() => createTwoButtonAlert()} color="red"/>
             </View>
             <VerticalPlaceholder size={150}/>
         </ScrollView>
