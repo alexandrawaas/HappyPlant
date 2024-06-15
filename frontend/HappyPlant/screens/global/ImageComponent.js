@@ -46,7 +46,7 @@ const ImageComponent = ({ imageId, authToken, style }) => {
     fetchImage();
   }, [imageId, authToken]);
 
-  if (true) { //loading
+  if (loading) { 
     return (
       <View>
         <ActivityIndicator size="large" color="#0000ff" style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }}/>
