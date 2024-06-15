@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
     },
     ImageComponent:{
-        width: 100,
-        height: 100,
+        width: 85,
+        height: 85,
     },
     image: {
         width: "100%",
