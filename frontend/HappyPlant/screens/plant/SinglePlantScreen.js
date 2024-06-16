@@ -71,13 +71,14 @@ export default function SinglePlantScreen({ navigation }) {
                          </LinearGradient>
                      </View>
                      <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
-                    { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
+                    { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) => v !== -1 ?
                           <View style={styles.boxContainer} key={k}>
                               <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                                   <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
                                   <Text>alle {v} Tage</Text>
                               </LinearGradient>
                           </View>
+                        : null
                       )
                       : null }
                      <Text style={styles.sectionTitle}>Notizen</Text>
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "grey",
         marginBottom: 10,
+        marginTop: 10,
     },
     link: {
         color: "grey",

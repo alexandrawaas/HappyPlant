@@ -40,7 +40,8 @@ export default function SingleSpeciesScreen({ navigation }) {
                     <View style={styles.pairedNeedContainer}>
                         {species?.needs?.intervals
                             ? Object.entries(species.needs.intervals).map(([k, v]) =>
-                                <NeedLabelWithIcon assignmentType={k} value={v} key={k}/>
+                                v !== -1 ? <NeedLabelWithIcon assignmentType={k} value={v} key={k}/>
+                                    : <NeedLabelWithIcon assignmentType={k} value={""} key={k}/>
                             )
                             : null}
                     </View>

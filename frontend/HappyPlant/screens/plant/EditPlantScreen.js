@@ -5,21 +5,23 @@ import { fetchURL } from '../../utils/ApiService'
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
 import {
-    AssignmentTypeTranslations,
+    AssignmentTypeTranslations, LightingTypeTranslations,
 } from "../../utils/EnumTranslations";
 import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import CollapsibleBar from "../other/CollapsibleBar";
 
 export default function EditPlantScreen({ navigation }) {
 
     const route = useRoute();
     const { id } = route.params;
     const [plant, setPlant] = useState({});
+    const [chosenLighting, setChosenLighting] = useState(null);
 
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', null, setPlant)
-    }, [])
+        fetchURL(`/plants/${id}`, 'GET', null, setPlant).then( () => {chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null})
+    }, [plant])
 
     useEffect(() => {
         navigation.setOptions({
@@ -53,14 +55,23 @@ export default function EditPlantScreen({ navigation }) {
                 <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
                 <VerticalPlaceholder size={20}/>
                 <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
-                <View style={styles.boxContainer}>
-                    <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                        <View style={styles.badgesContainer}>
-                            <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
-                                <Feather name="info" color="grey" size={25}/>
-                            </Tooltip>
-                        </View>
-                    </LinearGradient>
+                <View style={styles.badgesContainer}>
+                    <View style={styles.dropdownContainer}>
+                        <CollapsibleBar style={styles.dropdown} title={chosenLighting}>
+                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                                <ScrollView style={styles.scrollDropdown}>
+                                    {Object.entries(LightingTypeTranslations).map(([k, v]) =>
+                                        <TouchableOpacity key={k} onPress={() => setChosenLighting(v)}>
+                                            <Text style={styles.text}>{v}</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                </ScrollView>
+                            </LinearGradient>
+                        </CollapsibleBar>
+                    </View>
+                    <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
+                        <Feather name="info" color="grey" size={25}/>
+                    </Tooltip>
                 </View>
                 <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
                 { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
@@ -70,7 +81,7 @@ export default function EditPlantScreen({ navigation }) {
                                 <View style={styles.numberInputContainer}>
                                     <Text>alle</Text>
                                     <View style={styles.numberInputInnerContainer}>
-                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v}</TextInput>
+                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v !== -1 ? v : ""}</TextInput>
                                     </View>
                                     <Text>Tage</Text>
                                 </View>
@@ -128,6 +139,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "grey",
         marginBottom: 10,
+        marginTop: 20,
     },
     link: {
         color: "grey",
@@ -155,6 +167,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        width: "100%",
     },
     infoBadge: {
         borderRadius: 50,
@@ -215,5 +228,18 @@ const styles = StyleSheet.create({
     notesContainer: {
         paddingTop: 10,
         paddingBottom: 2,
-    }
+    },
+    dropdown: {
+        marginTop: 10,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowColor: "#000",
+    },
+    scrollDropdown: {
+        padding: 10,
+        maxHeight: 300,
+    },
+    dropdownContainer: {
+        width: "90%",
+    },
 });
