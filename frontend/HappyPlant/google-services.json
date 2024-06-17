@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1018064593483",
+    "project_id": "happyplants-1c1d6",
+    "storage_bucket": "happyplants-1c1d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018064593483:android:340e2beca0d66f3d6e23ce",
+        "android_client_info": {
+          "package_name": "com.happyplants.HappyPlantsAndroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA19Z3mGSfEkY0qfoqHCTUUw1Y-gyri5bc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

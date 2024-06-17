@@ -23,7 +23,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.happyplants.HappyPlantsAndroid",
-      "googleServicesFile": "./android/app/google-services.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

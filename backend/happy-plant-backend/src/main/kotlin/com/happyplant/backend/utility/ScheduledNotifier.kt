@@ -27,10 +27,6 @@ class ScheduledNotifier( private val userService: UserService) {
         }.stream().map{ user -> PushNotificationDTO.userToPushNotificationDTO(user) }.toList()
 
 
-        //for testing
-        //var pushNotificationDTOs: MutableList<PushNotificationDTO> = listOf(User.DUMMY_USER).stream().map{ user -> PushNotificationDTO.userToPushNotificationDTO(user) }.toList();
-
-
         val sizedArrays: MutableList<Array<PushNotificationDTO>> = ArrayList()
 
         if(pushNotificationDTOs.size > 100){

@@ -46,16 +46,16 @@ const ImageComponent = ({ imageId, authToken, style }) => {
     fetchImage();
   }, [imageId, authToken]);
 
-  if (loading) {
+  if (loading) { 
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View>
+        <ActivityIndicator size="large" color="#0000ff" style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }}/>
       </View>
     );
   }
 
   return (
-    <View style={styles.view}>
+    <View>
       {imageBase64 && <Image source={{ uri: imageBase64 }} style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />}
     </View>
   );
@@ -66,9 +66,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
   },
-  view:{
-    
-  }
+
 });
 
 export default ImageComponent;

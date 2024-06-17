@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.io.File
 import java.security.MessageDigest
+import java.time.LocalTime
 import java.util.*
 
 
@@ -662,9 +663,9 @@ class DatabaseInitializer {
                 emailVerified = true,
                 emailVerificationToken = UUID.randomUUID().toString(),
                 emailVerificationExpires = System.currentTimeMillis() + 600000,
-                receivePushNotifications = false, // TODO
-                pushNotificationsTime = null, //TODO
-                pushNotificationToken = "ExponentPushToken[Wx9b-UKX5NSxWFpCb8ke4f]",
+                receivePushNotifications = true,
+                pushNotificationsTime = LocalTime.of(17, 46),
+                pushNotificationToken = "ExponentPushToken[Wx9b-UKX5NSxWFpCb8ke4f]", //Ralf Handy for Testing
                 plants = mutableListOf(),
                 rooms = mutableListOf())
         )
