@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, Pressable, BackHandler } from "react-native";
-import WindowSelectionGrid from "./room/WindowSelectionGrid";
-import { useEffect, useState, useMemo, useCallback } from "react";
-import { fetchURL } from "../utils/ApiService";
+import { View, Text, StyleSheet, Pressable, BackHandler, TouchableOpacity } from "react-native";
+import WindowSelectionGrid from "./WindowSelectionGrid";
+import { useEffect, useState } from "react";
+import { fetchURL } from "../../utils/ApiService";
 import { useRoute } from "@react-navigation/native";
-import { HeaderBackButton } from '@react-navigation/elements'
+import { HeaderBackButton } from '@react-navigation/elements';
+import Feather from "react-native-vector-icons/Feather";
 
 export default function PlaceWindow({ navigation }) {
     const route = useRoute();
@@ -15,6 +16,11 @@ export default function PlaceWindow({ navigation }) {
             ...navigation,
             headerLeft: (props) => (
                 <HeaderBackButton {...props} onPress={() => backAction(room?.id)} style={styles.headerBackButton} />
+            ),
+            headerRight: () => (
+                <TouchableOpacity onPress={handleDone} style={{margin: 8}}>
+                    <Feather name="check" color="grey" size={25}/>
+                </TouchableOpacity>
             )
         })
     }, [navigation, room])
@@ -46,13 +52,6 @@ export default function PlaceWindow({ navigation }) {
             <Text style={styles.heading}>{room?.name}</Text>
             <Text style={styles.text}>Wählen Sie die Position Ihrer Fenster. Tippen Sie dafür auf die Kästchen am Rand des Raumes.</Text>
             <WindowSelectionGrid room={room} callback={setPixels} />
-            <Pressable
-                style={styles.button}
-                onPress={handleDone}
-                title="Raum erstellen"
-            >
-                <Text style={styles.buttonText}>Raum erstellen</Text>
-            </Pressable>
         </View>
     );
 }
