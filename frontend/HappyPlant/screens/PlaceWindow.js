@@ -23,9 +23,9 @@ export default function PlaceWindow({ navigation }) {
         setRoom(route.params.roomData)
     }, [route])
 
-    const backAction = (id, goBack=true) => {
+    const backAction = (id, goBack = true) => {
         fetchURL(`/rooms/${id}`, 'DELETE')
-        if(goBack)
+        if (goBack)
             navigation.goBack(route.params.go_back_key);
     }
 
@@ -35,13 +35,10 @@ export default function PlaceWindow({ navigation }) {
     }, [room]);
 
     const handleDone = async () => {
-        if (pixels != null) {
-            const pixelValues = pixels.map(p => p.item);
-            console.log(pixelValues);
-            fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, () => {
-                navigation.navigate('Räume');
-            });
-        }
+        const pixelValues = pixels?.map(p => p.item) ?? [];
+        fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, () => {
+            navigation.navigate('Räume');
+        });
     }
 
     return (
