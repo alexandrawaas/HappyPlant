@@ -6,18 +6,23 @@ import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from "react";
 import { fetchURL } from '../../utils/ApiService'
 import { commonStyles } from "../../utils/styles/CommonStyles";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function RoomsScreen({ navigation }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [rooms, setRooms] = useState([]);
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
         fetchURL('/rooms', 'GET', null, setRooms)
-    }, [])
+    }, [isFocused])
 
     useEffect(() => {
         fetchURL(`/rooms?search=${searchQuery}`, 'GET', null, setRooms)
     }, [searchQuery])
+
+
 
     const handleAddRoomClick = () => {
         navigation.navigate('Neuen Raum erstellen');
