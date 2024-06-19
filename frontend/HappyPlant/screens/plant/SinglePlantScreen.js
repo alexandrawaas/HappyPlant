@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from "react-native";
-import {useRoute} from "@react-navigation/native";
+import {useIsFocused, useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
@@ -21,9 +21,11 @@ export default function SinglePlantScreen({ navigation }) {
     const { id } = route.params;
     const [plant, setPlant] = useState({});
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, setPlant)
-    }, [])
+    }, [isFocused])
 
     useEffect(() => {
         navigation.setOptions({

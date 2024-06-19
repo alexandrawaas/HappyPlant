@@ -8,6 +8,7 @@ import CollapsibleBar from "../other/CollapsibleBar";
 import {LinearGradient} from "expo-linear-gradient";
 import {commonStyles} from "../../utils/styles/CommonStyles";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
+import {fetchURL} from "../../utils/ApiService";
 
 export default function NewPlantScreen({ navigation }) {
 
@@ -18,14 +19,32 @@ export default function NewPlantScreen({ navigation }) {
     const { id } = route.params;
 
     const [chosenSpecies, setChosenSpecies] = useState(id);
+    const [nameWarningEnabled, setNameWarningEnabled] = useState(false)
 
+    const handleContinue = async () =>{
+        let shouldCancel = false;
+        if(name.length < 1 || name.length > 50){
+            setNameWarningEnabled(true);
+            shouldCancel = true;
+        }
+
+        if(shouldCancel){ return;}
+
+        const payload = {
+            name: name,
+            speciesId: chosenSpecies.id,
+        };
+        fetchURL('/plants', 'POST', payload, (data) => {
+            navigation.navigate('Meine Pflanzen');
+        })
+    }
 
     useEffect(() => {
         navigation.setOptions({
             ...navigation.options,
             headerTitle: "Neue Pflanze",
             headerRight: () => (
-                <TouchableOpacity onPress={() => console.log("submit Button pressed")} style={{margin: 8}}>
+                <TouchableOpacity onPress={handleContinue} style={{margin: 8}}>
                     <Feather name="check" color="grey" size={25}/>
                 </TouchableOpacity>
             )
@@ -57,6 +76,9 @@ export default function NewPlantScreen({ navigation }) {
                         <TextInput style={styles.textInput} inputMode={"text"} placeholder="Gib einen Namen ein..." onChangeText={setName} value={name}/>
                     </View>
                 </View>
+                {nameWarningEnabled &&
+                    <Text style={styles.warning}>Der Pflanzenname muss zwischen 1 und 50 Zeichen lang sein.</Text>
+                }
                 <Text style={styles.sectionTitle}>Spezies</Text>
                 <View style={styles.dropdownContainer}>
                     <CollapsibleBar style={styles.dropdown} title={
@@ -100,6 +122,10 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+    },
+    warning:{
+       color: "red",
+        marginTop: 10,
     },
     container: {
         flex: 1,

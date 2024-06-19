@@ -19,16 +19,50 @@ export default function EditPlantScreen({ navigation }) {
     const [plant, setPlant] = useState({});
     const [chosenLighting, setChosenLighting] = useState(null);
 
+    const [newNotes, setNewNotes] = useState(null);
+    const [intervals, setIntervals] = useState(new Map());
+
+    const updateMap = (text, k) => {
+        const numericValue = text.replace(/[^0-9]/g, "");
+        setIntervals(new Map(intervals.set(k.toUpperCase(), numericValue)));
+    }
+
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', null, setPlant).then( () => {chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null})
+        fetchURL(`/plants/${id}`, 'GET', null, setPlant)
+            .then( () => {
+                chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
+                if (newNotes == null) setNewNotes(plant.notes);
+            })
     }, [plant])
+
+    const handleSubmit = async () =>{
+        const intervalsMap = new Map();
+        const map = new Map(Object.entries(plant.needs.intervals));
+        map.forEach((v, k) => {
+            intervalsMap.set(k, intervals.get(k) ?? v);
+        });
+
+        const payload = {
+            name: plant.name,
+            picturePath: plant.picturePath,
+            notes: newNotes,
+            speciesId: plant.species.id,
+            needs: {
+                lightingType: Object.keys(LightingTypeTranslations).find(key => LightingTypeTranslations[key] === chosenLighting),
+                intervals: Object.fromEntries(intervalsMap),
+            }
+        };
+        fetchURL('/plants/'+plant.id, 'PUT', payload, () => {
+            navigation.navigate("Pflanzenprofil", {id: plant.id})
+        })
+    }
 
     useEffect(() => {
         navigation.setOptions({
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <TouchableOpacity onPress={() => console.log("submit Button pressed")} style={{margin: 8}}>
+                <TouchableOpacity onPress={handleSubmit} style={{margin: 8}}>
                     <Feather name="check" color="grey" size={25}/>
                 </TouchableOpacity>
             )
@@ -44,7 +78,6 @@ export default function EditPlantScreen({ navigation }) {
             },
             {text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, null).then(() => {
                 navigation.navigate("Meine Pflanzen")
-                reload();
                 })},
         ]);
 
@@ -81,7 +114,7 @@ export default function EditPlantScreen({ navigation }) {
                                 <View style={styles.numberInputContainer}>
                                     <Text>alle</Text>
                                     <View style={styles.numberInputInnerContainer}>
-                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v !== -1 ? v : ""}</TextInput>
+                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3} onChangeText={(e) => updateMap(e, k)}>{v !== -1 ? v : ""}</TextInput>
                                     </View>
                                     <Text>Tage</Text>
                                 </View>
@@ -92,7 +125,7 @@ export default function EditPlantScreen({ navigation }) {
                 <Text style={styles.sectionTitle}>Notizen</Text>
                 <View style={styles.boxContainer}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.detailContainer, styles.notesContainer]}>
-                        <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400}>{plant.notes}</Input>
+                        <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400} onChangeText={(t) => {setNewNotes(t); console.log(newNotes);}}>{plant.notes}</Input>
                     </LinearGradient>
                 </View>
                 <Button title={"Pflanze löschen"} onPress={() => createTwoButtonAlert()} color="red"/>
