@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, BackHandler, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, BackHandler, TouchableOpacity } from "react-native";
 import WindowSelectionGrid from "./WindowSelectionGrid";
 import { useEffect, useState } from "react";
 import { fetchURL } from "../../utils/ApiService";
@@ -12,6 +12,13 @@ export default function PlaceWindow({ navigation }) {
     const [pixels, setPixels] = useState(null)
 
     useEffect(() => {
+        const handleDone = () => {
+            const pixelValues = pixels?.map(p => p.item) ?? [];
+            fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, () => {
+                navigation.navigate('Räume');
+            });
+        };
+
         navigation.setOptions({
             ...navigation,
             headerLeft: (props) => (
@@ -23,7 +30,7 @@ export default function PlaceWindow({ navigation }) {
                 </TouchableOpacity>
             )
         })
-    }, [navigation, room])
+    }, [navigation, room, pixels])
 
     useEffect(() => {
         setRoom(route.params.roomData)
@@ -39,13 +46,6 @@ export default function PlaceWindow({ navigation }) {
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => backAction(room?.id, false));
         return () => backHandler.remove();
     }, [room]);
-
-    const handleDone = async () => {
-        const pixelValues = pixels?.map(p => p.item) ?? [];
-        fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, () => {
-            navigation.navigate('Räume');
-        });
-    }
 
     return (
         <View style={styles.container}>
