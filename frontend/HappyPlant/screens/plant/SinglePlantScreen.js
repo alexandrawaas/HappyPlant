@@ -38,7 +38,7 @@ export default function SinglePlantScreen({ navigation }) {
     return (
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
-                <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
+                <RoundPictureNameComponent header={plant?.name} imageId={plant?.imageId} subHeader={plant?.species?.name}></RoundPictureNameComponent>
                 <View style={styles.containerHorizontal}>
                     <Text style={styles.sectionTitle}>Raum</Text>
                     <Text style={styles.link} title={"AllRoomsButton"} onPress={() => {
