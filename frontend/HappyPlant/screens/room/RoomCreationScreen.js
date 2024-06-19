@@ -1,8 +1,12 @@
-import {View, Text, TextInput, StyleSheet, ScrollView, Pressable, Platform  } from "react-native";
+import {View, Text, TextInput, StyleSheet, ScrollView, Pressable, Platform, TouchableOpacity} from "react-native";
 import { useEffect, useState } from "react";
 import RoomTypeCarousel from "./RoomTypeCarousel";
 import { API_URL } from '../../config';
 import { fetchURL } from "../../utils/ApiService";
+import {AssignmentTypeTranslations} from "../../utils/EnumTranslations";
+import {LinearGradient} from "expo-linear-gradient";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import Feather from "react-native-vector-icons/Feather";
 
 export default function RoomCreationScreen({ navigation }) {
     const [name, setName] = useState("")
@@ -24,9 +28,6 @@ export default function RoomCreationScreen({ navigation }) {
         setY(numericValue); 
     }; 
 
-    const handleCancle = () =>{
-        navigation.navigate('Neuen Raum erstellen');
-    }
 
     const handleContinue = async () =>{
         setNameWarningEnabled(false);
@@ -55,60 +56,70 @@ export default function RoomCreationScreen({ navigation }) {
         })
     }
 
+    useEffect(() => {
+        navigation.setOptions({
+            ...navigation.options,
+            headerRight: () => (
+                <TouchableOpacity onPress={handleContinue} style={{margin: 8}}>
+                    <Feather name="arrow-right" color="grey" size={25}/>
+                </TouchableOpacity>
+            )
+        })
+    });
+
+
     return (
             <View style={styles.container}>
                 <ScrollView style={styles.upper}>
+                    <VerticalPlaceholder size={20}/>
                     <RoomTypeCarousel callback={setRoomCategory}></RoomTypeCarousel>
-                    <Text style={styles.text}>Name des Raums</Text>
-                    <TextInput
-                        style={[styles.textInput, styles.nameInput]}
-                        onChangeText={setName}
-                        value={name}
-                        placeholder="mein neuer Raum"
-                        placeholderTextColor={"ligthgrey"}
-                    />
-                    {nameWarningEnabled &&
-                        <Text style={styles.warning}>Der Raumname muss zwischen 1 und 50 Zeichen lang sein</Text>
-                    }
-                    <Text style={styles.text}>Seitenverhältnis</Text>
-                    <View style={styles.proportionView}>
-                        <TextInput
-                            style={[styles.xInput, styles.textInput]}
-                            inputMode= "numeric"
-                            onChangeText={handleXinput}
-                            value={x}
-                            placeholder="X"
-                            placeholderTextColor={"ligthgrey"}
-                        />
-                        <Text style={styles.colon}> : </Text>
-                        <TextInput
-                            style={[styles.yInput, styles.textInput]}
-                            inputMode= "numeric"
-                            onChangeText={handleYinput}
-                            value={y}
-                            placeholder="Y"
-                            placeholderTextColor={"ligthgrey"}
-                        />
-                    </View>
-                    {proportionWarningEnabled &&
-                        <Text style={styles.warning}>Das Verhältnis muss aus zwei Zahlen zwischen 1 und 50 bestehen</Text>
-                    }
-                </ScrollView>
+                    <View style={styles.innerContainer}>
+                        <Text style={styles.sectionTitle}>Name des Raums</Text>
+                        <View style={styles.textInputContainer}>
+                            <View style={[styles.textInputInnerContainer]}>
+                                <TextInput style={styles.textInput}
+                                           inputMode={"text"}
+                                           onChangeText={setName}
+                                           value={name}
+                                           placeholder="Gib einen Namen ein..."
+                                           placeholderTextColor={"ligthgrey"}/>
+                            </View>
+                        </View>
+                        {nameWarningEnabled &&
+                            <Text style={styles.warning}>Der Raumname muss zwischen 1 und 50 Zeichen lang sein</Text>
+                        }
+                        <Text style={styles.sectionTitle}>Seitenverhältnis</Text>
+                        <View>
+                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.numberInputContainer}>
+                                    <View style={styles.numberInputInnerContainer}>
+                                        <TextInput mode={"outline"}
+                                                   inputMode={"numeric"}
+                                                   style={styles.numberInput}
+                                                   maxLength={2}
+                                                   onChangeText={handleXinput}
+                                                   value={x}
+                                                   placeholder="X"
+                                        ></TextInput>
+                                    </View>
+                                    <Text style={styles.colon}> : </Text>
 
-                <View style={styles.buttonView}>
-                    <Pressable
-                        style={styles.button}
-                        onPress={handleCancle}
-                        title="Abbrechen">
-                            <Text style={styles.buttonText}>Abbrechen</Text>
-                    </Pressable>
-                    <Pressable
-                        style={styles.button}
-                        onPress={handleContinue}
-                        title="Weiter">
-                            <Text style={styles.buttonText}>Weiter</Text>
-                    </Pressable>
-                </View>
+                                    <View style={styles.numberInputInnerContainer}>
+                                        <TextInput mode={"outline"}
+                                                   inputMode={"numeric"}
+                                                   style={styles.numberInput}
+                                                   onChangeText={handleYinput}
+                                                   maxLength={2}
+                                                   value={y}
+                                                   placeholder="Y">
+                                            </TextInput>
+                                </View>
+                            </LinearGradient>
+                        </View>
+                        {proportionWarningEnabled &&
+                            <Text style={styles.warning}>Das Verhältnis muss aus zwei Zahlen zwischen 1 und 50 bestehen</Text>
+                        }
+                    </View>
+                </ScrollView>
             </View>
         
     );
@@ -120,6 +131,10 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        padding: 10,
+    },
+    innerContainer: {
+        padding: 5,
     },
     upper:{
         flex:1,
@@ -128,12 +143,6 @@ const styles = StyleSheet.create({
         fontSize:24,
         fontWeight: "bold",
         marginBottom: 8,
-    },
-    textInput: {
-        fontSize:24,
-        fontWeight: "bold",
-        backgroundColor: "white",
-        borderRadius: 12
     },
     nameInput:{
         borderTopColor: "grey",
@@ -144,18 +153,12 @@ const styles = StyleSheet.create({
         paddingLeft: 6,
     },
     proportionView: {
-        flexDirection: 'row',
-        borderWidth: 1.5,
-        borderColor: "grey",
-        borderRadius: 12,
-        backgroundColor: "white",
-        marginBottom: 16,
+
     },
     colon:{
         fontSize:24,
         fontWeight: "bold",
-        backgroundColor: "white",
-        paddingVertical: 7, 
+        paddingVertical: 7,
         borderWidth: 0,
     },
     xInput:{
@@ -185,8 +188,79 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     buttonText:{
-        fontSize: 24,
+        fontSize: 16,
         fontWeight: "bold",
         textAlign: "center"
-    }
+    },
+    textInput: {
+        width: '90%',
+        fontSize: 16,
+        textAlign: "left",
+        textAlignVertical: "bottom",
+        paddingBottom: 5,
+        paddingTop: 5,
+        color: "black",
+    },
+    textInputContainer: {
+        width: '100%',
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        alignSelf: "center",
+
+    },
+    textInputInnerContainer : {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: '100%',
+        height: 40,
+        backgroundColor: '#fef7ee',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0, height: 4
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 1,
+    },
+    sectionTitle: {
+        alignSelf: "center",
+        fontSize: 18,
+        color: "grey",
+        marginTop: 20,
+        marginBottom: 10,
+        width: '100%'
+    },
+    numberInput: {
+        width: 40,
+        fontSize: 16,
+        textAlign: "center",
+        textAlignVertical: "bottom",
+        paddingBottom: 5,
+        paddingTop: 5,
+    },
+    numberInputContainer: {
+        width: '100%',
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 12,
+        marginBottom: 16,
+    },
+    numberInputInnerContainer : {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "bottom",
+        justifyContent: "center",
+        width: 60,
+        height: 30,
+        backgroundColor: "#f5eae7",
+        borderRadius: 10,
+        marginHorizontal: 10,
+    },
 });
