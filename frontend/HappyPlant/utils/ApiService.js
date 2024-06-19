@@ -60,9 +60,6 @@ export const fetchURLUploadImage =async (plantId, payload) => {
 
         const response = await fetch(`${API_URL}/images?plantId=${plantId}`, requestOptions);
 
-        console.log(response);
-        console.log("picture send");
-
         if (response.ok) {
             const data = await response.json();
             if (data.error) {
