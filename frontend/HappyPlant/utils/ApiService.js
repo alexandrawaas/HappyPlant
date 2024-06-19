@@ -44,3 +44,36 @@ export const fetchURL = async (url, method='GET', payload=null, callback = ()=>{
         callback([]);
     }
 }
+
+export const fetchURLUploadImage =async (plantId, payload) => {
+    try {
+        let authToken = await getAuthToken();
+
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'multipart/form-data'
+            },
+            body: payload,
+        };
+
+        const response = await fetch(`${API_URL}/images?plantId=${plantId}`, requestOptions);
+
+        console.log(response);
+        console.log("picture send");
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.error) {
+                console.error('error: ', data);
+                window.alert(data.error);
+            }
+        } else {
+            console.error('Fehler beim Abrufen der Daten:', response.status);
+        }
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Daten:', error);
+        window.alert('Fehler beim Abrufen der Daten');
+    }
+}

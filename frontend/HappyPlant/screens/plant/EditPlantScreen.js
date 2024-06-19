@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import { fetchURL } from '../../utils/ApiService'
@@ -11,6 +11,7 @@ import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import CollapsibleBar from "../other/CollapsibleBar";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function EditPlantScreen({ navigation }) {
 
@@ -81,11 +82,25 @@ export default function EditPlantScreen({ navigation }) {
             })},
         ]);
 
+    const handleChoosePhoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+          });
+      
+          if (!result.canceled) {
+            navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
+          }
+      };
 
     return (
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
-                <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
+                <Pressable onPress={handleChoosePhoto}>
+                    <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
+                </Pressable>
                 <VerticalPlaceholder size={20}/>
                 <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
                 <View style={styles.badgesContainer}>

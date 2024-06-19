@@ -5,6 +5,7 @@ import SinglePlantScreen from '../plant/SinglePlantScreen'
 import GlobalLayout from './GlobalLayout';
 import headerStyleOptions from './HeaderStyle';
 import NewPlantScreen from "../plant/NewPlantScreen";
+import UploadImageDialog from '../plant/UploadImageDialog';
 
 const PlantStack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ export default function PlantStackNavigator() {
         <PlantStack.Screen name="Pflanzenprofil" children={(props) => <GlobalLayout component={SinglePlantScreen} {...props} />} />
         <PlantStack.Screen name="Pflanze bearbeiten" children={(props) => <GlobalLayout component={EditPlantScreen} {...props} />} />
         <PlantStack.Screen name="Neue Pflanze erstellen" children={(props) => <GlobalLayout component={NewPlantScreen} {...props} />} />
-      </PlantStack.Navigator>
+        <PlantStack.Screen name="Foto hochladen" children={(props) => <GlobalLayout component={UploadImageDialog} {...props} />} />
+        </PlantStack.Navigator>
   );
 }
