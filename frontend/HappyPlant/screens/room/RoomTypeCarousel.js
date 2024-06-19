@@ -55,13 +55,17 @@ const styles = StyleSheet.create({
     iconContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0, height: 4
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
     },
     circle: {
         width: 130,
         height: 130,
         borderRadius: 35,
-        borderWidth: 1.5,
-        borderColor: "grey",
         backgroundColor: '#ffffff',
         justifyContent: 'center',
         alignItems: 'center',
