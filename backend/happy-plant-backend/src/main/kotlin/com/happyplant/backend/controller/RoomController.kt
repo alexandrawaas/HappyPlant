@@ -60,7 +60,9 @@ class RoomController (
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
             ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
 
-        return service.storeWindowsOnRoom(roomId, windows, userId)?.asDtoResponse()
+
+
+        return service.storeWindowsOnRoom(roomId, windows.filter { it.isWindow }, userId)?.asDtoResponse()
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
     
