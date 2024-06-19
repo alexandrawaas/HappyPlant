@@ -37,6 +37,13 @@ export default function SinglePlantScreen({ navigation }) {
         })
     }, [navigation, plant])
 
+    const addDays = (date, days)=> {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+
     return (
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
@@ -73,16 +80,18 @@ export default function SinglePlantScreen({ navigation }) {
                          </LinearGradient>
                      </View>
                      <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
-                    { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) => v !== -1 ?
-                          <View style={styles.boxContainer} key={k}>
-                              <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                  <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
-                                  <Text>alle {v} Tage</Text>
-                              </LinearGradient>
-                          </View>
-                        : null
-                      )
-                      : null }
+                    { plant.assignments !== undefined
+                        ? plant.assignments.map
+                        (
+                            it =>
+                            <View style={styles.boxContainer} key={it.id}>
+                                <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                                    <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[it.assignmentType]}</Text>
+                                    <Text> { plant.needs.intervals[it.assignmentType] !== undefined ? (it.lastDone ? addDays(it.lastDone, plant.needs.intervals[it.assignmentType]).toLocaleDateString() : addDays(new Date(), plant.needs.intervals[it.assignmentType]).toLocaleDateString()) : ""} </Text>
+                                </LinearGradient>
+                            </View>
+                        ) : null }
+
                      <Text style={styles.sectionTitle}>Notizen</Text>
                      <View style={styles.boxContainer}>
                          <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
