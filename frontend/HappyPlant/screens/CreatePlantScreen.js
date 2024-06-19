@@ -11,12 +11,33 @@ import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
 import VerticalPlaceholder from "../utils/styles/VerticalPlaceholder";
 import * as ImagePicker from 'expo-image-picker';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 export default function CreatePlantScreen({ navigation }) {
 
     const route = useRoute();
     const { id } = route.params;
     const [plant, setPlant] = useState({});
+    const { showActionSheetWithOptions } = useActionSheet();
+
+    const showActionSheet = () => {
+        const options = ['Neues Foto aufnehmen', 'Foto aus Bibliothek aussuchen', 'Abbrechen'];
+        const cancelButtonIndex = 2;
+    
+        showActionSheetWithOptions(
+          {
+            options,
+            cancelButtonIndex,
+          },
+          (buttonIndex) => {
+            if (buttonIndex === 0) {
+              handleTakePhoto();
+            } else if (buttonIndex === 1) {
+              handleChoosePhoto();
+            }
+          }
+        );
+    };
 
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, setPlant)
@@ -38,6 +59,7 @@ export default function CreatePlantScreen({ navigation }) {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
+            allowsMultipleSelection: false,
             aspect: [1, 1],
             quality: 1,
           });
@@ -45,12 +67,24 @@ export default function CreatePlantScreen({ navigation }) {
           if (!result.canceled) {
             navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
           }
-      };
+    };
+    
+    const handleTakePhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+        });
+    
+        if (!result.canceled) {
+          navigation.navigate('Foto hochladen', { photo: result.assets[0], plantId: plant.id });
+        }
+    };
 
     return (
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
-                <Pressable onPress={handleChoosePhoto}>
+                <Pressable onPress={showActionSheet}>
                     <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
                 </Pressable>
                 <VerticalPlaceholder size={20}/>

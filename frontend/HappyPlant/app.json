@@ -37,7 +37,9 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to use them in your plant profiles"
+          "photosPermission": "The app accesses your photos to use them in your plant profiles",
+          "cameraPermission": "Allow app to open the camera to use the pictures in your plant profiles",
+          "microphonePermission": false
         }
       ]
     ]
