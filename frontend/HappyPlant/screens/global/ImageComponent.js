@@ -49,7 +49,7 @@ const ImageComponent = ({ imageId, authToken, style }) => {
   if (loading) { 
     return (
       <View>
-        <ActivityIndicator size="large" color="#0000ff" style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }}/>
+        <ActivityIndicator size="large" color="#42f590" style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }}/>
       </View>
     );
   }
