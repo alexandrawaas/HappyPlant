@@ -40,7 +40,9 @@ data class Pixel(
                 val coordinates = mutableListOf<Coordinate>()
                 for (x in this.x - manhattanDistance..this.x + manhattanDistance) {
                         for (y in this.y - (manhattanDistance - abs(this.x - x))..this.y + (manhattanDistance - abs(this.x - x))) {
-                                coordinates.add(Coordinate(x, y))
+                                if (abs(this.x - x) + abs(this.y - y) == manhattanDistance) {
+                                        coordinates.add(Coordinate(x, y))
+                                }
                         }
                 }
                 return coordinates

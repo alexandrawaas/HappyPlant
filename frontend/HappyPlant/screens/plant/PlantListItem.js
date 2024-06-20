@@ -5,7 +5,7 @@ export default function ({plant, onPress}) {
     return <>
         <TouchableOpacity onPress={() => onPress(plant.id)} style={styles.listItemContainer}>
             <View >
-                <RoundPictureNameComponent header={plant.name} subHeader={plant.species.name} isListItem />
+                <RoundPictureNameComponent header={plant.name} subHeader={plant.species.name} imageId={plant.imageId} isListItem />
             </View>
         </TouchableOpacity>
     </>;
