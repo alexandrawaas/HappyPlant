@@ -78,6 +78,9 @@ export default function EditPlantScreen({ navigation }) {
         fetchURL('/plants/'+plant.id, 'PUT', payload, () => {
             navigation.navigate("Pflanzenprofil", {id: plant.id})
         })
+
+        handleUploadPhoto();
+        console.log("submitted");
     }
 
     useEffect(() => {
@@ -85,7 +88,7 @@ export default function EditPlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <TouchableOpacity onPress={handleSubmit} style={{margin: 8}}>
+                <TouchableOpacity onPress={() => handleSubmit()} style={{margin: 8}}>
                     <Feather name="check" color="grey" size={25}/>
                 </TouchableOpacity>
             )
@@ -103,6 +106,26 @@ export default function EditPlantScreen({ navigation }) {
                 navigation.navigate("Meine Pflanzen")
             })},
         ]);
+
+    const handleUploadPhoto = () => {
+        fetchURLUploadImage(plant.id, createFormData());
+        navigation.goBack()
+    };
+    
+    const createFormData = () => {
+        const data = new FormData();
+        const uri = imageData.uri;
+        const uriParts = uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+      
+        data.append('file', {
+          uri,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+        });
+      
+        return data;
+    };
 
     const handleChoosePhoto = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
