@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
-import { API_URL } from '../../config';
-import { getAuthToken } from "../../utils/AuthTokenUtil";
 import { fetchImage } from '../../utils/ApiService';
 
 
@@ -32,25 +30,30 @@ const ImageComponent = ({ imageId, style, raw = false, imageData }) => {
     );
   }
 
+  const renderContent = useCallback(() => {
+    let res
+    if(raw) {
+      res = <Image source={imageData} style={{ ...styles.default, ...styles.image, resizeMode: 'contain' }} />
+    } else if(!raw && loading) {
+      res = <ActivityIndicator size = "large" color = "#42f590" style = { style? { ...style, resizeMode: 'contain' } : {...styles.default, resizeMode: 'contain' }} />
+    } else if(!raw && !loading && imageBase64) {
+      res = <Image source={{ uri: imageBase64 }} style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />
+    }
+    return res
+  }, [loading, raw, imageBase64])
+
   return (
-    <View>{raw
-      ? <Image source={imageData} style={{ ...styles.default, ...styles.image, resizeMode: 'contain' }} />
-      : {
-        loading
-          ?<ActivityIndicator size = "large" color = "#42f590" style = { style? { ...style, resizeMode: 'contain'
-      } : {...styles.default, resizeMode: 'contain' }} />
-      : {imageBase64 && <Image source={{ uri: imageBase64 }} style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />}
-            }}
+    <View>
+      {renderContent()}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   default: {
     width: 200,
     height: 200,
   },
-
 });
 
 export default ImageComponent;
