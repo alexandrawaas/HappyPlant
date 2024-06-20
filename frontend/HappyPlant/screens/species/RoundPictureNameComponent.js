@@ -8,8 +8,7 @@ export default function RoundPictureNameComponent({header, subHeader, isListItem
         <View style={styles.topContainer}>
             <View style={[styles.imageContainer, commonStyles.shadow]}>
                 <LinearGradient colors={["#fdfbef", "#fef1ed"]}>
-                    <ImageComponent style={styles.image} imageId={imageId} raw={raw} imageData={imageData}
-                    />
+                    <ImageComponent style={styles.image} imageId={imageId} raw={raw} imageData={imageData}/>
                 </LinearGradient>
             </View>
             <Text numberOfLines={1} style={[styles.header, isListItem ? styles.listItemTextFormat : {}]}>{header}</Text>

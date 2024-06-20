@@ -79,8 +79,8 @@ export default function EditPlantScreen({ navigation }) {
             navigation.navigate("Pflanzenprofil", {id: plant.id})
         })
 
-        handleUploadPhoto();
-        console.log("submitted");
+        fetchURLUploadImage(plant.id, createFormData(imageData));
+        navigation.goBack()
     }
 
     useEffect(() => {
@@ -88,12 +88,12 @@ export default function EditPlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <TouchableOpacity onPress={() => handleSubmit()} style={{margin: 8}}>
+                <TouchableOpacity onPress={() => handleSubmit(imageData)} style={{margin: 8}}>
                     <Feather name="check" color="grey" size={25}/>
                 </TouchableOpacity>
             )
         })
-    }, [navigation, plant])
+    }, [navigation, plant, imageData])
 
 
     const createTwoButtonAlert = () =>
@@ -110,9 +110,9 @@ export default function EditPlantScreen({ navigation }) {
     const handleUploadPhoto = () => {
         fetchURLUploadImage(plant.id, createFormData());
         navigation.goBack()
-    };
+    }
     
-    const createFormData = () => {
+    const createFormData = (imageData) => {
         const data = new FormData();
         const uri = imageData.uri;
         const uriParts = uri.split('.');

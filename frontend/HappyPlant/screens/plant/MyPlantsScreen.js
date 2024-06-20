@@ -17,6 +17,9 @@ export default function MyPlantsScreen({ navigation }) {
     useEffect(() => {
         fetchURL('/plants', 'GET', null, setPlants)
     }, [])
+    useFocusEffect(() => {
+        fetchURL('/plants', 'GET', null, setPlants)
+    })
 
     useEffect(() => {
         let url = '/plants?search=' + searchQuery

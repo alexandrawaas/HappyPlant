@@ -21,7 +21,7 @@ const ImageComponent = ({ imageId, style, raw = false, imageData }) => {
     }
   }, [imageId, raw]);
 
-  console.log({ uri: imageBase64 })
+ 
   if (loading) {
     return (
       <View>

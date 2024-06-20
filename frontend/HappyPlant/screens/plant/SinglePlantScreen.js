@@ -14,6 +14,7 @@ import {Tooltip} from "react-native-elements";
 import EditButton from "../global/EditButton";
 import Feather from "react-native-vector-icons/Feather";
 import { fetchURL } from '../../utils/ApiService'
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function SinglePlantScreen({ navigation }) {
 
@@ -26,6 +27,10 @@ export default function SinglePlantScreen({ navigation }) {
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, setPlant)
     }, [isFocused])
+
+    useFocusEffect(() => {
+        fetchURL(`/plants/${id}`, 'GET', null, setPlant)
+    })
 
     useEffect(() => {
         navigation.setOptions({
