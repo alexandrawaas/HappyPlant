@@ -6,34 +6,22 @@ import {useEffect, useState} from "react";
 import { fetchURL } from '../../utils/ApiService'
 import {Searchbar} from "react-native-paper";
 import { commonStyles } from "../../utils/styles/CommonStyles";
-import {useFocusEffect, useIsFocused} from "@react-navigation/native";
+import { useIsFocused } from '@react-navigation/native';
 
 // TODO: remove plant mock and use fetch instead
 export default function MyPlantsScreen({ navigation }) {
-
+    const isFocused = useIsFocused();
     const [searchQuery, setSearchQuery] = useState("");
     const [plants, setPlants] = useState([]);
 
     useEffect(() => {
         fetchURL('/plants', 'GET', null, setPlants)
-    }, [])
-    useFocusEffect(() => {
-        fetchURL('/plants', 'GET', null, setPlants)
-    })
+    }, [isFocused])
 
     useEffect(() => {
         let url = '/plants?search=' + searchQuery
         fetchURL(url, 'GET', null, setPlants)
     }, [searchQuery])
-
-    const isFocused = useIsFocused();
-
-    useEffect(() => {
-        if (isFocused) {
-            fetchURL('/plants', 'GET', null, setPlants);
-        }
-    }, [isFocused]);
-
 
     let handleAddPlantClick = () => {
         navigation.navigate('Neue Pflanze erstellen', {id: null})
