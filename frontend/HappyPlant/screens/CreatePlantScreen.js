@@ -85,7 +85,7 @@ export default function CreatePlantScreen({ navigation }) {
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
                 <Pressable onPress={showActionSheet}>
-                    <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
+                    <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} imageId={plant.imageId}></RoundPictureNameComponent>
                 </Pressable>
                 <VerticalPlaceholder size={20}/>
                 <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>

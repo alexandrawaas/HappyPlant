@@ -43,9 +43,8 @@ class ImageDataService(
 
     fun getImage(imageId: UUID, loggedIn: Boolean, userId: UUID?): Image {
         val dbImage: Image? = db.findById(imageId).getOrNull()
-
         if(dbImage != null) {
-            if ( (!loggedIn && dbImage.userId == null) || (loggedIn && dbImage.userId == userId) ) {
+            if ( ( dbImage.userId == null) || (loggedIn && dbImage.userId == userId) ) {
                 return dbImage
             } else {
                 throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
