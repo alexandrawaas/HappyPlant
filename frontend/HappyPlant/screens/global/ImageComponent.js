@@ -32,7 +32,7 @@ const ImageComponent = ({ imageId, style, raw = false, imageData }) => {
 
   if (raw) {
     return (<View>
-      <Image source={imageData} style={{ ...styles.default, ...styles.image, resizeMode: 'contain' }} />
+      <Image source={imageData} style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />
     </View>)
   } else if (!raw && loading) {
     return (<View>

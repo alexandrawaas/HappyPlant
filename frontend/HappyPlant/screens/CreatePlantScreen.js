@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Pressable} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Pressable, Image} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import { fetchURL } from '../utils/ApiService'
@@ -14,6 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
 export default function CreatePlantScreen({ navigation }) {
+    const [imageData, setImageData] = useState(undefined);
 
     const route = useRoute();
     const { id } = route.params;
@@ -65,7 +66,8 @@ export default function CreatePlantScreen({ navigation }) {
           });
       
           if (!result.canceled) {
-            navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
+            setImageData(result.assets[0])
+            //navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
           }
     };
     
@@ -77,7 +79,8 @@ export default function CreatePlantScreen({ navigation }) {
         });
     
         if (!result.canceled) {
-          navigation.navigate('Foto hochladen', { photo: result.assets[0], plantId: plant.id });
+            setImageData(result.assets[0])
+          //navigation.navigate('Foto hochladen', { photo: result.assets[0], plantId: plant.id });
         }
     };
 
@@ -85,7 +88,10 @@ export default function CreatePlantScreen({ navigation }) {
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
                 <Pressable onPress={showActionSheet}>
-                    <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} imageId={plant.imageId}></RoundPictureNameComponent>
+                    {imageData 
+                        ? <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} raw={true} imageData={imageData}></RoundPictureNameComponent>
+                        : <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} imageId={plant.imageId}></RoundPictureNameComponent>
+                    }
                 </Pressable>
                 <VerticalPlaceholder size={20}/>
                 <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
