@@ -30,23 +30,19 @@ const ImageComponent = ({ imageId, style, raw = false, imageData }) => {
     );
   }
 
-  const renderContent = useCallback(() => {
-    let res
-    if(raw) {
-      res = <Image source={imageData} style={{ ...styles.default, ...styles.image, resizeMode: 'contain' }} />
-    } else if(!raw && loading) {
-      res = <ActivityIndicator size = "large" color = "#42f590" style = { style? { ...style, resizeMode: 'contain' } : {...styles.default, resizeMode: 'contain' }} />
-    } else if(!raw && !loading && imageBase64) {
-      res = <Image source={{ uri: imageBase64 }} style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />
-    }
-    return res
-  }, [loading, raw, imageBase64])
-
-  return (
-    <View>
-      {renderContent()}
-    </View>
-  );
+  if (raw) {
+    return (<View>
+      <Image source={imageData} style={{ ...styles.default, ...styles.image, resizeMode: 'contain' }} />
+    </View>)
+  } else if (!raw && loading) {
+    return (<View>
+      <ActivityIndicator size="large" color="#42f590" style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />
+    </View>)
+  } else if (!raw && !loading && imageBase64) {
+    return (<View>
+      <Image source={{ uri: imageBase64 }} style={style ? { ...style, resizeMode: 'contain' } : { ...styles.default, resizeMode: 'contain' }} />
+    </View>)
+  }
 }
 
 const styles = StyleSheet.create({
