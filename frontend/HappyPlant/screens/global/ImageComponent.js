@@ -23,7 +23,7 @@ const ImageComponent = ({ imageId, style }) => {
     
   }, [imageId]);
 
-
+  console.log({uri: imageBase64})
   if (loading) { 
     return (
       <View>
