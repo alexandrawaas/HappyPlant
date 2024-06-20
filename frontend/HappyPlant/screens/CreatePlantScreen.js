@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Pressable, Image} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import { fetchURL } from '../utils/ApiService'
+import { fetchURL, fetchURLUploadImage } from '../utils/ApiService'
 import RoundPictureNameComponent from "./species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
 import {
@@ -49,12 +49,38 @@ export default function CreatePlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <TouchableOpacity onPress={() => console.log("submit Button pressed")} style={{margin: 8}}>
+                <TouchableOpacity onPress={() => handleSubmit()} style={{margin: 8}}>
                     <Feather name="check" color="grey" size={25}/>
                 </TouchableOpacity>
             )
         })
     }, [navigation, plant])
+
+    const handleSubmit = () =>{
+        //TODO mit if schaun ob daten oder bild oder beides
+        handleUploadPhoto();
+        console.log("submitted");
+    }
+
+    const handleUploadPhoto = () => {
+        fetchURLUploadImage(plant.id, createFormData());
+        navigation.goBack()
+    };
+    
+    const createFormData = () => {
+        const data = new FormData();
+        const uri = imageData.uri;
+        const uriParts = uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+      
+        data.append('file', {
+          uri,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+        });
+      
+        return data;
+    };
 
     const handleChoosePhoto = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
