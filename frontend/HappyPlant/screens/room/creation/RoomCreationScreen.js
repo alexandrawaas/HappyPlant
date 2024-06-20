@@ -5,6 +5,7 @@ import { fetchURL } from "../../../utils/ApiService";
 import {LinearGradient} from "expo-linear-gradient";
 import VerticalPlaceholder from "../../../utils/styles/VerticalPlaceholder";
 import Feather from "react-native-vector-icons/Feather";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 export default function RoomCreationScreen({ navigation }) {
     const [name, setName] = useState("")
@@ -26,18 +27,20 @@ export default function RoomCreationScreen({ navigation }) {
         setY(numericValue); 
     }; 
 
+    const maxNameLength = 50
+    const maxProportionValue = 20
 
     const handleContinue = async () =>{
         setNameWarningEnabled(false);
         setProportionWarningEnabled(false);
 
         let shouldCancel = false;
-        if(name.length < 1 || name.length > 50){
+        if(name.length < 1 || name.length > maxNameLength){
             setNameWarningEnabled(true);
             shouldCancel = true;
         }
         currX = parseInt(x); currY = parseInt(y);
-        if( x.length < 1 || y.length < 1 || currX == 0 || currY == 0 || currX > 50 || currY > 50 ){
+        if( x.length < 1 || y.length < 1 || currX == 0 || currY == 0 || currX > maxProportionValue || currY > maxProportionValue ){
             setProportionWarningEnabled(true);
             shouldCancel = true;
         }
@@ -74,7 +77,7 @@ export default function RoomCreationScreen({ navigation }) {
                     <View style={styles.innerContainer}>
                         <Text style={styles.sectionTitle}>Name des Raums</Text>
                         <View style={styles.textInputContainer}>
-                            <View style={[styles.textInputInnerContainer]}>
+                            <View style={[styles.textInputInnerContainer, commonStyles.shadow]}>
                                 <TextInput style={styles.textInput}
                                            inputMode={"text"}
                                            onChangeText={setName}
@@ -84,11 +87,11 @@ export default function RoomCreationScreen({ navigation }) {
                             </View>
                         </View>
                         {nameWarningEnabled &&
-                            <Text style={styles.warning}>Der Raumname muss zwischen 1 und 50 Zeichen lang sein</Text>
+                            <Text style={styles.warning}>Der Raumname muss zwischen 1 und {maxNameLength} Zeichen lang sein</Text>
                         }
                         <Text style={styles.sectionTitle}>Seitenverhältnis</Text>
                         <View>
-                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.numberInputContainer}>
+                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.numberInputContainer]}>
                                     <View style={styles.numberInputInnerContainer}>
                                         <TextInput mode={"outline"}
                                                    inputMode={"numeric"}
@@ -114,7 +117,7 @@ export default function RoomCreationScreen({ navigation }) {
                             </LinearGradient>
                         </View>
                         {proportionWarningEnabled &&
-                            <Text style={styles.warning}>Das Verhältnis muss aus zwei Zahlen zwischen 1 und 50 bestehen</Text>
+                            <Text style={styles.warning}>Das Verhältnis muss aus zwei Zahlen zwischen 1 und {maxProportionValue} bestehen</Text>
                         }
                     </View>
                 </ScrollView>
@@ -216,14 +219,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 40,
         backgroundColor: '#fef7ee',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0, height: 4
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 1,
+        borderRadius: 10
     },
     sectionTitle: {
         alignSelf: "center",
@@ -248,7 +244,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 12,
-        marginBottom: 16,
     },
     numberInputInnerContainer : {
         display: "flex",
