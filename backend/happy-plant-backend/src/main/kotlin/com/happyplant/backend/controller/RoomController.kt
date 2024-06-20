@@ -9,6 +9,7 @@ import com.happyplant.backend.datatransfer.room.RoomDtoResponse
 import com.happyplant.backend.datatransfer.room.asDtoResponse
 import com.happyplant.backend.service.RoomService
 import com.happyplant.backend.utility.AuthTokenUtil
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -41,7 +42,7 @@ class RoomController (
     @ResponseStatus(HttpStatus.CREATED)
     fun addRoom(
         @RequestHeader("Authorization") authHeader: String, 
-        @RequestBody newRoom: RoomDtoRequest
+        @Valid @RequestBody newRoom: RoomDtoRequest
     ): RoomDtoResponse {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
             ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid or missing authorization token")
