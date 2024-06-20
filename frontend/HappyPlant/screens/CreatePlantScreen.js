@@ -49,25 +49,21 @@ export default function CreatePlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <TouchableOpacity onPress={() => handleSubmit()} style={{margin: 8}}>
+                <TouchableOpacity onPress={() => handleSubmit(imageData)} style={{margin: 8}}>
                     <Feather name="check" color="grey" size={25}/>
                 </TouchableOpacity>
             )
         })
-    }, [navigation, plant])
+    }, [navigation, plant, imageData])
 
-    const handleSubmit = () =>{
+    const handleSubmit = (imageData) =>{
         //TODO mit if schaun ob daten oder bild oder beides
-        handleUploadPhoto();
-        console.log("submitted");
-    }
-
-    const handleUploadPhoto = () => {
-        fetchURLUploadImage(plant.id, createFormData());
+        fetchURLUploadImage(plant.id, createFormData(imageData));
+        //console.log("send")
         navigation.goBack()
-    };
+    }
     
-    const createFormData = () => {
+    const createFormData = (imageData) => {
         const data = new FormData();
         const uri = imageData.uri;
         const uriParts = uri.split('.');

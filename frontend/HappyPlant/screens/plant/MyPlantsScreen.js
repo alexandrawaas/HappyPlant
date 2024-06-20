@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import { fetchURL } from '../../utils/ApiService'
 import {Searchbar} from "react-native-paper";
 import { commonStyles } from "../../utils/styles/CommonStyles";
+import { useFocusEffect } from '@react-navigation/native';
 
 // TODO: remove plant mock and use fetch instead
 export default function MyPlantsScreen({ navigation }) {
@@ -16,6 +17,9 @@ export default function MyPlantsScreen({ navigation }) {
     useEffect(() => {
         fetchURL('/plants', 'GET', null, setPlants)
     }, [])
+    useFocusEffect(() => {
+        fetchURL('/plants', 'GET', null, setPlants)
+    })
 
     useEffect(() => {
         let url = '/plants?search=' + searchQuery
