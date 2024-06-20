@@ -13,7 +13,6 @@ export default function RoomTypeCarousel(props) {
 
     const handleSnap = (index) =>{
         setCurrentIndex(index);
-        //console.log(index);
         props.callback(roomTypes[index]);
     }
 

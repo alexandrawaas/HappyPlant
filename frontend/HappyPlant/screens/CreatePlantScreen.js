@@ -59,7 +59,6 @@ export default function CreatePlantScreen({ navigation }) {
     const handleSubmit = (imageData) =>{
         //TODO mit if schaun ob daten oder bild oder beides
         fetchURLUploadImage(plant.id, createFormData(imageData));
-        //console.log("send")
         navigation.goBack()
     }
     
