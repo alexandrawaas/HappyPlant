@@ -1,4 +1,3 @@
-
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable, Image} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
@@ -60,6 +59,7 @@ export default function EditPlantScreen({ navigation }) {
             })
     }, [plant])
 
+
     useEffect(() => {
         navigation.setOptions({
             ...navigation.options,
@@ -118,7 +118,6 @@ export default function EditPlantScreen({ navigation }) {
         fetchURL('/plants/' + plant.id, 'PUT', payload, sendImage)
         
     }, [imageData, plant])
-
 
     const createFormData = (imageData) => {
         const data = new FormData();
