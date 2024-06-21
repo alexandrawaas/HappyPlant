@@ -58,6 +58,7 @@ export default function CreatePlantScreen({ navigation }) {
 
     const handleSubmit = useCallback(() => {
         const payload = {
+            name: plant.name,
             speciesId: plant.species.id,
         }
         
