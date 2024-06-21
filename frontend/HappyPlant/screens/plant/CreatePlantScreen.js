@@ -97,8 +97,6 @@ export default function EditPlantScreen({ navigation }) {
 
         const payload = {
             name: plant.name,
-            picturePath: plant.picturePath,
-            notes: newNotes,
             speciesId: plant.species.id,
             needs: {
                 lightingType: Object.keys(LightingTypeTranslations).find(key => LightingTypeTranslations[key] === chosenLighting),
