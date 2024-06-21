@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MyPlantsScreen from '../plant/MyPlantsScreen'
-import CreatePlantScreen from '../CreatePlantScreen'
+import CreatePlantScreen from '../plant/CreatePlantScreen'
 import SinglePlantScreen from '../plant/SinglePlantScreen'
 import GlobalLayout from './GlobalLayout';
 import headerStyleOptions from './HeaderStyle';

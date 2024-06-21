@@ -1,17 +1,17 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Pressable, Image} from "react-native";
-import {useRoute} from "@react-navigation/native";
-import {useEffect, useState} from "react";
-import { fetchURL, fetchURLUploadImage } from '../utils/ApiService'
-import RoundPictureNameComponent from "./species/RoundPictureNameComponent";
-import {LinearGradient} from "expo-linear-gradient";
+import { View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Pressable, Image } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
+import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
+import { LinearGradient } from "expo-linear-gradient";
 import {
     AssignmentTypeTranslations,
-} from "../utils/EnumTranslations";
-import {Input, Tooltip} from "react-native-elements";
+} from "../../utils/EnumTranslations";
+import { Input, Tooltip } from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
-import VerticalPlaceholder from "../utils/styles/VerticalPlaceholder";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import * as ImagePicker from 'expo-image-picker';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { fetchURL, fetchURLUploadImage } from "../../utils/ApiService";
 
 export default function CreatePlantScreen({ navigation }) {
     const [imageData, setImageData] = useState(undefined);
@@ -24,19 +24,19 @@ export default function CreatePlantScreen({ navigation }) {
     const showActionSheet = () => {
         const options = ['Neues Foto aufnehmen', 'Foto aus Bibliothek aussuchen', 'Abbrechen'];
         const cancelButtonIndex = 2;
-    
+
         showActionSheetWithOptions(
-          {
-            options,
-            cancelButtonIndex,
-          },
-          (buttonIndex) => {
-            if (buttonIndex === 0) {
-              handleTakePhoto();
-            } else if (buttonIndex === 1) {
-              handleChoosePhoto();
+            {
+                options,
+                cancelButtonIndex,
+            },
+            (buttonIndex) => {
+                if (buttonIndex === 0) {
+                    handleTakePhoto();
+                } else if (buttonIndex === 1) {
+                    handleChoosePhoto();
+                }
             }
-          }
         );
     };
 
@@ -49,31 +49,43 @@ export default function CreatePlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <TouchableOpacity onPress={() => handleSubmit(imageData)} style={{margin: 8}}>
-                    <Feather name="check" color="grey" size={25}/>
+                <TouchableOpacity onPress={handleSubmit} style={{ margin: 8 }}>
+                    <Feather name="check" color="blue" size={25} />
                 </TouchableOpacity>
             )
         })
     }, [navigation, plant, imageData])
 
-    const handleSubmit = (imageData) =>{
-        //TODO mit if schaun ob daten oder bild oder beides
-        fetchURLUploadImage(plant.id, createFormData(imageData));
-        navigation.navigate("Pflanzenprofil", {id: plant.id})
-    }
-    
+    const handleSubmit = useCallback(() => {
+        const payload = {
+            speciesId: plant.species.id,
+        }
+        
+        const sendImage = () => {
+            if (imageData) {
+                fetchURLUploadImage(plant.id, createFormData(imageData))
+                    .then(() => { navigation.navigate("Pflanzenprofil", { id: plant.id }) });
+                setImageData(undefined)
+            } else {
+                navigation.navigate("Pflanzenprofil", { id: plant.id })
+            }
+        }
+        fetchURL('/plants/' + plant.id, 'PUT', payload, sendImage)
+        
+    }, [imageData, plant])
+
     const createFormData = (imageData) => {
         const data = new FormData();
         const uri = imageData.uri;
         const uriParts = uri.split('.');
         const fileType = uriParts[uriParts.length - 1];
-      
+
         data.append('file', {
-          uri,
-          name: `photo.${fileType}`,
-          type: `image/${fileType}`,
+            uri,
+            name: `photo.${fileType}`,
+            type: `image/${fileType}`,
         });
-      
+
         return data;
     };
 
@@ -84,24 +96,24 @@ export default function CreatePlantScreen({ navigation }) {
             allowsMultipleSelection: false,
             aspect: [1, 1],
             quality: 1,
-          });
-      
-          if (!result.canceled) {
-            setImageData(result.assets[0])
-            //navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
-          }
-    };
-    
-    const handleTakePhoto = async () => {
-        let result = await ImagePicker.launchCameraAsync({
-          allowsEditing: true,
-          aspect: [1, 1],
-          quality: 1,
         });
-    
+
         if (!result.canceled) {
             setImageData(result.assets[0])
-          //navigation.navigate('Foto hochladen', { photo: result.assets[0], plantId: plant.id });
+            //navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
+        }
+    };
+
+    const handleTakePhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImageData(result.assets[0])
+            //navigation.navigate('Foto hochladen', { photo: result.assets[0], plantId: plant.id });
         }
     };
 
@@ -109,38 +121,38 @@ export default function CreatePlantScreen({ navigation }) {
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
                 <Pressable onPress={showActionSheet}>
-                    {imageData 
+                    {imageData
                         ? <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} raw={true} imageData={imageData}></RoundPictureNameComponent>
                         : <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} imageId={plant.imageId}></RoundPictureNameComponent>
                     }
                 </Pressable>
-                <VerticalPlaceholder size={20}/>
+                <VerticalPlaceholder size={20} />
                 <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
                 <View style={styles.boxContainer}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                         <View style={styles.badgesContainer}>
                             <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
-                                <Feather name="info" color="grey" size={25}/>
+                                <Feather name="info" color="grey" size={25} />
                             </Tooltip>
                         </View>
                     </LinearGradient>
                 </View>
                 <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
-                { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
-                        <View style={styles.boxContainer} key={k}>
-                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
-                                <View style={styles.numberInputContainer}>
-                                    <Text>alle</Text>
-                                    <View style={styles.numberInputInnerContainer}>
-                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v}</TextInput>
-                                    </View>
-                                    <Text>Tage</Text>
+                {plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
+                    <View style={styles.boxContainer} key={k}>
+                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                            <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
+                            <View style={styles.numberInputContainer}>
+                                <Text>alle</Text>
+                                <View style={styles.numberInputInnerContainer}>
+                                    <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v}</TextInput>
                                 </View>
-                            </LinearGradient>
-                        </View>
-                    )
-                    : null }
+                                <Text>Tage</Text>
+                            </View>
+                        </LinearGradient>
+                    </View>
+                )
+                    : null}
                 <Text style={styles.sectionTitle}>Notizen</Text>
                 <View style={styles.boxContainer}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.detailContainer, styles.notesContainer]}>
@@ -148,7 +160,7 @@ export default function CreatePlantScreen({ navigation }) {
                     </LinearGradient>
                 </View>
             </View>
-            <VerticalPlaceholder size={150}/>
+            <VerticalPlaceholder size={150} />
         </ScrollView>
     );
 }
@@ -167,8 +179,8 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        alignItems:"center",
-        justifyContent:"top",
+        alignItems: "center",
+        justifyContent: "top",
     },
     containerHorizontal: {
         marginTop: 16,
@@ -258,7 +270,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    numberInputInnerContainer : {
+    numberInputInnerContainer: {
         display: "flex",
         flexDirection: "row",
         alignItems: "bottom",
