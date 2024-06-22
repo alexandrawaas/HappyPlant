@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React, { useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import Draggable2 from "./Draggable2";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import DropZone2 from "./DropZone2";
@@ -9,7 +9,8 @@ const DROP_ZONES = [
     'lavender',
     'beige',
     'lightgreen',
-    'grey',]
+    'grey',
+]
 
 export default function DragTest() {
     const dropZones = DROP_ZONES.map(i => useRef(null));
@@ -18,6 +19,11 @@ export default function DragTest() {
     const addMeasures = (m,i) => {
         measures[i] = m
         setMeasures([...measures])
+    }
+
+    const processDrop = (receivedMeasures, item) => {
+        const pixelIndex = measures.indexOf(receivedMeasures)
+        console.log(`${item} in ${DROP_ZONES[pixelIndex]}`)
     }
 
     return (
@@ -29,10 +35,10 @@ export default function DragTest() {
             </View>
 
             <VerticalPlaceholder size={100} />
-
+         
             <View style={styles.row}>
                 {DROP_ZONES.map((c, i) =>
-                    <Draggable2 dropZoneMeasures={measures} color={c} key={i} onSuccesfulDrop={(zones, item) => console.log(item, 'in', zones)}/>
+                    <Draggable2 dropZoneMeasures={measures} color={c} key={i} onSuccesfulDrop={processDrop}/>
                 )}
             </View>
         </View>

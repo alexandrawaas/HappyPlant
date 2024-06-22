@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Animated, PanResponder, StyleSheet, View } from 'react-native';
-import { isIntervalInInterval } from '../../utils/helpers';
+import { getOverlapValue, isIntervalInInterval } from '../../utils/helpers';
 
 export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop }) {
     const pan = useRef(new Animated.ValueXY()).current;
     const draggable = useRef(null)
 
     const check = (px, width, py, height) => {
-        return dropZoneMeasures.filter(m => 
-            isIntervalInInterval(m.minX, m.maxX, px, px + width)
-                && isIntervalInInterval(m.minY, m.maxY, py, py + height)
-        )
+        let res = dropZoneMeasures
+            .map(m => {
+                const horizontalOverlap = getOverlapValue(m.minX, m.maxX, px, px + width)
+                const verticalOverlap = getOverlapValue(m.minY, m.maxY, py, py + height)
+                return [m, (horizontalOverlap * verticalOverlap)]
+            })
+            .reduce((max, curr) => curr[1] > max[1] ? curr : max)
+        res = res[1] > 0 ? [res[0]] : []
+        return res
     }
 
     const getMatchingDropZones = () => {
@@ -29,8 +34,8 @@ export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop })
         ),
         onPanResponderRelease: () => {
             getMatchingDropZones().then(zones => {
-                if (zones.length !== 0) {
-                    onSuccesfulDrop(zones, color)
+                if (zones.length === 1) {
+                    onSuccesfulDrop(zones[0], color)
                 } else {
                     Animated.spring(pan, {
                         toValue: { x: 0, y: 0 },
