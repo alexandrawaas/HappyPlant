@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView }
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchURL } from '../utils/ApiService';
+import { commonStyles } from "../utils/styles/CommonStyles";
 
 export default function AssignmentsScreen({ navigation }) {
     const [assignments, setAssignments] = useState([]);
@@ -126,7 +127,7 @@ export default function AssignmentsScreen({ navigation }) {
                         colors={['#FDFBEF', '#F6FFED']}
                         start={[0, 0]}
                         end={[1, 1]}
-                        style={styles.assignmentsContainer}
+                        style={[styles.assignmentsContainer, commonStyles.shadow]}
                     >
                         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
                             {Object.keys(groupedAssignments).map((type, index) => (
@@ -135,6 +136,7 @@ export default function AssignmentsScreen({ navigation }) {
                                     <Text style={styles.categoryText}>{translateAssignmentType(type)}</Text>
                                     <FlatList 
                                         data={groupedAssignments[type]}
+                                        scrollEnabled={false}
                                         renderItem={({ item }) => renderAssignmentItem({ item })}
                                         keyExtractor={item => item.id.toString()}
                                         contentContainerStyle={styles.listContainer}
@@ -162,9 +164,10 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        borderRadius: 12,
-        paddingTop: 20,
+        paddingVertical: 20,
         paddingHorizontal: 12,
+        minHeight: "100%",
+        borderRadius: 10,
     },
     scrollViewContainer: {
         width: '100%',
