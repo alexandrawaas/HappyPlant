@@ -1,8 +1,8 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from 'react';
 import { View, Modal, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import WarnIcon from "../other/WarnIcon";
-import AssignmentIcon from "../other/AssignmentIcon";
+import WarnIcon from "../../other/WarnIcon";
+import AssignmentIcon from "../../other/AssignmentIcon";
 
 export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation }) {
     const handlePlantPress = (plantId) => {

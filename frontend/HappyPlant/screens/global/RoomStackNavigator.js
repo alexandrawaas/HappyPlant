@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RoomsScreen from '../room/RoomsScreen';
-import SingleRoomScreen from '../room/SingleRoomScreen';
+import SingleRoomScreen from '../room/detail-view/SingleRoomScreen';
 import PlaceWindow from '../room/PlaceWindow';
 import GlobalLayout from './GlobalLayout';
 import headerStyleOptions from './HeaderStyle';

@@ -3,8 +3,8 @@ import { Text, View, FlatList, StyleSheet, TouchableOpacity, useWindowDimensions
 import { useState } from "react";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import PlantsOnPixelPopup from "./PlantsOnPixelPopup";
-import RoomListItemWarnings from "./RoomListItemWarnings";
-import AssignmentIcon from "../other/AssignmentIcon";
+import RoomListItemWarnings from "../RoomListItemWarnings";
+import AssignmentIcon from "../../other/AssignmentIcon";
 
 const GLOBAL_PADDING = 2 * 20;
 

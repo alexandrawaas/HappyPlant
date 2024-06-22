@@ -1,10 +1,10 @@
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native"
-import CollapsibleBar from "../other/CollapsibleBar"
+import CollapsibleBar from "../../other/CollapsibleBar"
 import { LinearGradient } from "expo-linear-gradient"
 import { useState, useEffect } from "react"
-import { fetchURL } from '../../utils/ApiService'
+import { fetchURL } from '../../../utils/ApiService'
 import InventoryItem from "./InventoryItem"
-import { commonStyles } from "../../utils/styles/CommonStyles"
+import { commonStyles } from "../../../utils/styles/CommonStyles"
 
 export default function SingleRoomInventory({ room, handleAddPlantToInventoryPress }) {
     const [inventory, setInventory] = useState();
