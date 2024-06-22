@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, ScrollView, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { removeAuthToken } from '../../utils/AuthTokenUtil';
+import { getAuthToken, removeAuthToken } from '../../utils/AuthTokenUtil';
 import { fetchURL } from '../../utils/ApiService'
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
 import VerticalPlaceholder from '../../utils/styles/VerticalPlaceholder';
@@ -12,12 +12,15 @@ export default function SettingsScreen({ navigation }) {
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [user, setUser] = useState(null);
     const [expoPushToken, setExpoPushToken] = useState();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-            e.preventDefault();
-            updateNotificationSettings();
-            navigation.dispatch(e.data.action);
+            // if (!isLoggingOut) {
+                e.preventDefault();
+                updateNotificationSettings();
+                navigation.dispatch(e.data.action);
+            // }
         });
 
         fetchUserData();
@@ -25,7 +28,11 @@ export default function SettingsScreen({ navigation }) {
         return () => {
             unsubscribe();
         };
-    }, []);
+    }, [navigation]);
+
+    useEffect(() => {
+        updateNotificationSettings();
+    }, [remindersEnabled, notificationTime]);
 
 
     const fetchUserData = async () => {
@@ -62,9 +69,11 @@ export default function SettingsScreen({ navigation }) {
     const handleAction = async (endpoint, method, successMessage) => {
         fetchURL(endpoint, method, null, navigation, async () => {
             await removeAuthToken();
-            navigation.replace('OnboardingStack', { screen: 'Anmelden' });
+            await AsyncStorage.removeItem('rememberMe');
             Alert.alert('Erfolg', successMessage);
-        });
+            navigation.replace('OnboardingStack', { screen: 'Anmelden' });
+        }
+        setIsLoggingOut(false);
     };
 
     const confirmAction = (action, handleAction) => {

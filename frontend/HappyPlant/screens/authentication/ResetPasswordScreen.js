@@ -18,12 +18,12 @@ const ResetPasswordScreen = ({ navigation, route }) => {
             const response = await axios.post(`${API_URL}/auth/password/reset`, {
                 email: email
             });
-            if (response.ok) {
+            if (response.status === 200) {
                 const resetPasswordToken = response.data.resetPasswordToken;
                 navigation.navigate('Passwort ändern', { resetPasswordToken });
-                navigation.replace('ResetPasswordSuccess');
+                //navigation.replace('ResetPasswordSuccess');
             } else {
-                Alert.alert('Fehler', response.data);
+                Alert.alert('Fehler', response.status.toString() || 'Unbekannter Fehler');
             }
         } catch (error) {
             console.error('Fehler beim Zurücksetzen des Passworts:', error);
@@ -40,8 +40,10 @@ const ResetPasswordScreen = ({ navigation, route }) => {
                     placeholder=""
                     value={email}
                     onChangeText={setEmail}
+                    autoCorrect={false}
+                    autoCapitalize="none"
                 />
-                <TouchableOpacity onPress={() => navigation.navigate('Registrieren')}>
+                <TouchableOpacity onPress={() => navigation.replace('Registrieren')}>
                     <Text style={styles.button2Text}>Konto erstellen</Text>
                 </TouchableOpacity>
             </View>

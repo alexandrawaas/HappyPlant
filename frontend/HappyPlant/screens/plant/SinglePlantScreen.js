@@ -13,6 +13,7 @@ import {RoomTypeIcons} from "../../utils/EnumIcons";
 import {Tooltip} from "react-native-elements";
 import EditButton from "../global/EditButton";
 import Feather from "react-native-vector-icons/Feather";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchURL } from '../../utils/ApiService'
 
 
