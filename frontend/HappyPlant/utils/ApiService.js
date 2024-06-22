@@ -2,9 +2,9 @@ import { API_URL } from "../config";
 import { getAuthToken } from "./AuthTokenUtil";
 import { blobToBase64 } from "./BlobToBase64";
 
-const getResponse = async (url, method='GET', payload=null, needsAuth=true) => {
+const getResponse = async (url, method = 'GET', payload = null, needsAuth = true) => {
     let authToken
-        if(needsAuth) {
+    if (needsAuth) {
         authToken = await getAuthToken();
     }
     const options = {
@@ -23,11 +23,11 @@ const getResponse = async (url, method='GET', payload=null, needsAuth=true) => {
     return response
 }
 
-export const fetchURL = async (url, method='GET', payload=null, callback = ()=>{}, needsAuth=true) => {
+export const fetchURL = async (url, method = 'GET', payload = null, callback = () => { }, needsAuth = true) => {
     try {
         const response = await getResponse(url, method, payload, needsAuth)
         if (response.ok) {
-            if(response.status === 204) {
+            if (response.status === 204) {
                 callback();
                 return;
             }
@@ -37,7 +37,7 @@ export const fetchURL = async (url, method='GET', payload=null, callback = ()=>{
                 window.alert(data.error);
                 callback([]);
             } else {
-                callback(data); 
+                callback(data);
             }
         } else {
             console.error('Fehler beim Abrufen der Daten:', response.status);
@@ -50,7 +50,7 @@ export const fetchURL = async (url, method='GET', payload=null, callback = ()=>{
     }
 }
 
-export const fetchImage = async (url, method='GET', payload=null, callback = ()=>{}, needsAuth=true) => {
+export const fetchImage = async (url, method = 'GET', payload = null, callback = () => { }, needsAuth = true) => {
     try {
         const response = await getResponse(url, method, payload, needsAuth)
         if (response.ok) {
@@ -69,32 +69,34 @@ export const fetchImage = async (url, method='GET', payload=null, callback = ()=
     }
 }
 
-export const fetchURLUploadImage =async (plantId, payload) => {
-    try {
-        let authToken = await getAuthToken();
-
-        const requestOptions = {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-                'Content-Type': 'multipart/form-data'
-            },
-            body: payload,
-        };
-
-        const response = await fetch(`${API_URL}/images?plantId=${plantId}`, requestOptions);
-
-        if (response.ok) {
-            const data = await response.json();
-            if (data.error) {
-                console.error('error: ', data);
-                window.alert(data.error);
+export const fetchURLUploadImage = (plantId, payload) => {
+    return getAuthToken()
+        .then((authToken) => {
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: payload,
+            };
+            return fetch(`${API_URL}/images?plantId=${plantId}`, requestOptions)
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                throw Error(response.status);
             }
-        } else {
-            console.error('Fehler beim Abrufen der Daten:', response.status);
-        }
-    } catch (error) {
-        console.error('Fehler beim Abrufen der Daten:', error);
-        window.alert('Fehler beim Abrufen der Daten');
-    }
+        })
+        .then((data) => {
+            if (data.error) {
+                throw Error(data);
+            }
+            return data
+        })
+        .catch((err => {
+            console.error('Fehler beim Abrufen der Daten:', err);
+            window.alert('Fehler beim Abrufen der Daten');
+        }))
 }
