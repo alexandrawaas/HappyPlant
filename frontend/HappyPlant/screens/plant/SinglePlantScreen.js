@@ -43,6 +43,16 @@ export default function SinglePlantScreen({ navigation }) {
         return result;
     }
 
+    const calculateDates = (assignment) => {
+        if(plant.needs.intervals[assignment.assignmentType] === undefined) return <Text></Text>
+        const myDate = (assignment.lastDone
+                    ? addDays(assignment.lastDone, plant.needs.intervals[assignment.assignmentType])
+                    : addDays(new Date(), plant.needs.intervals[assignment.assignmentType]))
+        console.log(myDate)
+        console.log(new Date())
+        return <Text style={myDate <= new Date() ? styles.redText : styles.text}>{myDate.toLocaleDateString('de-DE', {year: "numeric", month: "2-digit", day: "2-digit"})}</Text>
+    }
+
 
     return (
         <ScrollView style={styles.scrollview}>
@@ -87,7 +97,7 @@ export default function SinglePlantScreen({ navigation }) {
                             <View style={styles.boxContainer} key={it.id}>
                                 <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                                     <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[it.assignmentType]}</Text>
-                                    <Text> { plant.needs.intervals[it.assignmentType] !== undefined ? (it.lastDone ? addDays(it.lastDone, plant.needs.intervals[it.assignmentType]).toLocaleDateString() : addDays(new Date(), plant.needs.intervals[it.assignmentType]).toLocaleDateString()) : ""} </Text>
+                                    {calculateDates(it)}
                                 </LinearGradient>
                             </View>
                         ) : null }
@@ -131,6 +141,11 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
+    },
+    redText: {
+        fontSize: 16,
+        color: "red",
+        fontWeight: "bold",
     },
     boldText: {
         fontSize: 14,
