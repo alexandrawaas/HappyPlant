@@ -128,7 +128,7 @@ export default function EditPlantScreen({ navigation }) {
                         <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400} onChangeText={(t) => {setNewNotes(t); console.log(newNotes);}}>{plant.notes}</Input>
                     </LinearGradient>
                 </View>
-                <Button title={"Pflanze löschen"} onPress={() => createTwoButtonAlert()} color="red"/>
+                <Text onPress={() => createTwoButtonAlert()} color="red" style={[styles.link, styles.redLink]}>Pflanze löschen</Text>
             </View>
             <VerticalPlaceholder size={150}/>
         </ScrollView>
@@ -180,6 +180,11 @@ const styles = StyleSheet.create({
         textDecorationLine: "underline",
         textDecorationStyle: "solid",
         textDecorationColor: "grey"
+    },
+    redLink: {
+        color: "red",
+        marginTop: 20,
+        textDecorationColor: "red",
     },
     boxContainer: {
         width: "100%",
