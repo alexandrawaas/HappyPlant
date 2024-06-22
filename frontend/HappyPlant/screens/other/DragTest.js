@@ -29,7 +29,7 @@ export default function DragTest() {
     const renderItem = ({ item, index }) => {
         return (
             <DropZone2 style={{ backgroundColor: item }} ref={dropZones[index]} addMeasures={addMeasures} key={index} index={index} >
-                <Text>Drop {index}</Text>
+                <Text style={styles.text}>Drop {index}</Text>
             </DropZone2>
         )
     }
@@ -37,7 +37,6 @@ export default function DragTest() {
     return (
         <View style={styles.mainContainer}>
             <FlatList
-                key={'fioio'}
                 scrollEnabled={false}
                 data={DROP_ZONES}
                 renderItem={renderItem}
