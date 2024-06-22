@@ -6,3 +6,13 @@ export const isIntervalInInterval = (intervalLowerBound, intervalUpperBound, val
     return isInInterval(intervalLowerBound, intervalUpperBound, valueLowerBound)
         || isInInterval(intervalLowerBound, intervalUpperBound, valueUpperBound)
 }
+
+export const getOverlapValue = (intervalLowerBound, intervalUpperBound, valueLowerBound, valueUpperBound) => {
+    if (isInInterval(intervalLowerBound, intervalUpperBound, valueLowerBound)) {
+        return intervalUpperBound - valueLowerBound
+    } else if (isInInterval(intervalLowerBound, intervalUpperBound, valueUpperBound)) {
+        return valueUpperBound - intervalLowerBound
+    } else {
+        return 0
+    }
+}
