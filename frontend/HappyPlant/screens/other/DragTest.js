@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React, { useRef, useState, useCallback } from "react";
+import { StyleSheet, View, Text, FlatList } from "react-native";
 import Draggable2 from "./Draggable2";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import DropZone2 from "./DropZone2";
@@ -26,15 +26,25 @@ export default function DragTest() {
         console.log(`${item} in ${DROP_ZONES[pixelIndex]}`)
     }
 
+    const renderItem = ({ item, index }) => {
+        return (
+            <DropZone2 style={{ backgroundColor: item }} ref={dropZones[index]} addMeasures={addMeasures} key={index} index={index} >
+                <Text>Drop {index}</Text>
+            </DropZone2>
+        )
+    }
+
     return (
         <View style={styles.mainContainer}>
-            <View style={styles.grid}>
-                {DROP_ZONES.map((c, i) =>
-                    <DropZone2 style={{ backgroundColor: c }} ref={dropZones[i]} addMeasures={addMeasures} key={i} index={i} >
-                        <Text>Drop {i}</Text>
-                    </DropZone2>
-                )}
-            </View>
+            <FlatList
+                key={'fioio'}
+                scrollEnabled={false}
+                data={DROP_ZONES}
+                renderItem={renderItem}
+                numColumns={3}
+                contentContainerStyle={styles.grid}
+                style={styles.table}
+            />
 
             <VerticalPlaceholder size={100} />
          
@@ -48,15 +58,10 @@ export default function DragTest() {
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1
-    },
     grid: {
-        // backgroundColor: 'red',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        flexWrap: "wrap",
     },
     ballContainer: {
         height: 200
