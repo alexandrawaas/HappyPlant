@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import Draggable2 from "./Draggable2";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import DropZone2 from "./DropZone2";
@@ -30,7 +30,9 @@ export default function DragTest() {
         <View style={styles.mainContainer}>
             <View style={styles.grid}>
                 {DROP_ZONES.map((c, i) =>
-                    <DropZone2 style={{ backgroundColor: c }} ref={dropZones[i]} addMeasures={addMeasures} key={i} index={i} />
+                    <DropZone2 style={{ backgroundColor: c }} ref={dropZones[i]} addMeasures={addMeasures} key={i} index={i} >
+                        <Text>Drop {i}</Text>
+                    </DropZone2>
                 )}
             </View>
 
