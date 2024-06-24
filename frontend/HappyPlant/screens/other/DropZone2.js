@@ -3,10 +3,10 @@ import { View, StyleSheet } from "react-native";
 
 export default DropZone2 = forwardRef(({ addMeasures, index, children }, ref) => {
     useEffect(() => {
-        ref.current.measure((fx, fy, width, height, px, py) => {
+        ref?.current.measure((fx, fy, width, height, px, py) => {
             addMeasures({ minX: px, maxX: px + width, minY: py, maxY: py + height }, index)
         })
-    }, [ref.current])
+    }, [ref?.current])
 
     return (
         <View ref={ref} style={styles.test}>

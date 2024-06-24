@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { StyleSheet, View, Text, FlatList, useWindowDimensions } from "react-native";
 import Draggable2 from "./Draggable2";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { fetchURL } from "../../utils/ApiService";
 import { pixelData, room } from "./pixelDataDump";
 import RoomPixel from '../room/detail-view/RoomPixel'
+import { findMeasureInArray } from "../../utils/helpers";
 
 const DROP_ZONES = [
     'skyblue',
@@ -19,45 +20,57 @@ const DROP_ZONES = [
 
 const GLOBAL_PADDING = 2 * 20;
 
-export default function DragTestScreen({ navigation }) {
-    const data = Array.from({ length: room.y }, (_, rowIndex) =>
-        Array.from({ length: room.x }, (_, colIndex) => ({
-            key: `${rowIndex}-${colIndex}`,
-            item: room.grid.find(p => p.x == colIndex && p.y == rowIndex)
-        }))
-    ).flat();
-    const dropZones = data.map(i => useRef(null));
+export default function DragTestScreen({ navigation, room }) {
+    const [data, setData] = useState([])
+    const [dropZones, setDropZones] = useState([])
     const [measures, setMeasures] = useState([])
+
+    useEffect(() => {
+        if (room) {
+            const newData = Array.from({ length: room.y }, (_, rowIndex) =>
+                Array.from({ length: room.x }, (_, colIndex) => ({
+                    key: `${rowIndex}-${colIndex}`,
+                    item: room.grid.find(p => p.x == colIndex && p.y == rowIndex)
+                }))
+            ).flat();
+            setData(newData)
+        }
+    }, [room])
+
+    useEffect(() => {
+        if(data) {
+            setDropZones(data.map(i => React.createRef(null)))
+        }
+    }, [data])
 
     const addMeasures = (m, i) => {
         measures[i] = m
         setMeasures([...measures])
     }
 
-    const processDrop = (receivedMeasures, item) => {
-        const pixelIndex = measures.indexOf(receivedMeasures)
+    const processDrop = useCallback((receivedMeasures, item) => {
+        const pixelIndex = findMeasureInArray(measures, receivedMeasures)
         console.log(`${item} in ${data[pixelIndex].key}`)
         console.log(`PATCH rooms/${room.id}/plants/{plantId}, body: {coords: {x:${data[pixelIndex].item.x}, y:${data[pixelIndex].item.y}}}`)
         console.log(`GET inventory`)
-    }
+    }, [room, measures])
 
     const { width, height } = useWindowDimensions();
 
-    let cellSize = (width - GLOBAL_PADDING) / room.x;
-    if (cellSize * room.y > 0.4 * height) {
-        cellSize = (0.4 * height) / room.y
-    }
-    const renderItem = ({ item, index }) => {
+    const renderItem = useCallback(({ item, index }) => {
+        let cellSize = (width - GLOBAL_PADDING) / room.x;
+        if (cellSize * room.y > 0.4 * height) {
+            cellSize = (0.4 * height) / room.y
+        }
         return (
             <DropZone2 ref={dropZones[index]} addMeasures={addMeasures} key={index} index={index}>
                 <RoomPixel item={item} cellSize={cellSize} navigation={navigation} />
             </DropZone2>
         )
-    }
+    }, [dropZones, addMeasures, navigation, room])
 
     return (
         <View>
-            <Text>TestScreen</Text>
             <FlatList
                 key={room.id}
                 scrollEnabled={false}

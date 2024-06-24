@@ -16,3 +16,10 @@ export const getOverlapValue = (intervalLowerBound, intervalUpperBound, valueLow
         return 0
     }
 }
+
+export const findMeasureInArray = (arr, receivedMeasures) => {
+    return arr.findIndex(m => m.maxX === receivedMeasures.maxX 
+        && m.minX === receivedMeasures.minX 
+        && m.maxY === receivedMeasures.maxY 
+        && m.minY === receivedMeasures.minY)
+}

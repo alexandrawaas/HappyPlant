@@ -6,6 +6,7 @@ import SingleRoomWarnings from "./SingleRoomWarnings";
 import { useEffect, useState } from "react";
 import VerticalPlaceholder from "../../../utils/styles/VerticalPlaceholder";
 import { fetchURL } from '../../../utils/ApiService'
+import DragTestScreen from "../../other/DragTestScreen";
 
 export default function SingleRoomScreen({ navigation }) {
     const route = useRoute();
@@ -29,8 +30,9 @@ export default function SingleRoomScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <SingleRoomGrid room={room} navigation={navigation}/>
-            <SingleRoomInventory room={room} handleAddPlantToInventoryPress={handleAddPlantToInventoryPress}/>
+            <DragTestScreen room={room} handleAddPlantToInventoryPress={handleAddPlantToInventoryPress}/>
+            {/* <SingleRoomGrid room={room} navigation={navigation}/> */}
+            {/* <SingleRoomInventory room={room}/> */}
             <SingleRoomWarnings room={room}/>
             <VerticalPlaceholder size={120}/>
         </ScrollView>
