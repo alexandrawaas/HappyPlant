@@ -7,12 +7,10 @@ export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop })
     const draggable = useRef(null)
 
     const check = (px, width, py, height) => {
-        console.log(px, px + width, py, py + height)
         let res = dropZoneMeasures
             .map(m => {
                 const horizontalOverlap = getOverlapValue(m.minX, m.maxX, px, px + width)
                 const verticalOverlap = getOverlapValue(m.minY, m.maxY, py, py + height)
-                console.log(horizontalOverlap, verticalOverlap)
                 return [m, (horizontalOverlap * verticalOverlap)]
             })
             .reduce((max, curr) => curr[1] > max[1] ? curr : max)
@@ -39,7 +37,6 @@ export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop })
                 if (zones.length === 1) {
                     onSuccesfulDrop(zones[0], color)
                 } else {
-                    console.log(zones, dropZoneMeasures)
                     Animated.spring(pan, {
                         toValue: { x: 0, y: 0 },
                         useNativeDriver: false,
@@ -67,7 +64,9 @@ let styles = StyleSheet.create({
     circle: {
         width: CIRCLE_RADIUS * 2,
         height: CIRCLE_RADIUS * 2,
-        borderRadius: CIRCLE_RADIUS
+        borderRadius: CIRCLE_RADIUS,
+        borderColor: 'darkgrey',
+        borderWidth: 1
     }
 });
 

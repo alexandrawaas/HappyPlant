@@ -19,7 +19,7 @@ const DROP_ZONES = [
 
 const GLOBAL_PADDING = 2 * 20;
 
-export default function DragTestScreen({navigation}) {
+export default function DragTestScreen({ navigation }) {
     const data = Array.from({ length: room.y }, (_, rowIndex) =>
         Array.from({ length: room.x }, (_, colIndex) => ({
             key: `${rowIndex}-${colIndex}`,
@@ -56,20 +56,17 @@ export default function DragTestScreen({navigation}) {
     }
 
     return (
-        <View >
-            <View>
-                <FlatList
-                    key={room.id}
-                    scrollEnabled={false}
-                    data={data}
-                    renderItem={renderItem}
-                    numColumns={room.x}
-                    contentContainerStyle={styles.grid}
-                    style={styles.table}
-                />
-            </View>
-
-            <VerticalPlaceholder size={100} />
+        <View>
+            <Text>TestScreen</Text>
+            <FlatList
+                key={room.id}
+                scrollEnabled={false}
+                data={data}
+                renderItem={renderItem}
+                numColumns={room.x}
+                contentContainerStyle={styles.grid}
+                style={styles.table}
+            />
 
             <View style={styles.row}>
                 {DROP_ZONES.map((c, i) =>
@@ -85,23 +82,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 15,
     },
-    ballContainer: {
-        height: 100
+    table: {
+        flexGrow: 0,
     },
     row: {
         justifyContent: 'space-between',
         flexDirection: "row",
-    },
-    dropZone: {
-        height: 30,
-    },
-    text: {
-        marginTop: 25,
-        marginLeft: 5,
-        marginRight: 5,
-        textAlign: "center",
-        color: "#fff",
-        fontSize: 25,
-        fontWeight: "bold"
     }
 });
