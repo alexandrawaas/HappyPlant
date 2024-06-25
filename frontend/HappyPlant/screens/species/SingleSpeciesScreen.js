@@ -50,7 +50,7 @@ export default function SingleSpeciesScreen({ navigation }) {
                     <Text style={styles.informationBlock}>Diese Pflanze gehört zur Familie
                         der {species.family}. {species.description}</Text>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Neue Pflanze erstellen", {id: species})}>
+                <TouchableOpacity style={[styles.button, commonStyles.shadow]} onPress={() => navigation.navigate("Neue Pflanze erstellen", {id: species})}>
                     <Text style={styles.buttonText}>Als neue Pflanze hinzufügen</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -114,17 +114,14 @@ const styles = StyleSheet.create({
     button: {
         top: Platform.OS === 'ios' ? 40 : 30,
         zIndex: 1,
-        elevation: 5,
         backgroundColor: '#BEF5B5',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 50,
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
         alignContent: "center",
         alignItems: "center",
         justifyContent: "center",
         marginHorizontal: 20,
-    },
+        marginBottom: 150,
+    }
 });
