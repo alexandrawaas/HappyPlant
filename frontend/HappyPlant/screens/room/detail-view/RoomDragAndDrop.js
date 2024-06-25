@@ -6,7 +6,7 @@ import RoomPixel from './RoomPixel'
 import { findMeasureInArray, calculateCellSize } from "../../../utils/windowMeasureUtils";
 import Inventory from "./Inventory";
 
-export default function RoomDragAndDrop({ navigation, room }) {
+export default function RoomDragAndDrop({ navigation, room, handleAddPlantToInventoryPress }) {
     const { width, height } = useWindowDimensions();
     const [data, setData] = useState([])
     const [dropZones, setDropZones] = useState([])
@@ -58,7 +58,7 @@ export default function RoomDragAndDrop({ navigation, room }) {
                 style={styles.table}
             />
 
-            <Inventory measures={measures} processDrop={processDrop} />
+            <Inventory measures={measures} processDrop={processDrop} onAddPlantPress={handleAddPlantToInventoryPress} />
         </View>
     );
 }
