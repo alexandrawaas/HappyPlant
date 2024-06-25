@@ -1,10 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from 'react';
 import { View, Modal, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import WarnIcon from "../../other/WarnIcon";
-import AssignmentIcon from "../../other/AssignmentIcon";
+import Feather from "react-native-vector-icons/Feather";
 
-export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation }) {
+export default function PlantsOnPixelPopup({ roomId, pixel, visible, onClose, navigation, onPlantDelete }) {
     const handlePlantPress = (plantId) => {
         navigation.navigate('plants', { screen: 'Pflanzenprofil', params: {id: plantId} });
         visible = false
@@ -37,13 +36,16 @@ export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation
                                     onPress={() => handlePlantPress(plant.id)}
                                 >
                                     <Text style={styles.buttonText} numberOfLines={1}>{plant.name} ({plant.species.name}) </Text>
-                                    <View style={styles.warningContainer}>
+                                    {/* <View style={styles.warningContainer}>
                                         {!plant.hasOptimalLightingCondition
                                             ? <WarnIcon/>
                                             : null}
                                         {plant.assignments.length !== 0
                                             ? <AssignmentIcon/>
                                             : null}
+                                    </View> */}
+                                    <View style={styles.warningContainer}>
+                                        <Feather name="trash-2" color="grey" size={14} onPress={() => onPlantDelete(plant)}/>
                                     </View>
                                 </TouchableOpacity>
                             ))}</ScrollView>

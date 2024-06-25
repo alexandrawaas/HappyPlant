@@ -39,11 +39,15 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
         fetchURL(`/rooms/${room.id}/plants/${item.id}`, 'PATCH', coords, onRoomUpdate)
     }, [room, measures])
 
+    const handlePlantDelete = useCallback((plant) => {
+        fetchURL(`/rooms/${room.id}/plants/${plant?.id}`, 'DELETE', null, onRoomUpdate)
+    }, [room])
+
 
     const renderItem = useCallback(({ item, index }) => {
         return (
             <DropZone2 ref={dropZones[index]} addMeasures={addMeasures} key={index} index={index}>
-                <RoomPixel item={item} cellSize={calculateCellSize(width, height, room)} navigation={navigation} />
+                <RoomPixel item={item} cellSize={calculateCellSize(width, height, room)} navigation={navigation} onPlantDelete={handlePlantDelete} />
             </DropZone2>
         )
     }, [dropZones, addMeasures, navigation, width, height, room])

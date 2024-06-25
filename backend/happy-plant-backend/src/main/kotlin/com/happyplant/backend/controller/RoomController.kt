@@ -118,7 +118,7 @@ class RoomController (
     }
 
     @DeleteMapping("/{roomId}/plants/{plantId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
     fun removePlantFromRoom(
         @RequestHeader("Authorization") authHeader: String, 
         @PathVariable roomId: UUID, 
