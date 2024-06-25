@@ -76,9 +76,9 @@ export default function EditPlantScreen({ navigation }) {
                 text: 'Abbrechen',
                 style: 'cancel',
             },
-            {text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, null).then(() => {
+            {text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, () => {
                 navigation.navigate("Meine Pflanzen")
-                })},
+            })},
         ]);
 
 

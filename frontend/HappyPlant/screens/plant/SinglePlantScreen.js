@@ -48,9 +48,11 @@ export default function SinglePlantScreen({ navigation }) {
         const myDate = (assignment.lastDone
                     ? addDays(assignment.lastDone, plant.needs.intervals[assignment.assignmentType])
                     : addDays(new Date(), plant.needs.intervals[assignment.assignmentType]))
-        console.log(myDate)
-        console.log(new Date())
-        return <Text style={myDate <= new Date() ? styles.redText : styles.text}>{myDate.toLocaleDateString('de-DE', {year: "numeric", month: "2-digit", day: "2-digit"})}</Text>
+        return (
+            <Text style={myDate <= new Date() ? styles.redText : styles.text}>
+                {myDate.toLocaleDateString('de-DE', {year: "numeric", month: "2-digit", day: "2-digit"})}
+            </Text>
+        )
     }
 
 

@@ -35,11 +35,11 @@ export const fetchURL = async (url, method='GET', payload=null, callback = ()=>{
                 callback(data); 
             }
         } else {
-            console.error('Fehler beim Abrufen der Daten:', response.status);
+            console.error(`Fehler beim Abrufen der Daten (${method} ${url}):`, response.status);
             callback([]);
         }
     } catch (error) {
-        console.error('Fehler beim Abrufen der Daten:', error);
+        console.error(`Fehler beim Abrufen der Daten (${method} ${url}):`, error);
         window.alert('Fehler beim Abrufen der Daten');
         callback([]);
     }
