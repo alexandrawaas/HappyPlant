@@ -1,8 +1,7 @@
 
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable, Image} from "react-native";
 import {useRoute} from "@react-navigation/native";
-import {useEffect, useState} from "react";
-import { fetchURL } from '../../utils/ApiService'
+import {useEffect, useState, useCallback} from "react";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
 import {
