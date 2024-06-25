@@ -60,7 +60,13 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
                 style={styles.table}
             />
 
-            <Inventory plants={inventory} measures={measures} processDrop={processDrop} onAddPlantPress={onInventoryAdd} onDrag={onDrag} />
+            <Inventory 
+                plants={inventory} 
+                measures={measures} 
+                processDrop={processDrop} 
+                onAddPlantPress={onInventoryAdd} 
+                onDrag={onDrag} 
+            />
         </View>
     );
 }

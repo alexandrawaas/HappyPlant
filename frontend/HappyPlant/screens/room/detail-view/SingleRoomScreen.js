@@ -35,9 +35,13 @@ export default function SingleRoomScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container} scrollEnabled={!isDragging}>
-            <RoomDragAndDrop room={room} onRoomUpdate={handleRoomUpdate} onInventoryAdd={handleAddPlantToInventoryPress} onDrag={setIsDragging}/>
-            {/* <SingleRoomGrid room={room} navigation={navigation}/> */}
-            {/* <SingleRoomInventory room={room}/> */}
+            <RoomDragAndDrop 
+                room={room} 
+                onRoomUpdate={handleRoomUpdate} 
+                onInventoryAdd={handleAddPlantToInventoryPress} 
+                onDrag={setIsDragging}
+                navigation={navigation}
+            />
             <SingleRoomWarnings room={room}/>
             <VerticalPlaceholder size={120}/>
         </ScrollView>

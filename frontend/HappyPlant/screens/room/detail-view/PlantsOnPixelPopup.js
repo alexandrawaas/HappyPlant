@@ -6,7 +6,7 @@ import AssignmentIcon from "../../other/AssignmentIcon";
 
 export default function PlantsOnPixelPopup({ pixel, visible, onClose, navigation }) {
     const handlePlantPress = (plantId) => {
-        navigation.navigate('plants', { screen: 'Pflanzenprofil' });
+        navigation.navigate('plants', { screen: 'Pflanzenprofil', params: {id: plantId} });
         visible = false
         onClose();
     };
