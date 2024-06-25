@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView} from "react-native";
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable} from "react-native";
 import {useEffect, useState} from "react";
 import {API_URL} from "../../config";
 import {useRoute} from "@react-navigation/native";
@@ -8,9 +8,12 @@ import CollapsibleBar from "../other/CollapsibleBar";
 import {LinearGradient} from "expo-linear-gradient";
 import {commonStyles} from "../../utils/styles/CommonStyles";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
-import {fetchURL} from "../../utils/ApiService";
+import {fetchURL,  fetchURLUploadImage} from "../../utils/ApiService";
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function NewPlantScreen({ navigation }) {
+    const [imageData, setImageData] = useState(undefined);
 
     const [species, setSpecies] = useState([]);
     const [name, setName] = useState("");
@@ -34,9 +37,17 @@ export default function NewPlantScreen({ navigation }) {
             name: name,
             speciesId: chosenSpecies.id,
         };
-        fetchURL('/plants', 'POST', payload, (data) => {
-            navigation.navigate('Meine Pflanzen');
-        })
+
+        const sendImage = (data) => {
+            if (imageData) {
+                fetchURLUploadImage(data.id, createFormData(imageData))
+                    .then(() => { navigation.navigate('Meine Pflanzen') });
+            } else {
+                navigation.navigate('Meine Pflanzen')
+            }
+        }
+
+        fetchURL('/plants', 'POST', payload, sendImage)
     }
 
     useEffect(() => {
@@ -65,11 +76,78 @@ export default function NewPlantScreen({ navigation }) {
         }
     }, [species])
 
+    const showActionSheet = () => {
+        const options = ['Neues Foto aufnehmen', 'Foto aus Bibliothek aussuchen', 'Abbrechen'];
+        const cancelButtonIndex = 2;
+
+        showActionSheetWithOptions(
+            {
+                options,
+                cancelButtonIndex,
+            },
+            (buttonIndex) => {
+                if (buttonIndex === 0) {
+                    handleTakePhoto();
+                } else if (buttonIndex === 1) {
+                    handleChoosePhoto();
+                }
+            }
+        );
+    };
+
+    const { showActionSheetWithOptions } = useActionSheet();
+
+    const handleChoosePhoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            allowsMultipleSelection: false,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImageData(result.assets[0])
+        }
+    };
+
+    const handleTakePhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImageData(result.assets[0])
+        }
+    };
+
+    const createFormData = (imageData) => {
+        const data = new FormData();
+        const uri = imageData.uri;
+        const uriParts = uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+
+        data.append('file', {
+            uri,
+            name: `photo.${fileType}`,
+            type: `image/${fileType}`,
+        });
+
+        return data;
+    };
+
 
     return (
         <View style={styles.container}>
             <ScrollView style={styles.scrollview}>
-                <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name}></RoundPictureNameComponent>
+                <Pressable onPress={showActionSheet}>
+                    {imageData
+                        ? <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} raw={true} imageData={imageData}></RoundPictureNameComponent>
+                        : <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} ></RoundPictureNameComponent>
+                    }
+                </Pressable>
                 <Text style={styles.sectionTitle}>Name der Pflanze</Text>
                 <View style={styles.textInputContainer}>
                     <View style={[styles.textInputInnerContainer]}>

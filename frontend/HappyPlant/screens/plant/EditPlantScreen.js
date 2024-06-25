@@ -1,5 +1,5 @@
 
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable, Image} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState, useCallback} from "react";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
@@ -81,11 +81,6 @@ export default function EditPlantScreen({ navigation }) {
                 navigation.navigate("Meine Pflanzen")
             })},
         ]);
-
-    const handleUploadPhoto = () => {
-        fetchURLUploadImage(plant.id, createFormData());
-        navigation.goBack()
-    }
     
     const handleSubmit = useCallback(() => {
         const intervalsMap = new Map();
@@ -109,7 +104,6 @@ export default function EditPlantScreen({ navigation }) {
             if (imageData) {
                 fetchURLUploadImage(plant.id, createFormData(imageData))
                     .then(() => { navigation.navigate("Pflanzenprofil", { id: plant.id }) });
-                setImageData(undefined)
             } else {
                 navigation.navigate("Pflanzenprofil", { id: plant.id })
             }
@@ -145,7 +139,6 @@ export default function EditPlantScreen({ navigation }) {
 
         if (!result.canceled) {
             setImageData(result.assets[0])
-            //navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
         }
     };
 
@@ -158,7 +151,6 @@ export default function EditPlantScreen({ navigation }) {
 
         if (!result.canceled) {
             setImageData(result.assets[0])
-            //navigation.navigate('Foto hochladen', { photo: result.assets[0], plantId: plant.id });
         }
     };
 
