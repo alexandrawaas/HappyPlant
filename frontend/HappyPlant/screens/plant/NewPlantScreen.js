@@ -131,7 +131,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems:"center",
         justifyContent:"top",
-        padding: '5%',
     },
     containerHorizontal: {
         marginTop: 16,
@@ -219,5 +218,7 @@ const styles = StyleSheet.create({
     },
     dropdownContainer: {
         width: '100%',
+        backgroundColor: '#fdfbef',
+        borderRadius: 15,
     },
 });

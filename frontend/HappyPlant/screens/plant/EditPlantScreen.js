@@ -279,5 +279,7 @@ const styles = StyleSheet.create({
     },
     dropdownContainer: {
         width: "90%",
+        backgroundColor: '#fdfbef',
+        borderRadius: 15,
     },
 });
