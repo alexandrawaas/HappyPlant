@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import { fetchURL } from '../../utils/ApiService'
 import {Searchbar} from "react-native-paper";
 import { commonStyles } from "../../utils/styles/CommonStyles";
+import {useFocusEffect, useIsFocused} from "@react-navigation/native";
 
 // TODO: remove plant mock and use fetch instead
 export default function MyPlantsScreen({ navigation }) {
@@ -22,8 +23,17 @@ export default function MyPlantsScreen({ navigation }) {
         fetchURL(url, 'GET', null, setPlants)
     }, [searchQuery])
 
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            fetchURL('/plants', 'GET', null, setPlants);
+        }
+    }, [isFocused]);
+
+
     let handleAddPlantClick = () => {
-        console.log("TODO: implement add plant dialog")
+        navigation.navigate('Neue Pflanze erstellen', {id: null})
     }
 
     return (

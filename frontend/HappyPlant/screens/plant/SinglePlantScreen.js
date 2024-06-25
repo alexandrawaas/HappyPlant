@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from "react-native";
-import {useRoute} from "@react-navigation/native";
+import {useIsFocused, useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
@@ -21,19 +21,40 @@ export default function SinglePlantScreen({ navigation }) {
     const { id } = route.params;
     const [plant, setPlant] = useState({});
 
+    const isFocused = useIsFocused();
+
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, setPlant)
-    }, [])
+    }, [isFocused])
 
     useEffect(() => {
         navigation.setOptions({
             ...navigation.options,
             headerTitle: "Pflanzenprofil",
             headerRight: () => (
-                <EditButton onPress={() => navigation.navigate("Pflanze erstellen", {id: plant.id})} />
+                <EditButton onPress={() => navigation.navigate("Pflanze bearbeiten", {id: plant.id})} />
             )
         })
     }, [navigation, plant])
+
+    const addDays = (date, days)=> {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    const calculateDates = (assignment) => {
+        if(plant.needs.intervals[assignment.assignmentType] === undefined) return <Text></Text>
+        const myDate = (assignment.lastDone
+                    ? addDays(assignment.lastDone, plant.needs.intervals[assignment.assignmentType])
+                    : addDays(new Date(), plant.needs.intervals[assignment.assignmentType]))
+        return (
+            <Text style={myDate <= new Date() ? styles.redText : styles.text}>
+                {myDate.toLocaleDateString('de-DE', {year: "numeric", month: "2-digit", day: "2-digit"})}
+            </Text>
+        )
+    }
+
 
     return (
         <ScrollView style={styles.scrollview}>
@@ -71,15 +92,18 @@ export default function SinglePlantScreen({ navigation }) {
                          </LinearGradient>
                      </View>
                      <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
-                    { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
-                          <View style={styles.boxContainer} key={k}>
-                              <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                  <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
-                                  <Text>alle {v} Tage</Text>
-                              </LinearGradient>
-                          </View>
-                      )
-                      : null }
+                    { plant.assignments !== undefined
+                        ? plant.assignments.map
+                        (
+                            it =>
+                            <View style={styles.boxContainer} key={it.id}>
+                                <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                                    <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[it.assignmentType]}</Text>
+                                    {calculateDates(it)}
+                                </LinearGradient>
+                            </View>
+                        ) : null }
+
                      <Text style={styles.sectionTitle}>Notizen</Text>
                      <View style={styles.boxContainer}>
                          <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
@@ -120,6 +144,11 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
     },
+    redText: {
+        fontSize: 16,
+        color: "red",
+        fontWeight: "bold",
+    },
     boldText: {
         fontSize: 14,
         fontWeight: "bold",
@@ -129,6 +158,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "grey",
         marginBottom: 10,
+        marginTop: 10,
     },
     link: {
         color: "grey",

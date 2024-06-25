@@ -11,7 +11,7 @@ export default function CollapsibleBar({ title, children }) {
         <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} >
             <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.toggleContainer}>
                 <Text style={styles.containerTitle}>{title}</Text>
-                <Entypo name={isCollapsed ? 'chevron-up' : 'chevron-down'} color={'#98948f'} size={20} />
+                <Entypo name={isCollapsed ? 'chevron-down' : 'chevron-up'} color={'#98948f'} size={20} />
             </LinearGradient>
         </TouchableOpacity>
         <Collapsible collapsed={isCollapsed}>

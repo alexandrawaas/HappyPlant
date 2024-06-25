@@ -1,5 +1,5 @@
-import {ScrollView, StyleSheet, Text, View,} from "react-native";
-import {useEffect, useState} from "react";
+import {Button, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View,} from "react-native";
+import React, {useEffect, useState} from "react";
 import {useRoute} from '@react-navigation/native';
 import {API_URL} from "../../config";
 import NeedLabelWithIcon from "./NeedLabelWithIcon";
@@ -7,6 +7,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import AddSpeciesAsPlantButton from "../global/AddSpeciesAsPlantButton";
 import RoundPictureNameComponent from "./RoundPictureNameComponent";
 import { commonStyles } from "../../utils/styles/CommonStyles";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 
 export default function SingleSpeciesScreen({ navigation }) {
     const route = useRoute();
@@ -16,9 +17,6 @@ export default function SingleSpeciesScreen({ navigation }) {
     useEffect(() => {
         navigation.setOptions({
             ...navigation.options,
-            headerRight: () => (
-                <AddSpeciesAsPlantButton onPress={() => alert('This is a button!')} />
-            )
         })
     }, [navigation])
 
@@ -42,7 +40,8 @@ export default function SingleSpeciesScreen({ navigation }) {
                     <View style={styles.pairedNeedContainer}>
                         {species?.needs?.intervals
                             ? Object.entries(species.needs.intervals).map(([k, v]) =>
-                                <NeedLabelWithIcon assignmentType={k} value={v} key={k}/>
+                                v !== -1 ? <NeedLabelWithIcon assignmentType={k} value={v} key={k}/>
+                                    : <NeedLabelWithIcon assignmentType={k} value={""} key={k}/>
                             )
                             : null}
                     </View>
@@ -51,7 +50,9 @@ export default function SingleSpeciesScreen({ navigation }) {
                     <Text style={styles.informationBlock}>Diese Pflanze gehört zur Familie
                         der {species.family}. {species.description}</Text>
                 </View>
-                <View/>
+                <TouchableOpacity style={[styles.button, commonStyles.shadow]} onPress={() => navigation.navigate("Neue Pflanze erstellen", {id: species})}>
+                    <Text style={styles.buttonText}>Als neue Pflanze hinzufügen</Text>
+                </TouchableOpacity>
             </ScrollView>
         </LinearGradient>
     );
@@ -109,5 +110,18 @@ const styles = StyleSheet.create({
     },
     informationBlock: {
         textAlign: "justify"
+    },
+    button: {
+        top: Platform.OS === 'ios' ? 40 : 30,
+        zIndex: 1,
+        backgroundColor: '#BEF5B5',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 50,
+        alignContent: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 20,
+        marginBottom: 150,
     }
 });

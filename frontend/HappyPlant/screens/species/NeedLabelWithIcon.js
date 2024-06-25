@@ -12,7 +12,7 @@ export default function NeedLabelWithIcon({assignmentType, value}) {
             </Tooltip>
             {assignmentType === "LIGHTING" 
                 ? <Text>{LightingTypeTranslations[value]}</Text>
-                : <Text>alle {value} Tage</Text>
+                : (value !== "" ? <Text>alle {value} Tage</Text> : <Text> - </Text>)
             }
         </View>
     )

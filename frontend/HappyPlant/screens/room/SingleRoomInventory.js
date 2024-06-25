@@ -6,16 +6,12 @@ import { fetchURL } from '../../utils/ApiService'
 import InventoryItem from "./InventoryItem"
 import { commonStyles } from "../../utils/styles/CommonStyles"
 
-export default function SingleRoomInventory({ room }) {
+export default function SingleRoomInventory({ room, handleAddPlantToInventoryPress }) {
     const [inventory, setInventory] = useState();
 
     useEffect(() => {
         fetchURL(`/inventory`, 'GET', null, setInventory);
     }, [])
-
-    const handleAddPlantToInventoryPress = () => {
-        console.log("TODO: implement create plant dialog")
-    }
 
     return (
         <View style={styles.container}>

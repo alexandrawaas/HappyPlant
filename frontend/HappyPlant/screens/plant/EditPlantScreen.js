@@ -1,37 +1,86 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert} from "react-native";
 import {useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import { fetchURL } from '../utils/ApiService'
-import RoundPictureNameComponent from "./species/RoundPictureNameComponent";
+import { fetchURL } from '../../utils/ApiService'
+import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
 import {
-    AssignmentTypeTranslations,
-} from "../utils/EnumTranslations";
+    AssignmentTypeTranslations, LightingTypeTranslations,
+} from "../../utils/EnumTranslations";
 import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
-import VerticalPlaceholder from "../utils/styles/VerticalPlaceholder";
+import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import CollapsibleBar from "../other/CollapsibleBar";
 
-export default function CreatePlantScreen({ navigation }) {
+export default function EditPlantScreen({ navigation }) {
 
     const route = useRoute();
     const { id } = route.params;
     const [plant, setPlant] = useState({});
+    const [chosenLighting, setChosenLighting] = useState(null);
+
+    const [newNotes, setNewNotes] = useState(null);
+    const [intervals, setIntervals] = useState(new Map());
+
+    const updateMap = (text, k) => {
+        const numericValue = text.replace(/[^0-9]/g, "");
+        setIntervals(new Map(intervals.set(k.toUpperCase(), numericValue)));
+    }
 
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, setPlant)
-    }, [])
+            .then( () => {
+                chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
+                if (newNotes == null) setNewNotes(plant.notes);
+            })
+    }, [plant])
+
+    const handleSubmit = async () =>{
+        const intervalsMap = new Map();
+        const map = new Map(Object.entries(plant.needs.intervals));
+        map.forEach((v, k) => {
+            intervalsMap.set(k, intervals.get(k) ?? v);
+        });
+
+        const payload = {
+            name: plant.name,
+            picturePath: plant.picturePath,
+            notes: newNotes,
+            speciesId: plant.species.id,
+            needs: {
+                lightingType: Object.keys(LightingTypeTranslations).find(key => LightingTypeTranslations[key] === chosenLighting),
+                intervals: Object.fromEntries(intervalsMap),
+            }
+        };
+        fetchURL('/plants/'+plant.id, 'PUT', payload, () => {
+            navigation.navigate("Pflanzenprofil", {id: plant.id})
+        })
+    }
 
     useEffect(() => {
         navigation.setOptions({
             ...navigation.options,
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
-                <TouchableOpacity onPress={() => console.log("submit Button pressed")} style={{margin: 8}}>
+                <TouchableOpacity onPress={handleSubmit} style={{margin: 8}}>
                     <Feather name="check" color="grey" size={25}/>
                 </TouchableOpacity>
             )
         })
     }, [navigation, plant])
+
+
+    const createTwoButtonAlert = () =>
+        Alert.alert('Pflanze löschen', 'Bist du sicher, dass du diese Pflanze löschen möchtest? Sie wird automatisch aus allen Räumen entfernt. Alle Daten und Aufgaben werden nicht mehr einsehbar sein.', [
+            {
+                text: 'Abbrechen',
+                style: 'cancel',
+            },
+            {text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, () => {
+                navigation.navigate("Meine Pflanzen")
+            })},
+        ]);
+
 
     return (
         <ScrollView style={styles.scrollview}>
@@ -39,14 +88,23 @@ export default function CreatePlantScreen({ navigation }) {
                 <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name}></RoundPictureNameComponent>
                 <VerticalPlaceholder size={20}/>
                 <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
-                <View style={styles.boxContainer}>
-                    <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                        <View style={styles.badgesContainer}>
-                            <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
-                                <Feather name="info" color="grey" size={25}/>
-                            </Tooltip>
-                        </View>
-                    </LinearGradient>
+                <View style={styles.badgesContainer}>
+                    <View style={styles.dropdownContainer}>
+                        <CollapsibleBar style={styles.dropdown} title={chosenLighting}>
+                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                                <ScrollView style={styles.scrollDropdown}>
+                                    {Object.entries(LightingTypeTranslations).map(([k, v]) =>
+                                        <TouchableOpacity key={k} onPress={() => setChosenLighting(v)}>
+                                            <Text style={styles.text}>{v}</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                </ScrollView>
+                            </LinearGradient>
+                        </CollapsibleBar>
+                    </View>
+                    <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
+                        <Feather name="info" color="grey" size={25}/>
+                    </Tooltip>
                 </View>
                 <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
                 { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
@@ -56,7 +114,7 @@ export default function CreatePlantScreen({ navigation }) {
                                 <View style={styles.numberInputContainer}>
                                     <Text>alle</Text>
                                     <View style={styles.numberInputInnerContainer}>
-                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3}>{v}</TextInput>
+                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3} onChangeText={(e) => updateMap(e, k)}>{v !== -1 ? v : ""}</TextInput>
                                     </View>
                                     <Text>Tage</Text>
                                 </View>
@@ -67,9 +125,10 @@ export default function CreatePlantScreen({ navigation }) {
                 <Text style={styles.sectionTitle}>Notizen</Text>
                 <View style={styles.boxContainer}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.detailContainer, styles.notesContainer]}>
-                        <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400}>{plant.notes}</Input>
+                        <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400} onChangeText={(t) => {setNewNotes(t); console.log(newNotes);}}>{plant.notes}</Input>
                     </LinearGradient>
                 </View>
+                <Text onPress={() => createTwoButtonAlert()} color="red" style={[styles.link, styles.redLink]}>Pflanze löschen</Text>
             </View>
             <VerticalPlaceholder size={150}/>
         </ScrollView>
@@ -113,6 +172,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "grey",
         marginBottom: 10,
+        marginTop: 20,
     },
     link: {
         color: "grey",
@@ -120,6 +180,11 @@ const styles = StyleSheet.create({
         textDecorationLine: "underline",
         textDecorationStyle: "solid",
         textDecorationColor: "grey"
+    },
+    redLink: {
+        color: "red",
+        marginTop: 20,
+        textDecorationColor: "red",
     },
     boxContainer: {
         width: "100%",
@@ -140,6 +205,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        width: "100%",
     },
     infoBadge: {
         borderRadius: 50,
@@ -200,5 +266,20 @@ const styles = StyleSheet.create({
     notesContainer: {
         paddingTop: 10,
         paddingBottom: 2,
-    }
+    },
+    dropdown: {
+        marginTop: 10,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowColor: "#000",
+    },
+    scrollDropdown: {
+        padding: 10,
+        maxHeight: 300,
+    },
+    dropdownContainer: {
+        width: "90%",
+        backgroundColor: '#fdfbef',
+        borderRadius: 15,
+    },
 });
