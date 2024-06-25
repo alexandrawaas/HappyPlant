@@ -5,12 +5,14 @@ import { useEffect } from "react";
 import RoomPixel from './RoomPixel'
 import { findMeasureInArray, calculateCellSize } from "../../../utils/windowMeasureUtils";
 import Inventory from "./Inventory";
+import { fetchURL } from "../../../utils/ApiService";
 
-export default function RoomDragAndDrop({ navigation, room, handleAddPlantToInventoryPress }) {
+export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInventoryAdd, onDrag }) {
     const { width, height } = useWindowDimensions();
     const [data, setData] = useState([])
     const [dropZones, setDropZones] = useState([])
     const [measures, setMeasures] = useState([])
+    const [inventory, setInventory] = useState([]);
 
     useEffect(() => {
         if (room) {
@@ -23,6 +25,7 @@ export default function RoomDragAndDrop({ navigation, room, handleAddPlantToInve
             setData(newData)
             setDropZones(newData.map(i => React.createRef(null)))
         }
+        fetchURL(`/inventory`, 'GET', null, setInventory);
     }, [room])
 
     const addMeasures = (m, i) => {
@@ -32,9 +35,13 @@ export default function RoomDragAndDrop({ navigation, room, handleAddPlantToInve
 
     const processDrop = useCallback((receivedMeasures, item) => {
         const pixelIndex = findMeasureInArray(measures, receivedMeasures)
-        console.log(`${item.name} in ${data[pixelIndex].key}`)
-        console.log(`PATCH rooms/${room.id}/plants/{plantId}, body: {coords: {x:${data[pixelIndex].item.x}, y:${data[pixelIndex].item.y}}}`)
-        console.log(`GET inventory`)
+        const coords = {x: data[pixelIndex].item.x, y: data[pixelIndex].item.y}
+        console.log(coords)
+        fetchURL(`/rooms/${room.id}/plants/${item.id}`, 'PATCH', {coords: coords}, onRoomUpdate)
+        // console.log(`${item.name} in ${data[pixelIndex].key}`)
+        
+        // console.log(`PATCH rooms/${room.id}/plants/${item.id}, body: {coords: {x:${data[pixelIndex].item.x}, y:${data[pixelIndex].item.y}}}`)
+        // console.log(`GET inventory`)
     }, [room, measures])
 
 
@@ -58,7 +65,7 @@ export default function RoomDragAndDrop({ navigation, room, handleAddPlantToInve
                 style={styles.table}
             />
 
-            <Inventory measures={measures} processDrop={processDrop} onAddPlantPress={handleAddPlantToInventoryPress} />
+            <Inventory plants={inventory} measures={measures} processDrop={processDrop} onAddPlantPress={onInventoryAdd} onDrag={onDrag} />
         </View>
     );
 }

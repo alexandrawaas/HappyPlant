@@ -8,17 +8,7 @@ import InventoryItem from "./InventoryItem";
 import { TouchableOpacity } from "react-native";
 import { commonStyles } from "../../../utils/styles/CommonStyles";
 
-export default function Inventory({ measures, processDrop }) {
-    const [inventory, setInventory] = useState([]);
-
-    useEffect(() => {
-        fetchURL(`/inventory`, 'GET', null, setInventory);
-    }, [])
-
-    const handleAddPlantToInventoryPress = () => {
-        console.log("TODO: implement create plant dialog")
-    }
-
+export default function Inventory({ measures, processDrop, plants, onAddPlantPress, onDrag }) {
     return (
         <View style={styles.container}>
             <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.toggleContainer}>
@@ -29,14 +19,14 @@ export default function Inventory({ measures, processDrop }) {
             <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                 <View style={styles.plantsContainer}>
 
-                    {inventory.map((item, i) =>
-                        <Draggable2 dropZoneMeasures={measures} color={item} key={i} onSuccesfulDrop={processDrop}>
+                    {plants.map((item, i) =>
+                        <Draggable2 dropZoneMeasures={measures} color={item} key={i} onSuccesfulDrop={processDrop} onDrag={onDrag}>
                             <InventoryItem plant={item} />
                         </Draggable2>
                     )}
                 </View>
                 <View style={styles.addButtonContainer}>
-                    <TouchableOpacity onPress={handleAddPlantToInventoryPress}>
+                    <TouchableOpacity onPress={onAddPlantPress}>
                         <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.button, commonStyles.shadow]}>
                             <Text>+</Text>
                         </LinearGradient>
