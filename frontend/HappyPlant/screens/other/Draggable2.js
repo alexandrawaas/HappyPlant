@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Animated, PanResponder, StyleSheet, View } from 'react-native';
-import { getOverlapValue } from '../../utils/helpers';
+import { getOverlapValue } from '../../utils/windowMeasureUtils';
 
-export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop }) {
+export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop, children }) {
     const pan = useRef(new Animated.ValueXY()).current;
     const draggable = useRef(null)
 
@@ -54,19 +54,8 @@ export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop })
             }]}
             ref={draggable}
         >
-            <View style={{ ...styles.circle, backgroundColor: color }} />
+            {children}
         </Animated.View>
     );
 };
-
-let CIRCLE_RADIUS = 12;
-let styles = StyleSheet.create({
-    circle: {
-        width: CIRCLE_RADIUS * 2,
-        height: CIRCLE_RADIUS * 2,
-        borderRadius: CIRCLE_RADIUS,
-        borderColor: 'darkgrey',
-        borderWidth: 1
-    }
-});
 
