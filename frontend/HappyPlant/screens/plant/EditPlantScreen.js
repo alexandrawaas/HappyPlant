@@ -11,12 +11,11 @@ import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import CollapsibleBar from "../other/CollapsibleBar";
-import * as ImagePicker from 'expo-image-picker';
-import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useImageSelecetion } from "../../utils/useImageSelection";
 import { fetchURL, fetchURLUploadImage } from "../../utils/ApiService";
 
 export default function EditPlantScreen({ navigation }) {
-    const [imageData, setImageData] = useState(undefined);
+    const [imageData, showActionSheet] = useImageSelecetion();
 
     const route = useRoute();
     const { id } = route.params;
@@ -30,26 +29,6 @@ export default function EditPlantScreen({ navigation }) {
         const numericValue = text.replace(/[^0-9]/g, "");
         setIntervals(new Map(intervals.set(k.toUpperCase(), numericValue)));
     }
-    const { showActionSheetWithOptions } = useActionSheet();
-
-    const showActionSheet = () => {
-        const options = ['Neues Foto aufnehmen', 'Foto aus Bibliothek aussuchen', 'Abbrechen'];
-        const cancelButtonIndex = 2;
-
-        showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex,
-            },
-            (buttonIndex) => {
-                if (buttonIndex === 0) {
-                    handleTakePhoto();
-                } else if (buttonIndex === 1) {
-                    handleChoosePhoto();
-                }
-            }
-        );
-    };
 
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, setPlant)
@@ -126,32 +105,6 @@ export default function EditPlantScreen({ navigation }) {
         });
 
         return data;
-    };
-
-    const handleChoosePhoto = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            allowsMultipleSelection: false,
-            aspect: [1, 1],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setImageData(result.assets[0])
-        }
-    };
-
-    const handleTakePhoto = async () => {
-        let result = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setImageData(result.assets[0])
-        }
     };
 
     return (

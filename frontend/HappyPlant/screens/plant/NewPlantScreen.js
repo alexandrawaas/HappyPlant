@@ -9,12 +9,9 @@ import {LinearGradient} from "expo-linear-gradient";
 import {commonStyles} from "../../utils/styles/CommonStyles";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {fetchURL,  fetchURLUploadImage} from "../../utils/ApiService";
-import { useActionSheet } from '@expo/react-native-action-sheet';
-import * as ImagePicker from 'expo-image-picker';
+import { useImageSelecetion } from "../../utils/useImageSelection";
 
 export default function NewPlantScreen({ navigation }) {
-    const [imageData, setImageData] = useState(undefined);
-
     const [species, setSpecies] = useState([]);
     const [name, setName] = useState("");
 
@@ -23,6 +20,8 @@ export default function NewPlantScreen({ navigation }) {
 
     const [chosenSpecies, setChosenSpecies] = useState(id);
     const [nameWarningEnabled, setNameWarningEnabled] = useState(false)
+
+    const [imageData, showActionSheet] = useImageSelecetion();
 
     const handleContinue = async () =>{
         let shouldCancel = false;
@@ -75,53 +74,6 @@ export default function NewPlantScreen({ navigation }) {
             (id !== null ? setChosenSpecies(species.filter(x => x.id === id)) : setChosenSpecies(species[0]))
         }
     }, [species])
-
-    const showActionSheet = () => {
-        const options = ['Neues Foto aufnehmen', 'Foto aus Bibliothek aussuchen', 'Abbrechen'];
-        const cancelButtonIndex = 2;
-
-        showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex,
-            },
-            (buttonIndex) => {
-                if (buttonIndex === 0) {
-                    handleTakePhoto();
-                } else if (buttonIndex === 1) {
-                    handleChoosePhoto();
-                }
-            }
-        );
-    };
-
-    const { showActionSheetWithOptions } = useActionSheet();
-
-    const handleChoosePhoto = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            allowsMultipleSelection: false,
-            aspect: [1, 1],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setImageData(result.assets[0])
-        }
-    };
-
-    const handleTakePhoto = async () => {
-        let result = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-
-        if (!result.canceled) {
-            setImageData(result.assets[0])
-        }
-    };
 
     const createFormData = (imageData) => {
         const data = new FormData();
