@@ -1,26 +1,13 @@
-import React, { useRef, useState, useCallback } from "react";
-import { StyleSheet, View, Text, FlatList, useWindowDimensions } from "react-native";
-import Draggable2 from "./Draggable2";
-import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
-import DropZone2 from "./DropZone2";
-import CollapsibleBar from "./CollapsibleBar"
+import React, { useState, useCallback } from "react";
+import { StyleSheet, View, FlatList, useWindowDimensions } from "react-native";
+import DropZone2 from "../../other/DropZone2";
 import { useEffect } from "react";
-import { fetchURL } from "../../utils/ApiService";
-import { pixelData, room } from "./pixelDataDump";
-import RoomPixel from '../room/detail-view/RoomPixel'
-import { findMeasureInArray } from "../../utils/helpers";
+import RoomPixel from './RoomPixel'
+import { findMeasureInArray, calculateCellSize } from "../../../utils/windowMeasureUtils";
+import Inventory from "./Inventory";
 
-const DROP_ZONES = [
-    'skyblue',
-    'lavender',
-    'beige',
-    'lightgreen',
-    'grey',
-]
-
-const GLOBAL_PADDING = 2 * 20;
-
-export default function DragTestScreen({ navigation, room }) {
+export default function RoomDragAndDrop({ navigation, room }) {
+    const { width, height } = useWindowDimensions();
     const [data, setData] = useState([])
     const [dropZones, setDropZones] = useState([])
     const [measures, setMeasures] = useState([])
@@ -34,14 +21,9 @@ export default function DragTestScreen({ navigation, room }) {
                 }))
             ).flat();
             setData(newData)
+            setDropZones(newData.map(i => React.createRef(null)))
         }
     }, [room])
-
-    useEffect(() => {
-        if(data) {
-            setDropZones(data.map(i => React.createRef(null)))
-        }
-    }, [data])
 
     const addMeasures = (m, i) => {
         measures[i] = m
@@ -50,24 +32,19 @@ export default function DragTestScreen({ navigation, room }) {
 
     const processDrop = useCallback((receivedMeasures, item) => {
         const pixelIndex = findMeasureInArray(measures, receivedMeasures)
-        console.log(`${item} in ${data[pixelIndex].key}`)
+        console.log(`${item.name} in ${data[pixelIndex].key}`)
         console.log(`PATCH rooms/${room.id}/plants/{plantId}, body: {coords: {x:${data[pixelIndex].item.x}, y:${data[pixelIndex].item.y}}}`)
         console.log(`GET inventory`)
     }, [room, measures])
 
-    const { width, height } = useWindowDimensions();
 
     const renderItem = useCallback(({ item, index }) => {
-        let cellSize = (width - GLOBAL_PADDING) / room.x;
-        if (cellSize * room.y > 0.4 * height) {
-            cellSize = (0.4 * height) / room.y
-        }
         return (
             <DropZone2 ref={dropZones[index]} addMeasures={addMeasures} key={index} index={index}>
-                <RoomPixel item={item} cellSize={cellSize} navigation={navigation} />
+                <RoomPixel item={item} cellSize={calculateCellSize(width, height, room)} navigation={navigation} />
             </DropZone2>
         )
-    }, [dropZones, addMeasures, navigation, room])
+    }, [dropZones, addMeasures, navigation, width, height, room])
 
     return (
         <View>
@@ -81,11 +58,7 @@ export default function DragTestScreen({ navigation, room }) {
                 style={styles.table}
             />
 
-            <View style={styles.row}>
-                {DROP_ZONES.map((c, i) =>
-                    <Draggable2 dropZoneMeasures={measures} color={c} key={i} onSuccesfulDrop={processDrop} />
-                )}
-            </View>
+            <Inventory measures={measures} processDrop={processDrop} />
         </View>
     );
 }
@@ -97,9 +70,5 @@ const styles = StyleSheet.create({
     },
     table: {
         flexGrow: 0,
-    },
-    row: {
-        justifyContent: 'space-between',
-        flexDirection: "row",
     }
 });

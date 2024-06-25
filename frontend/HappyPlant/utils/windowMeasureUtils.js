@@ -23,3 +23,12 @@ export const findMeasureInArray = (arr, receivedMeasures) => {
         && m.maxY === receivedMeasures.maxY 
         && m.minY === receivedMeasures.minY)
 }
+
+export const calculateCellSize = (width, height, room) => {
+    const GLOBAL_PADDING = 2 * 20;
+    let cellSize = (width - GLOBAL_PADDING) / room.x;
+    if (cellSize * room.y > 0.4 * height) {
+        cellSize = (0.4 * height) / room.y
+    }
+    return cellSize
+}
