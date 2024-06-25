@@ -78,7 +78,7 @@ export const fetchURLUploadImage = (plantId, payload) => {
                     'Authorization': `Bearer ${authToken}`,
                     'Content-Type': 'multipart/form-data'
                 },
-                body: payload,
+                body: createFormData(payload),
             };
             return fetch(`${API_URL}/images?plantId=${plantId}`, requestOptions)
         })
@@ -100,3 +100,18 @@ export const fetchURLUploadImage = (plantId, payload) => {
             window.alert('Fehler beim Abrufen der Daten');
         }))
 }
+
+const createFormData = (imageData) => {
+    const data = new FormData();
+    const uri = imageData.uri;
+    const uriParts = uri.split('.');
+    const fileType = uriParts[uriParts.length - 1];
+
+    data.append('file', {
+        uri,
+        name: `photo.${fileType}`,
+        type: `image/${fileType}`,
+    });
+
+    return data;
+};

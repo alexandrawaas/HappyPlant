@@ -81,7 +81,7 @@ export default function EditPlantScreen({ navigation }) {
         
         const sendImage = () => {
             if (imageData) {
-                fetchURLUploadImage(plant.id, createFormData(imageData))
+                fetchURLUploadImage(plant.id, imageData)
                     .then(() => { navigation.navigate("Pflanzenprofil", { id: plant.id }) });
             } else {
                 navigation.navigate("Pflanzenprofil", { id: plant.id })
@@ -90,22 +90,6 @@ export default function EditPlantScreen({ navigation }) {
         fetchURL('/plants/' + plant.id, 'PUT', payload, sendImage)
         
     }, [imageData, plant])
-
-
-    const createFormData = (imageData) => {
-        const data = new FormData();
-        const uri = imageData.uri;
-        const uriParts = uri.split('.');
-        const fileType = uriParts[uriParts.length - 1];
-
-        data.append('file', {
-            uri,
-            name: `photo.${fileType}`,
-            type: `image/${fileType}`,
-        });
-
-        return data;
-    };
 
     return (
         <ScrollView style={styles.scrollview}>

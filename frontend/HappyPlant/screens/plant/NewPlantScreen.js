@@ -39,7 +39,7 @@ export default function NewPlantScreen({ navigation }) {
 
         const sendImage = (data) => {
             if (imageData) {
-                fetchURLUploadImage(data.id, createFormData(imageData))
+                fetchURLUploadImage(data.id, imageData)
                     .then(() => { navigation.navigate('Meine Pflanzen') });
             } else {
                 navigation.navigate('Meine Pflanzen')
@@ -74,21 +74,6 @@ export default function NewPlantScreen({ navigation }) {
             (id !== null ? setChosenSpecies(species.filter(x => x.id === id)) : setChosenSpecies(species[0]))
         }
     }, [species])
-
-    const createFormData = (imageData) => {
-        const data = new FormData();
-        const uri = imageData.uri;
-        const uriParts = uri.split('.');
-        const fileType = uriParts[uriParts.length - 1];
-
-        data.append('file', {
-            uri,
-            name: `photo.${fileType}`,
-            type: `image/${fileType}`,
-        });
-
-        return data;
-    };
 
 
     return (
