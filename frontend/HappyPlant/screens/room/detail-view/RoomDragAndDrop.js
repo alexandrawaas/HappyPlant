@@ -36,12 +36,7 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
     const processDrop = useCallback((receivedMeasures, item) => {
         const pixelIndex = findMeasureInArray(measures, receivedMeasures)
         const coords = {x: data[pixelIndex].item.x, y: data[pixelIndex].item.y}
-        console.log(coords)
-        fetchURL(`/rooms/${room.id}/plants/${item.id}`, 'PATCH', {coords: coords}, onRoomUpdate)
-        // console.log(`${item.name} in ${data[pixelIndex].key}`)
-        
-        // console.log(`PATCH rooms/${room.id}/plants/${item.id}, body: {coords: {x:${data[pixelIndex].item.x}, y:${data[pixelIndex].item.y}}}`)
-        // console.log(`GET inventory`)
+        fetchURL(`/rooms/${room.id}/plants/${item.id}`, 'PATCH', coords, onRoomUpdate)
     }, [room, measures])
 
 
