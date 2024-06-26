@@ -1,11 +1,11 @@
 import { Text, View, StyleSheet } from "react-native"
-import { fetchURL } from '../../utils/ApiService'
+import { fetchURL } from '../../../utils/ApiService'
 import { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { AssignmentTypeAsVerbTranslations } from "../../utils/EnumTranslations";
-import WarnIcon from "../other/WarnIcon";
-import AssignmentIcon from "../other/AssignmentIcon";
-import CollapsibleBar from "../other/CollapsibleBar";
+import { AssignmentTypeAsVerbTranslations } from "../../../utils/EnumTranslations";
+import WarnIcon from "../../other/WarnIcon";
+import AssignmentIcon from "../../other/AssignmentIcon";
+import CollapsibleBar from "../../other/CollapsibleBar";
 
 export default function SingleRoomWarnings({ room }) {
     const [plantIds, setPlantIds] = useState();
