@@ -16,14 +16,18 @@ import { saveAuthToken } from '../../utils/AuthTokenUtil';
 import { fetchURL } from '../../utils/ApiService';
 
 const LoginScreen = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('example.user@test.com');
+    const [password, setPassword] = useState('s3cur3P455w0rd');
     const [rememberMe, setRememberMe] = useState(false);
 
     const handleBlur = () => {
         setEmail('');
         setPassword('');
     };
+
+    useEffect(() =>{
+        handleLogin()
+    },[])
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', handleBlur);
