@@ -14,6 +14,7 @@ import {Tooltip} from "react-native-elements";
 import EditButton from "../global/EditButton";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { fetchURL } from '../../utils/ApiService'
 
 
@@ -112,6 +113,26 @@ export default function SinglePlantScreen({ navigation }) {
                      </View>
                  </View>
                  <VerticalPlaceholder size={150}/>
+                 {isDatePickerVisible && Platform.OS === 'ios' && (
+                    <View style={styles.iosDateTimePickerContainer}>
+    <View style={styles.iosDateTimePickerInnerContainer}>
+        <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            display="inline"
+            onChange={handleDateChange}
+        />
+        <View style={styles.iosButtonsContainer}>
+        <TouchableOpacity onPress={hideDatePicker} style={styles.iosCancelButton}>
+                <Text style={styles.iosCancelButtonText}>abbrechen</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleConfirm(selectedDate)} style={styles.iosConfirmButton}>
+                <Text style={styles.iosConfirmButtonText}>bestätigen</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+</View>
+            )}
              </ScrollView>
         );
 }
@@ -210,5 +231,47 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
         elevation: 1,
         backgroundColor: "#fdfbef",
-    }
-    });
+    },
+    iosDateTimePickerContainer: {
+        backgroundColor: '#ffffff',
+        position: 'absolute',
+        bottom: '25%',  // Positionierung auf etwa 25% von unten
+        left: 0,
+        right: 0,
+        transform: [{ translateY: -50 }],  // Vertikale Zentrierung
+        zIndex: 1000,
+    },
+    iosDateTimePickerInnerContainer: {
+        flexDirection: 'column',  // Anordnung der Kinder in einer vertikalen Spalte
+        alignItems: 'center',  // Zentrierung der Inhalte horizontal
+    },
+    iosButtonsContainer: {
+        flexDirection: 'row',  // Anordnung der Kinder in einer horizontalen Reihe
+        justifyContent: 'center',  // Zentrierung der Inhalte horizontal
+        marginTop: 10,  // Abstand zwischen DatePicker und Buttons
+    },
+    iosConfirmButton: {
+        backgroundColor: '#5C724F',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginHorizontal: 5,  // Horizontaler Abstand zwischen den Buttons
+        width: 100,  // Breite des Bestätigen-Buttons
+    },
+    iosConfirmButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    iosCancelButton: {
+        backgroundColor: 'red',  // Farbe für den Abbruch-Button
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginHorizontal: 5,  // Horizontaler Abstand zwischen den Buttons
+        width: 100,  // Breite des Abbrechen-Buttons
+    },
+    iosCancelButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+});
