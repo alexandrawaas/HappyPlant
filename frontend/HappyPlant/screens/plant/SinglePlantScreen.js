@@ -44,7 +44,7 @@ export default function SinglePlantScreen({ navigation }) {
     }
 
     const calculateDates = (assignment) => {
-        if(plant.needs.intervals[assignment.assignmentType] === undefined) return <Text></Text>
+        if(plant.needs.intervals[assignment.assignmentType] === undefined || plant.needs.intervals[assignment.assignmentType] === -1) return <Text></Text>
         const myDate = (assignment.lastDone
                     ? addDays(assignment.lastDone, plant.needs.intervals[assignment.assignmentType])
                     : addDays(new Date(), plant.needs.intervals[assignment.assignmentType]))
@@ -95,13 +95,13 @@ export default function SinglePlantScreen({ navigation }) {
                     { plant.assignments !== undefined
                         ? plant.assignments.map
                         (
-                            it =>
+                            it => plant.needs.intervals[it.assignmentType] !== undefined && plant.needs.intervals[it.assignmentType] !== -1 ?
                             <View style={styles.boxContainer} key={it.id}>
                                 <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                                     <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[it.assignmentType]}</Text>
                                     {calculateDates(it)}
                                 </LinearGradient>
-                            </View>
+                            </View> : null
                         ) : null }
 
                      <Text style={styles.sectionTitle}>Notizen</Text>
