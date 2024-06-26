@@ -3,6 +3,7 @@ import Onboarding from 'react-native-onboarding-swiper';
 import { Image, StyleSheet, View, Text} from 'react-native';
 import { useNavigation } from "@react-navigation/native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LogBox } from 'react-native';
 
 const MyPage = ({ title = '', subtitle = '', image = null }) => (
     <View style={styles.page}>
@@ -19,6 +20,13 @@ const MyOnboarding = () => {
         await AsyncStorage.setItem('hasOnboarded', 'true');
         navigation.navigate('Registrieren');
     }
+
+    // these warnings are due to library bugs (https://github.com/jfilter/react-native-onboarding-swiper/issues #148, #149), so we suppress them.
+    LogBox.ignoreLogs([
+        'Warning: SymbolButton: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.',
+        'Warning: TextButton: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.',
+        'Warning: Page: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.',
+    ])
 
     return (
         <Onboarding
