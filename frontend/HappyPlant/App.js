@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import headerStyleOptions from './screens/global/HeaderStyle';
-
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import MyOnboarding from "./screens/OnboardingScreen";
 import LoadingScreen from "./screens/authentication/LoadingScreen";
 import LoginScreen from "./screens/authentication/LoginScreen";
@@ -12,12 +12,14 @@ import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
 const RootStack = createNativeStackNavigator();
 export default function App() {
   return (
+    <ActionSheetProvider>
       <NavigationContainer>
         <RootStack.Navigator screenOptions={{ headerShown: false }}>
           <RootStack.Screen name="OnboardingStack" component={OnboardingStack} />
           <RootStack.Screen name="MainApp" component={TabNavigator} />
         </RootStack.Navigator>
       </NavigationContainer>
+    </ActionSheetProvider>
     );
 }
 

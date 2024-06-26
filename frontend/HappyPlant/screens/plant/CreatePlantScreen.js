@@ -1,7 +1,7 @@
-
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable, Image} from "react-native";
 import {useRoute} from "@react-navigation/native";
-import {useEffect, useState, useCallback} from "react";
+import {useEffect, useState} from "react";
+import { fetchURL } from '../../utils/ApiService'
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
 import {LinearGradient} from "expo-linear-gradient";
 import {
@@ -11,11 +11,12 @@ import {Input, Tooltip} from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import CollapsibleBar from "../other/CollapsibleBar";
-import { useImageSelecetion } from "../../utils/useImageSelection";
+import * as ImagePicker from 'expo-image-picker';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import { fetchURL, fetchURLUploadImage } from "../../utils/ApiService";
 
 export default function EditPlantScreen({ navigation }) {
-    const [imageData, showActionSheet] = useImageSelecetion();
+    const [imageData, setImageData] = useState(undefined);
 
     const route = useRoute();
     const { id } = route.params;
@@ -29,6 +30,26 @@ export default function EditPlantScreen({ navigation }) {
         const numericValue = text.replace(/[^0-9]/g, "");
         setIntervals(new Map(intervals.set(k.toUpperCase(), numericValue)));
     }
+    const { showActionSheetWithOptions } = useActionSheet();
+
+    const showActionSheet = () => {
+        const options = ['Neues Foto aufnehmen', 'Foto aus Bibliothek aussuchen', 'Abbrechen'];
+        const cancelButtonIndex = 2;
+
+        showActionSheetWithOptions(
+            {
+                options,
+                cancelButtonIndex,
+            },
+            (buttonIndex) => {
+                if (buttonIndex === 0) {
+                    handleTakePhoto();
+                } else if (buttonIndex === 1) {
+                    handleChoosePhoto();
+                }
+            }
+        );
+    };
 
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, setPlant)
@@ -37,6 +58,7 @@ export default function EditPlantScreen({ navigation }) {
                 if (newNotes == null) setNewNotes(plant.notes);
             })
     }, [plant])
+
 
     useEffect(() => {
         navigation.setOptions({
@@ -60,6 +82,11 @@ export default function EditPlantScreen({ navigation }) {
                 navigation.navigate("Meine Pflanzen")
             })},
         ]);
+
+    const handleUploadPhoto = () => {
+        fetchURLUploadImage(plant.id, createFormData());
+        navigation.goBack()
+    }
     
     const handleSubmit = useCallback(() => {
         const intervalsMap = new Map();
@@ -70,8 +97,6 @@ export default function EditPlantScreen({ navigation }) {
 
         const payload = {
             name: plant.name,
-            picturePath: plant.picturePath,
-            notes: newNotes,
             speciesId: plant.species.id,
             needs: {
                 lightingType: Object.keys(LightingTypeTranslations).find(key => LightingTypeTranslations[key] === chosenLighting),
@@ -81,8 +106,9 @@ export default function EditPlantScreen({ navigation }) {
         
         const sendImage = () => {
             if (imageData) {
-                fetchURLUploadImage(plant.id, imageData)
+                fetchURLUploadImage(plant.id, createFormData(imageData))
                     .then(() => { navigation.navigate("Pflanzenprofil", { id: plant.id }) });
+                setImageData(undefined)
             } else {
                 navigation.navigate("Pflanzenprofil", { id: plant.id })
             }
@@ -90,6 +116,49 @@ export default function EditPlantScreen({ navigation }) {
         fetchURL('/plants/' + plant.id, 'PUT', payload, sendImage)
         
     }, [imageData, plant])
+
+    const createFormData = (imageData) => {
+        const data = new FormData();
+        const uri = imageData.uri;
+        const uriParts = uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+
+        data.append('file', {
+            uri,
+            name: `photo.${fileType}`,
+            type: `image/${fileType}`,
+        });
+
+        return data;
+    };
+
+    const handleChoosePhoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            allowsMultipleSelection: false,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImageData(result.assets[0])
+            //navigation.navigate("Foto hochladen", {photo: result.assets[0], plantId: plant.id})
+        }
+    };
+
+    const handleTakePhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImageData(result.assets[0])
+            //navigation.navigate('Foto hochladen', { photo: result.assets[0], plantId: plant.id });
+        }
+    };
 
     return (
         <ScrollView style={styles.scrollview}>

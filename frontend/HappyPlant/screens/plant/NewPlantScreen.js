@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView} from "react-native";
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable} from "react-native";
 import {useEffect, useState} from "react";
 import {API_URL} from "../../config";
 import {useRoute} from "@react-navigation/native";
@@ -8,10 +8,10 @@ import CollapsibleBar from "../other/CollapsibleBar";
 import {LinearGradient} from "expo-linear-gradient";
 import {commonStyles} from "../../utils/styles/CommonStyles";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
-import {fetchURL} from "../../utils/ApiService";
+import {fetchURL,  fetchURLUploadImage} from "../../utils/ApiService";
+import { useImageSelecetion } from "../../utils/useImageSelection";
 
 export default function NewPlantScreen({ navigation }) {
-
     const [species, setSpecies] = useState([]);
     const [name, setName] = useState("");
 
@@ -20,6 +20,8 @@ export default function NewPlantScreen({ navigation }) {
 
     const [chosenSpecies, setChosenSpecies] = useState(id);
     const [nameWarningEnabled, setNameWarningEnabled] = useState(false)
+
+    const [imageData, showActionSheet] = useImageSelecetion();
 
     const handleContinue = async () =>{
         let shouldCancel = false;
@@ -34,9 +36,17 @@ export default function NewPlantScreen({ navigation }) {
             name: name,
             speciesId: chosenSpecies.id,
         };
-        fetchURL('/plants', 'POST', payload, (data) => {
-            navigation.navigate('Meine Pflanzen');
-        })
+
+        const sendImage = (data) => {
+            if (imageData) {
+                fetchURLUploadImage(data.id, imageData)
+                    .then(() => { navigation.navigate('Meine Pflanzen') });
+            } else {
+                navigation.navigate('Meine Pflanzen')
+            }
+        }
+
+        fetchURL('/plants', 'POST', payload, sendImage)
     }
 
     useEffect(() => {
@@ -69,7 +79,12 @@ export default function NewPlantScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <ScrollView style={styles.scrollview}>
-                <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name}></RoundPictureNameComponent>
+                <Pressable onPress={showActionSheet}>
+                    {imageData
+                        ? <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} raw={true} imageData={imageData}></RoundPictureNameComponent>
+                        : <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} ></RoundPictureNameComponent>
+                    }
+                </Pressable>
                 <Text style={styles.sectionTitle}>Name der Pflanze</Text>
                 <View style={styles.textInputContainer}>
                     <View style={[styles.textInputInnerContainer]}>

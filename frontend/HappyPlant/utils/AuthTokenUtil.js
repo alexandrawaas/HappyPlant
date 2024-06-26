@@ -13,12 +13,6 @@ export const getAuthToken = async () => {
     }
 
     return authToken;
-
-    // const authToken = await AsyncStorage.getItem('authToken');
-    // if (!authToken) {
-    //     throw new Error('Kein AuthToken gefunden.');
-    // }
-    // return authToken;
 };
 
 export const saveAuthToken = async (authToken) => {
