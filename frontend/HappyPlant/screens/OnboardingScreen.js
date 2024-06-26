@@ -3,8 +3,9 @@ import Onboarding from 'react-native-onboarding-swiper';
 import { Image, StyleSheet, View, Text} from 'react-native';
 import { useNavigation } from "@react-navigation/native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LogBox } from 'react-native';
 
-const MyPage = ({title = '', subtitle = '', image = null}) => (
+const MyPage = ({ title = '', subtitle = '', image = null }) => (
     <View style={styles.page}>
         <Image style={styles.img} source={image} />
         <Text style={styles.title}>{title}</Text>
@@ -20,6 +21,13 @@ const MyOnboarding = () => {
         navigation.navigate('Registrieren');
     }
 
+    // these warnings are due to library bugs (https://github.com/jfilter/react-native-onboarding-swiper/issues #148, #149), so we suppress them.
+    LogBox.ignoreLogs([
+        'Warning: SymbolButton: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.',
+        'Warning: TextButton: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.',
+        'Warning: Page: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.',
+    ])
+
     return (
         <Onboarding
             onSkip={handleOnboardingFinish}
@@ -27,35 +35,59 @@ const MyOnboarding = () => {
             pages={[
                 {
                     backgroundColor: '#BDEEB5',
-                    image: <MyPage
-                        image={require('../assets/Onboarding/Onboarding1.png')}
-                        title={'Willkommen bei' + '\n' + 'HappyPlant'}
-                        subtitle='Pflanzenpflege, smart und einfach.'
-                    />,
+                    image: <Image style={styles.img} source={require('../assets/Onboarding/Onboarding1.png')} />,
+                    title: (
+                        <Text style={[styles.title, { top: 520, left: 60 }]}>
+                            Willkommen bei{'\n'}HappyPlant
+                        </Text>
+                    ),
+                    subtitle: (
+                        <Text style={[styles.subtitle, { top: 620, left: 60 }]}>
+                            Pflanzenpflege, smart und einfach.
+                        </Text>
+                    ),
                 },
                 {
                     backgroundColor: '#BDEEB5',
-                    image: <MyPage
-                        image={require('../assets/Onboarding/Onboarding2.png')}
-                        title='To-dos verwalten'
-                        subtitle={'Behalte den Überblick über Gießen,' + '\n' + 'Schnitt, Umtopen und Düngen.'}
-                    />,
+                    image: <Image style={styles.img} source={require('../assets/Onboarding/Onboarding2.png')} />,
+                    title: (
+                        <Text style={[styles.title, { top: 520, left: 60 }]}>
+                            To-dos verwalten
+                        </Text>
+                    ),
+                    subtitle: (
+                        <Text style={[styles.subtitle, { top: 620, left: 60 }]}>
+                            Behalte den Überblick über Gießen, {'\n'}Schnitt, Umtopen und Düngen.
+                        </Text>
+                    ),
                 },
                 {
                     backgroundColor: '#BDEEB5',
-                    image: <MyPage
-                        image={require('../assets/Onboarding/Onboarding3.png')}
-                        title='Optimaler Standort'
-                        subtitle={'Finde den perfekten Platz' + '\n' + 'für deine Pflanzen.'}
-                    />,
+                    image: <Image style={styles.img} source={require('../assets/Onboarding/Onboarding3.png')} />,
+                    title: (
+                        <Text style={[styles.title, { top: 520, left: 60 }]}>
+                            Optimaler Standort
+                        </Text>
+                    ),
+                    subtitle: (
+                        <Text style={[styles.subtitle, { top: 620, left: 60 }]}>
+                            Finde den perfekten Platz {'\n'}für deine Pflanzen.
+                        </Text>
+                    ),
                 },
                 {
                     backgroundColor: '#BDEEB5',
-                    image: <MyPage
-                        image={require('../assets/Onboarding/Onboarding4.png')}
-                        title='Pflanzenwissen'
-                        subtitle={'Entdecke verschiedene Arten' + '\n' + 'und erweitere dein Know-how.'}
-                    />,
+                    image: <Image style={styles.img} source={require('../assets/Onboarding/Onboarding4.png')} />,
+                    title: (
+                        <Text style={[styles.title, { top: 520, left: 60 }]}>
+                            Pflanzenwissen
+                        </Text>
+                    ),
+                    subtitle: (
+                        <Text style={[styles.subtitle, { top: 620, left: 60 }]}>
+                            Entdecke verschiedene Arten {'\n'}und erweitere dein Know-how.
+                        </Text>
+                    ),
                 },
             ]}
         />
