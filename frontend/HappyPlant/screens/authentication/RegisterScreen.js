@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, TextInput, TouchableOpacity, Alert, Button, StyleSheet, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Button, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
 import { fetchURL } from '../../utils/ApiService';
 
+const FORM_HEIGHT = 300
 
 const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [expoPushToken, setExpoPushToken] = useState();
+    const { height } = useWindowDimensions();
 
     const handleBlur = () => {
         setEmail('');
@@ -30,9 +32,9 @@ const RegisterScreen = ({ navigation }) => {
             }
 
             await registerForPushNotificationsAsync()
-            .then(
-                (token) => { setExpoPushToken(token); }
-            );
+                .then(
+                    (token) => { setExpoPushToken(token); }
+                );
 
             const payload = {
                 email: email,
@@ -46,20 +48,21 @@ const RegisterScreen = ({ navigation }) => {
                 } else {
                     Alert.alert('Fehler', data.message || 'Registrierung fehlgeschlagen');
                 }
-            }, needsAuth=false)
+            }, needsAuth = false)
         } catch (error) {
             console.error('Fehler bei der Registrierung:', error);
             Alert.alert('Fehler', 'Es ist ein Fehler bei der Registrierung aufgetreten.');
         }
     };
 
+    const imgDimension = 0.3 * height
     return (
         <View style={commonStyles.container}>
-            <View style={{...StyleSheet.absoluteFillObject, backgroundColor: '#BEF5B5', height: 500, borderRadius: 60, top: -40}} />
-            <Image source={require('../../assets/register.jpg')} style={styles.img}/>
-            <Text style={styles.text}>Registrierung</Text>
-            <View style={styles.background} >
-                <Text style={styles.text2}> E-Mail </Text>
+            <View style={getBackgroundElipsisStyle(height)} />
+            <Image source={require('../../assets/register.jpg')} style={{...styles.img, height: imgDimension, width: imgDimension }} />
+            <Text style={styles.header}>Registrierung</Text>
+            <View style={[styles.formContainer, commonStyles.shadow]} >
+                <Text style={styles.inputLabel}> E-Mail </Text>
                 <TextInput
                     placeholder=""
                     value={email}
@@ -67,9 +70,9 @@ const RegisterScreen = ({ navigation }) => {
                     autoCorrect={false}
                     autoCapitalize="none"
                     keyboardType="email-address"
-                    style={styles.input}
+                    style={[commonStyles.shadow, styles.input]}
                 />
-                <Text style={styles.text2}> Passwort </Text>
+                <Text style={styles.inputLabel}> Passwort </Text>
                 <TextInput
                     placeholder=""
                     value={password}
@@ -77,9 +80,9 @@ const RegisterScreen = ({ navigation }) => {
                     secureTextEntry={true}
                     autoCorrect={false}
                     autoCapitalize="none"
-                    style={styles.input}
+                    style={[commonStyles.shadow, styles.input]}
                 />
-                <Text style={styles.text2}> Passwort bestätigen </Text>
+                <Text style={styles.inputLabel}> Passwort bestätigen </Text>
                 <TextInput
                     placeholder=""
                     value={confirmPassword}
@@ -87,36 +90,56 @@ const RegisterScreen = ({ navigation }) => {
                     secureTextEntry={true}
                     autoCorrect={false}
                     autoCapitalize="none"
-                    style={styles.input}
+                    style={[commonStyles.shadow, styles.input]}
                 />
-                <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('Anmelden')}>
-                    <Text style={styles.button2Text}>Ich habe schon einen Account</Text>
+                <TouchableOpacity style={styles.subButton} onPress={() => navigation.navigate('Anmelden')}>
+                    <Text style={styles.subButtonText}>Ich habe schon einen Account</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleRegister}>
-                <Text style={styles.buttonText}>Registrieren</Text>
+            <TouchableOpacity style={[styles.registerButton, commonStyles.shadow]} onPress={handleRegister}>
+                <Text style={styles.registerButtonText}>Registrieren</Text>
             </TouchableOpacity>
         </View>
     );
+
 };
 
 
 const styles = StyleSheet.create({
-
-    text: {
-        fontSize: 30,
-        marginBottom: 60,
-        top: 180,
+    backgroundElipsis: {
+        backgroundColor: '#BEF5B5',
+        borderBottomLeftRadius: 60,
+        borderBottomRightRadius: 60,
     },
-
     img: {
-        top: 170,
-        height: 250,
-        width: 250,
-        marginTop: -300,
+        marginTop: 20,
         borderRadius: 60,
     },
+    header: {
+        marginTop: 10,
+        marginBottom: 30,
+        fontSize: 30,
+    },
 
+    formContainer: {
+        backgroundColor: 'white',
+        paddingVertical: 7,
+        borderRadius: 20,
+        width: '90%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    inputLabel: {
+        marginTop: 5,
+        marginBottom: -3,
+        margin: 3,
+        color: '#233D0C',
+        zIndex: 1,
+        textAlign: 'left',
+        width: '100%',
+        marginLeft: 80,
+    },
     input: {
         width: '80%',
         marginTop: 5,
@@ -127,61 +150,34 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 12,
         backgroundColor: '#FDFBEF',
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity:  0.2,
-        shadowRadius: 1,
         elevation: 3,
     },
 
-    button:{
-        top: 180,
-        elevation: 5,
-        backgroundColor: '#BEF5B5',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 50,
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity:  0.5,
-        shadowRadius: 2,
+    subButton: {
+        left: 50,
     },
-
-    buttonText: {
-        color: 'black',
-        fontSize: 18,
-    },
-
-    button2Text: {
+    subButtonText: {
         marginTop: 10,
         color: '#9D9B9B',
         fontSize: 16,
         textDecorationLine: 'underline',
-        left: 50
-    },
+    },    
 
-    background: {
-        top: 150,
-        backgroundColor: 'white',
-        height: 300,
-        borderRadius: 20,
-        width: 360,
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity:  0.4,
-        shadowRadius: 3,
-        elevation: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
+    registerButton: {
+        backgroundColor: '#BEF5B5',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 50,
     },
-
-    text2: {
-        marginTop: 5,
-        marginBottom: -3,
-        margin: 3,
-        color: '#233D0C',
-        zIndex: 1,
-        textAlign: 'left',
-        width: '100%',
-        marginLeft: 80,
-    }
+    registerButtonText: {
+        color: 'black',
+        fontSize: 18,
+    },
 });
+
+const getBackgroundElipsisStyle = (height) => {
+    const elementHeight = 0.65 * height
+    return { ...StyleSheet.absoluteFillObject, ...styles.backgroundElipsis, height: elementHeight }
+}
 
 export default RegisterScreen;
