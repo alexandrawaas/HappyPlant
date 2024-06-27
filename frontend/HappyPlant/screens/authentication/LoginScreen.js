@@ -17,6 +17,12 @@ const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('example.user@test.com');
     const [password, setPassword] = useState('s3cur3P455w0rd');
     const [rememberMe, setRememberMe] = useState(false);
+    const [isValidEmail, setIsValidEmail] = useState(false);
+
+    const validateEmail = (inputEmail) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(inputEmail).toLowerCase());
+    }
 
     const handleBlur = () => {
         setEmail('');
@@ -28,12 +34,21 @@ const LoginScreen = ({ navigation }) => {
     // },[])
 
     useEffect(() => {
+        setIsValidEmail(validateEmail(email));
+    }, [email, password]);
+
+    useEffect(() => {
         const unsubscribe = navigation.addListener('blur', handleBlur);
         return unsubscribe;
     }, [navigation]);
 
     const handleLogin = async () => {
         try {
+            if (!isValidEmail) {
+                Alert.alert('Fehler', 'Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+                return;
+            }
+            
             const payload = {
                 email: email,
                 password: password

@@ -12,26 +12,16 @@ export default function SettingsScreen({ navigation }) {
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [user, setUser] = useState(null);
     const [expoPushToken, setExpoPushToken] = useState();
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [isInitialLoading, setIsInitialLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-            // if (!isLoggingOut) {
-                e.preventDefault();
-                updateNotificationSettings();
-                navigation.dispatch(e.data.action);
-            // }
-        });
-
         fetchUserData();
-
-        return () => {
-            unsubscribe();
-        };
-    }, [navigation]);
+    }, []);
 
     useEffect(() => {
-        updateNotificationSettings();
+        if (!isInitialLoading) {
+            updateNotificationSettings();
+        }
     }, [remindersEnabled, notificationTime]);
 
 
@@ -40,10 +30,13 @@ export default function SettingsScreen({ navigation }) {
             if (data) {
                 setUser(data);
                 setRemindersEnabled(data.receivePushNotifications);
-                const time = new Date(data.pushNotificationsTime);
+                const [hours, minutes, seconds] = data.pushNotificationsTime.split(':').map(Number);
+                const time = new Date();
+                time.setHours(hours, minutes, seconds, 0);
                 if (!isNaN(time.getTime())) {
                     setNotificationTime(time);
                 }
+                setIsInitialLoading(false);
             }
         });
     };

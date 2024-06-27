@@ -115,24 +115,34 @@ export default function SinglePlantScreen({ navigation }) {
                  <VerticalPlaceholder size={150}/>
                  {isDatePickerVisible && Platform.OS === 'ios' && (
                     <View style={styles.iosDateTimePickerContainer}>
-    <View style={styles.iosDateTimePickerInnerContainer}>
-        <DateTimePicker
-            value={selectedDate}
-            mode="date"
-            display="inline"
-            onChange={handleDateChange}
-        />
-        <View style={styles.iosButtonsContainer}>
-        <TouchableOpacity onPress={hideDatePicker} style={styles.iosCancelButton}>
-                <Text style={styles.iosCancelButtonText}>abbrechen</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleConfirm(selectedDate)} style={styles.iosConfirmButton}>
-                <Text style={styles.iosConfirmButtonText}>bestätigen</Text>
-            </TouchableOpacity>
-        </View>
-    </View>
-</View>
-            )}
+                        <View style={styles.iosDateTimePickerInnerContainer}>
+                            <DateTimePicker
+                                value={selectedDate}
+                                mode="date"
+                                display="inline"
+                                onChange={handleDateChange}
+                            />
+                            <View style={styles.iosButtonsContainer}>
+                                <TouchableOpacity onPress={hideDatePicker} style={styles.iosCancelButton}>
+                                    <Text style={styles.iosCancelButtonText}>abbrechen</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleConfirm(selectedDate)} style={styles.iosConfirmButton}>
+                                    <Text style={styles.iosConfirmButtonText}>bestätigen</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                )}
+                {isDatePickerVisible && Platform.OS === 'android' && (
+                    <View style={styles.iosDateTimePickerInnerContainer}>
+                        <DateTimePicker
+                            value={selectedDate}
+                            mode="date"
+                            display="spinner"
+                            onChange={handleDateChange}
+                        />
+                    </View>
+                )}
              </ScrollView>
         );
 }
