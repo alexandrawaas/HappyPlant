@@ -1,14 +1,14 @@
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable} from "react-native";
-import {useEffect, useState} from "react";
-import {API_URL} from "../../config";
-import {useRoute} from "@react-navigation/native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import { useEffect, useState } from "react";
+import { API_URL } from "../../config";
+import { useRoute } from "@react-navigation/native";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import Feather from "react-native-vector-icons/Feather";
 import CollapsibleBar from "../other/CollapsibleBar";
-import {LinearGradient} from "expo-linear-gradient";
-import {commonStyles} from "../../utils/styles/CommonStyles";
+import { LinearGradient } from "expo-linear-gradient";
+import { commonStyles } from "../../utils/styles/CommonStyles";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
-import {fetchURL,  fetchURLUploadImage} from "../../utils/ApiService";
+import { fetchURL, fetchURLUploadImage } from "../../utils/ApiService";
 import { useImageSelecetion } from "../../utils/useImageSelection";
 
 export default function NewPlantScreen({ navigation }) {
@@ -21,32 +21,34 @@ export default function NewPlantScreen({ navigation }) {
     const [chosenSpecies, setChosenSpecies] = useState(id);
     const [nameWarningEnabled, setNameWarningEnabled] = useState(false)
 
-    const [imageData, showActionSheet] = useImageSelecetion();
+    const [imageData, disableSend, showActionSheet] = useImageSelecetion();
 
-    const handleContinue = async () =>{
-        let shouldCancel = false;
-        if(name.length < 1 || name.length > 50){
-            setNameWarningEnabled(true);
-            shouldCancel = true;
-        }
-
-        if(shouldCancel){ return;}
-
-        const payload = {
-            name: name,
-            speciesId: chosenSpecies.id,
-        };
-
-        const sendImage = (data) => {
-            if (imageData) {
-                fetchURLUploadImage(data.id, imageData)
-                    .then(() => { navigation.navigate('Meine Pflanzen') });
-            } else {
-                navigation.navigate('Meine Pflanzen')
+    const handleContinue = async () => {
+        if (!disableSend) {
+            let shouldCancel = false;
+            if (name.length < 1 || name.length > 50) {
+                setNameWarningEnabled(true);
+                shouldCancel = true;
             }
-        }
 
-        fetchURL('/plants', 'POST', payload, navigation, sendImage)
+            if (shouldCancel) { return; }
+
+            const payload = {
+                name: name,
+                speciesId: chosenSpecies.id,
+            };
+
+            const sendImage = (data) => {
+                if (imageData) {
+                    fetchURLUploadImage(data.id, imageData)
+                        .then(() => { navigation.navigate('Meine Pflanzen') });
+                } else {
+                    navigation.navigate('Meine Pflanzen')
+                }
+            }
+
+            fetchURL('/plants', 'POST', payload, navigation, sendImage)
+        }
     }
 
     useEffect(() => {
@@ -54,8 +56,10 @@ export default function NewPlantScreen({ navigation }) {
             ...navigation.options,
             headerTitle: "Neue Pflanze",
             headerRight: () => (
-                <TouchableOpacity onPress={handleContinue} style={{margin: 8}}>
-                    <Feather name="check" color="grey" size={25}/>
+                <TouchableOpacity onPress={handleContinue} style={{ margin: 8 }}>
+                    {!disableSend?
+                    <Feather name="check" color={name.length > 0?"dodgerblue":"grey"} size={25}/>
+                    :<ActivityIndicator size="small" color="grey"/>}
                 </TouchableOpacity>
             )
         })
@@ -69,7 +73,7 @@ export default function NewPlantScreen({ navigation }) {
     }, [species])
 
     useEffect(() => {
-        if(chosenSpecies === undefined || chosenSpecies === null)
+        if (chosenSpecies === undefined || chosenSpecies === null) 
         {
             (id !== null ? setChosenSpecies(species.filter(x => x.id === id)) : setChosenSpecies(species[0]))
         }
@@ -88,7 +92,7 @@ export default function NewPlantScreen({ navigation }) {
                 <Text style={styles.sectionTitle}>Name der Pflanze</Text>
                 <View style={styles.textInputContainer}>
                     <View style={[styles.textInputInnerContainer]}>
-                        <TextInput style={styles.textInput} inputMode={"text"} placeholder="Gib einen Namen ein..." onChangeText={setName} value={name}/>
+                        <TextInput style={styles.textInput} inputMode={"text"} placeholder="Gib einen Namen ein..." onChangeText={setName} value={name} />
                     </View>
                 </View>
                 {nameWarningEnabled &&
@@ -99,11 +103,11 @@ export default function NewPlantScreen({ navigation }) {
                     <CollapsibleBar style={styles.dropdown} title={
                         (chosenSpecies !== undefined && chosenSpecies !== null) ?
                             chosenSpecies.name
-                        : "Spezies auswählen"}>
-                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                <ScrollView style={styles.scrollDropdown}
-                                            showsVerticalScrollIndicator={true}
-                                    >
+                            : "Spezies auswählen"}>
+                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                            <ScrollView style={styles.scrollDropdown}
+                                showsVerticalScrollIndicator={true}
+                            >
                                 {species?.length === 0
                                     ? <Text>Keine Spezies gefunden</Text>
                                     : null
@@ -115,12 +119,12 @@ export default function NewPlantScreen({ navigation }) {
                                         </TouchableOpacity>
                                     </View>
                                 )}
-                                    <VerticalPlaceholder size={8}/>
-                                </ScrollView>
-                            </LinearGradient>
+                                <VerticalPlaceholder size={8} />
+                            </ScrollView>
+                        </LinearGradient>
                     </CollapsibleBar>
                 </View>
-                <VerticalPlaceholder size={120}/>
+                <VerticalPlaceholder size={120} />
             </ScrollView>
         </View>
     );
@@ -138,14 +142,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
     },
-    warning:{
-       color: "red",
+    warning: {
+        color: "red",
         marginTop: 10,
     },
     container: {
         flex: 1,
-        alignItems:"center",
-        justifyContent:"top",
+        alignItems: "center",
+        justifyContent: "top",
     },
     containerHorizontal: {
         marginTop: 16,
@@ -181,7 +185,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
 
     },
-    textInputInnerContainer : {
+    textInputInnerContainer: {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",

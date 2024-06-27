@@ -1,13 +1,13 @@
 
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable} from "react-native";
-import {useRoute} from "@react-navigation/native";
-import {useEffect, useState, useCallback} from "react";
+import { View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable, ActivityIndicator } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { useEffect, useState, useCallback } from "react";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
-import {LinearGradient} from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import {
     AssignmentTypeTranslations, LightingTypeTranslations,
 } from "../../utils/EnumTranslations";
-import {Input, Tooltip} from "react-native-elements";
+import { Input, Tooltip } from "react-native-elements";
 import Feather from "react-native-vector-icons/Feather";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
 import CollapsibleBar from "../other/CollapsibleBar";
@@ -15,7 +15,7 @@ import { useImageSelecetion } from "../../utils/useImageSelection";
 import { fetchURL, fetchURLUploadImage } from "../../utils/ApiService";
 
 export default function EditPlantScreen({ navigation }) {
-    const [imageData, showActionSheet] = useImageSelecetion();
+    const [imageData, disableSend, showActionSheet] = useImageSelecetion();
 
     const route = useRoute();
     const { id } = route.params;
@@ -44,7 +44,9 @@ export default function EditPlantScreen({ navigation }) {
             headerTitle: "Pflanze bearbeiten",
             headerRight: () => (
                 <TouchableOpacity onPress={handleSubmit} style={{ margin: 8 }}>
-                    <Feather name="check" color="blue" size={25} />
+                    {!disableSend?
+                    <Feather name="check" color="dodgerblue" size={25}/>
+                    :<ActivityIndicator size="small" color="#grey"/>}
                 </TouchableOpacity>
             )
         })
@@ -56,39 +58,43 @@ export default function EditPlantScreen({ navigation }) {
                 text: 'Abbrechen',
                 style: 'cancel',
             },
-            {text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, () => {
-                navigation.navigate("Meine Pflanzen")
-            })},
+            {
+                text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, () => {
+                    navigation.navigate("Meine Pflanzen")
+                })
+            },
         ]);
-    
-    const handleSubmit = useCallback(() => {
-        const intervalsMap = new Map();
-        const map = new Map(Object.entries(plant.needs.intervals));
-        map.forEach((v, k) => {
-            intervalsMap.set(k, intervals.get(k) ?? v);
-        });
 
-        const payload = {
-            name: plant.name,
-            picturePath: plant.picturePath,
-            notes: newNotes,
-            speciesId: plant.species.id,
-            needs: {
-                lightingType: Object.keys(LightingTypeTranslations).find(key => LightingTypeTranslations[key] === chosenLighting),
-                intervals: Object.fromEntries(intervalsMap),
+    const handleSubmit = useCallback(() => {
+        if (!disableSend) {
+            const intervalsMap = new Map();
+            const map = new Map(Object.entries(plant.needs.intervals));
+            map.forEach((v, k) => {
+                intervalsMap.set(k, intervals.get(k) ?? v);
+            });
+
+            const payload = {
+                name: plant.name,
+                picturePath: plant.picturePath,
+                notes: newNotes,
+                speciesId: plant.species.id,
+                needs: {
+                    lightingType: Object.keys(LightingTypeTranslations).find(key => LightingTypeTranslations[key] === chosenLighting),
+                    intervals: Object.fromEntries(intervalsMap),
+                }
+            };
+
+            const sendImage = () => {
+                if (imageData) {
+                    fetchURLUploadImage(plant.id, imageData)
+                        .then(() => { navigation.navigate("Pflanzenprofil", { id: plant.id }) });
+                } else {
+                    navigation.navigate("Pflanzenprofil", { id: plant.id })
+                }
             }
-        };
-        
-        const sendImage = () => {
-            if (imageData) {
-                fetchURLUploadImage(plant.id, imageData)
-                    .then(() => { navigation.navigate("Pflanzenprofil", { id: plant.id }) });
-            } else {
-                navigation.navigate("Pflanzenprofil", { id: plant.id })
-            }
+            fetchURL('/plants/' + plant.id, 'PUT', payload, navigation, sendImage)
         }
-        fetchURL('/plants/' + plant.id, 'PUT', payload, navigation, sendImage)
-        
+
     }, [imageData, plant])
 
     return (
@@ -117,18 +123,18 @@ export default function EditPlantScreen({ navigation }) {
                         </CollapsibleBar>
                     </View>
                     <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
-                        <Feather name="info" color="grey" size={25}/>
+                        <Feather name="info" color="grey" size={25} />
                     </Tooltip>
                 </View>
                 <Text style={styles.sectionTitle}>Aufgaben-Intervalle</Text>
-                { plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
-                        <View style={styles.boxContainer} key={k}>
-                            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
-                                <View style={styles.numberInputContainer}>
-                                    <Text>alle</Text>
-                                    <View style={styles.numberInputInnerContainer}>
-                                        <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3} onChangeText={(e) => updateMap(e, k)}>{v !== -1 ? v : ""}</TextInput>
+                {plant.needs !== undefined ? Object.entries(plant.needs?.intervals).map(([k, v]) =>
+                    <View style={styles.boxContainer} key={k}>
+                        <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                            <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[k]}</Text>
+                            <View style={styles.numberInputContainer}>
+                                <Text>alle</Text>
+                                <View style={styles.numberInputInnerContainer}>
+                                    <TextInput mode={"outline"} inputMode={"numeric"} style={styles.numberInput} maxLength={3} onChangeText={(e) => updateMap(e, k)}>{v !== -1 ? v : ""}</TextInput>
                                 </View>
                                 <Text>Tage</Text>
                             </View>
@@ -139,7 +145,7 @@ export default function EditPlantScreen({ navigation }) {
                 <Text style={styles.sectionTitle}>Notizen</Text>
                 <View style={styles.boxContainer}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']} style={[styles.detailContainer, styles.notesContainer]}>
-                        <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400} onChangeText={(t) => {setNewNotes(t); console.log(newNotes);}}>{plant.notes}</Input>
+                        <Input style={[styles.notesText, styles.text]} multiline={true} maxLength={400} onChangeText={(t) => { setNewNotes(t); console.log(newNotes); }}>{plant.notes}</Input>
                     </LinearGradient>
                 </View>
                 <Text onPress={() => createTwoButtonAlert()} color="red" style={[styles.link, styles.redLink]}>Pflanze löschen</Text>
