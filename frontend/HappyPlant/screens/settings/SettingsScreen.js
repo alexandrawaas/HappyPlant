@@ -4,6 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { removeAuthToken } from '../../utils/AuthTokenUtil';
 import { fetchURL } from '../../utils/ApiService'
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
+import VerticalPlaceholder from '../../utils/styles/VerticalPlaceholder';
 
 export default function SettingsScreen({ navigation }) {
     const [remindersEnabled, setRemindersEnabled] = useState(false);
@@ -192,6 +193,7 @@ export default function SettingsScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <VerticalPlaceholder size={120} />
             </View>
         </ScrollView>
     );
@@ -200,7 +202,7 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
     scrollContainer: {
         flex: 1,
-        padding: 30,
+        padding: 20,
     },
     container: {
        alignItems: 'center',
