@@ -6,7 +6,7 @@ import MyOnboarding from "./screens/OnboardingScreen";
 import LoadingScreen from "./screens/authentication/LoadingScreen";
 import LoginScreen from "./screens/authentication/LoginScreen";
 import RegisterScreen from "./screens/authentication/RegisterScreen";
-import TabNavigator from "./screens/global/TabNavigator";
+import TabNavigator from "./screens/global/navigation/TabNavigator";
 import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
 
 const RootStack = createNativeStackNavigator();

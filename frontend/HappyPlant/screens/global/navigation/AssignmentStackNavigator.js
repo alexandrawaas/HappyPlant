@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import AssignmentsScreen from '../AssignmentsScreen'
-import GlobalLayout from './GlobalLayout';
-import headerStyleOptions from './HeaderStyle';
+import AssignmentsScreen from '../../AssignmentsScreen'
+import GlobalLayout from '../GlobalLayout';
+import headerStyleOptions from '../HeaderStyle';
 
 const AssignmentStack = createNativeStackNavigator();
 

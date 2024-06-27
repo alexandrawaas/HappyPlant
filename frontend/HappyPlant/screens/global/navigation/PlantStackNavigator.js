@@ -1,11 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MyPlantsScreen from '../plant/MyPlantsScreen'
-import EditPlantScreen from '../plant/EditPlantScreen'
-import SinglePlantScreen from '../plant/SinglePlantScreen'
-import GlobalLayout from './GlobalLayout';
-import headerStyleOptions from './HeaderStyle';
-import NewPlantScreen from "../plant/NewPlantScreen";
-import UploadImageDialog from '../plant/UploadImageDialog';
+import MyPlantsScreen from '../../plant/MyPlantsScreen'
+import EditPlantScreen from '../../plant/EditPlantScreen'
+import SinglePlantScreen from '../../plant/SinglePlantScreen'
+import GlobalLayout from '../GlobalLayout';
+import headerStyleOptions from '../HeaderStyle';
+import NewPlantScreen from "../../plant/NewPlantScreen";
+import UploadImageDialog from '../../plant/UploadImageDialog';
 
 const PlantStack = createNativeStackNavigator();
 
