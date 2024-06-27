@@ -23,7 +23,7 @@ export default function SinglePlantScreen({ navigation }) {
     const [plant, setPlant] = useState({});
     
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', null, setPlant)
+        fetchURL(`/plants/${id}`, 'GET', null, navigation, setPlant)
     }, [isFocused])
 
     useEffect(() => {

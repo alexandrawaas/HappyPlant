@@ -46,7 +46,7 @@ export default function NewPlantScreen({ navigation }) {
             }
         }
 
-        fetchURL('/plants', 'POST', payload, sendImage)
+        fetchURL('/plants', 'POST', payload, navigation, sendImage)
     }
 
     useEffect(() => {

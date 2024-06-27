@@ -28,7 +28,7 @@ export default function SettingsScreen({ navigation }) {
 
 
     const fetchUserData = async () => {
-        fetchURL('/user', 'GET', null, (data) => {
+        fetchURL('/user', 'GET', null, navigation, (data) => {
             if (data) {
                 setUser(data);
                 setRemindersEnabled(data.receivePushNotifications);
@@ -51,7 +51,7 @@ export default function SettingsScreen({ navigation }) {
             pushNotificationsTime: notificationTime.toISOString().substring(11, 16),
             pushNotificationToken: expoPushToken
         };
-        fetchURL('/user', 'PATCH', payload, (data) => {
+        fetchURL('/user', 'PATCH', payload, navigation, (data) => {
             if (!data) {
                 console.error('Fehler beim Aktualisieren der Benachrichtigungseinstellungen');
             }
@@ -59,7 +59,7 @@ export default function SettingsScreen({ navigation }) {
     };
     
     const handleAction = async (endpoint, method, successMessage) => {
-        fetchURL(endpoint, method, null, async () => {
+        fetchURL(endpoint, method, null, navigation, async () => {
             await removeAuthToken();
             navigation.replace('OnboardingStack', { screen: 'Anmelden' });
             Alert.alert('Erfolg', successMessage);

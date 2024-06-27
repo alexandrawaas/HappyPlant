@@ -51,7 +51,7 @@ export default function RoomCreationScreen({ navigation }) {
             ratioValueX: x, 
             ratioValueY: y 
         };
-        fetchURL('/rooms', 'POST', payload, (data) => {
+        fetchURL('/rooms', 'POST', payload, navigation, (data) => {
             navigation.navigate('Fenster platzieren', {roomData: data});
         })
     }

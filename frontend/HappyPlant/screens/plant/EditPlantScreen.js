@@ -31,11 +31,11 @@ export default function EditPlantScreen({ navigation }) {
     }
 
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', null, setPlant)
-            .then( () => {
-                chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
-                if (newNotes == null) setNewNotes(plant.notes);
-            })
+        fetchURL(`/plants/${id}`, 'GET', null, navigation, (data) => {
+            setPlant(data)
+            chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
+            if (newNotes == null) setNewNotes(plant.notes);
+        })
     }, [plant])
 
     useEffect(() => {
@@ -87,7 +87,7 @@ export default function EditPlantScreen({ navigation }) {
                 navigation.navigate("Pflanzenprofil", { id: plant.id })
             }
         }
-        fetchURL('/plants/' + plant.id, 'PUT', payload, sendImage)
+        fetchURL('/plants/' + plant.id, 'PUT', payload, navigation, sendImage)
         
     }, [imageData, plant])
 

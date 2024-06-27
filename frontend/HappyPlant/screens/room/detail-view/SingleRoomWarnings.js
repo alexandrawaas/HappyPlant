@@ -7,14 +7,14 @@ import WarnIcon from "../../other/WarnIcon";
 import AssignmentIcon from "../../other/AssignmentIcon";
 import CollapsibleBar from "../../other/CollapsibleBar";
 
-export default function SingleRoomWarnings({ room }) {
+export default function SingleRoomWarnings({ navigation, room }) {
     const [plantIds, setPlantIds] = useState();
     const [assignments, setAssignments] = useState();
     const [warnings, setWarnings] = useState();
 
     useEffect(() => {
         if (room.id) {
-            fetchURL(`/rooms/${room.id}/plants`, 'GET', null, 
+            fetchURL(`/rooms/${room.id}/plants`, 'GET', null, navigation,
                 (plantsInRoom) => {
                     setPlantIds(plantsInRoom.map(x => x.id));
                     setWarnings(plantsInRoom.filter(x => !x.hasOptimalLightingCondition).map(x => x.name))
@@ -24,7 +24,7 @@ export default function SingleRoomWarnings({ room }) {
     }, [room])
 
     useEffect(() => {
-        fetchURL(`/assignments`, 'GET', null, (list) => {
+        fetchURL(`/assignments`, 'GET', null, navigation, (list) => {
             setAssignments(list.filter(i => plantIds?.includes(i.plantId)))
         })
     }, [plantIds])
