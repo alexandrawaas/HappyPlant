@@ -1,10 +1,18 @@
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, useWindowDimensions } from "react-native";
 import SpeciesListItemAddButton from "./SpeciesListItemAddButton";
 import { LinearGradient } from 'expo-linear-gradient';
 import ImageComponent from "../global/ImageComponent";
 import { commonStyles } from "../../utils/styles/CommonStyles";
 
+const GLOBAL_PADDING = 20;
+const IMAGE_WIDTH = 85;
+const BUTTON_WIDTH = 20;
+const CARD_PADDING = 10;
+
 export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
+    const {width} = useWindowDimensions();
+    const titleContainerWidth = width - 2 * GLOBAL_PADDING - IMAGE_WIDTH - BUTTON_WIDTH - 3 * CARD_PADDING;
+
     return (
         <TouchableWithoutFeedback onPress={onPressItem}>
             <View style={styles.container} >
@@ -14,7 +22,7 @@ export default function SpeciesListItem({ species, onPressItem, onPressAdd }) {
                     </LinearGradient>
                 </View>
                 <View style={[styles.cardbox, commonStyles.shadow]}>
-                    <View style={styles.titleContainer}>
+                    <View style={{...styles.titleContainer, width: titleContainerWidth}}>
                         <Text style={styles.header}>{species.name}</Text>
                         <Text style={styles.subHeader}>{species.family}</Text>
                     </View>
@@ -38,16 +46,16 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         borderRadius: 50,
-        width: 85,
-        height: 85,
+        width: IMAGE_WIDTH,
+        height: IMAGE_WIDTH,
         overflow: "hidden",
         position: "absolute",
         left: 0,
         backgroundColor: "white",
     },
     ImageComponent:{
-        width: 85,
-        height: 85,
+        width: IMAGE_WIDTH,
+        height: IMAGE_WIDTH,
     },
     image: {
         width: "100%",
