@@ -52,6 +52,10 @@ export default function EditPlantScreen({ navigation }) {
         })
     }, [navigation, plant, imageData])
 
+    const deletePlantAction = () => {
+        fetchURL(`/plants/${id}`, 'DELETE', null, null, navigation.navigate("Meine Pflanzen", {reload: 1}))
+    }
+
     const createTwoButtonAlert = () =>
         Alert.alert('Pflanze löschen', 'Bist du sicher, dass du diese Pflanze löschen möchtest? Sie wird automatisch aus allen Räumen entfernt. Alle Daten und Aufgaben werden nicht mehr einsehbar sein.', [
             {
@@ -59,9 +63,8 @@ export default function EditPlantScreen({ navigation }) {
                 style: 'cancel',
             },
             {
-                text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, () => {
-                    navigation.navigate("Meine Pflanzen")
-                })
+                text: 'Löschen', onPress: deletePlantAction
+
             },
         ]);
 
