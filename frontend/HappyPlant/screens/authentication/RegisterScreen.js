@@ -154,7 +154,8 @@ const styles = StyleSheet.create({
     },
 
     subButton: {
-        left: 50,
+        alignSelf: 'flex-end',
+        marginRight: 20,
     },
     subButtonText: {
         marginTop: 10,
