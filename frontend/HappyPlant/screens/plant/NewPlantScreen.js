@@ -70,7 +70,7 @@ export default function NewPlantScreen({ navigation }) {
             .catch(err => console.dir(err))
             .then(response => response.json())
             .then(data => setSpecies(data))
-    }, [species])
+    }, [])
 
     useEffect(() => {
         if (chosenSpecies === undefined || chosenSpecies === null) 
