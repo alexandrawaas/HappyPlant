@@ -23,9 +23,10 @@ const getResponse = async (url, method = 'GET', payload = null, needsAuth = true
     return response
 }
 
-export const fetchURL = async (url, method = 'GET', payload = null, callback = () => { }, needsAuth = true) => {
+export const fetchURL = async (url, method = 'GET', payload = null, navigation, callback = () => { }, needsAuth = true) => {
     try {
         const response = await getResponse(url, method, payload, needsAuth)
+
         if (response.ok) {
             if (response.status === 204) {
                 callback();
@@ -33,18 +34,18 @@ export const fetchURL = async (url, method = 'GET', payload = null, callback = (
             }
             const data = await response.json();
             if (data.error) {
-                console.error('error: ', data);
-                window.alert(data.error);
-                callback([]);
+                throw Error(data.error)
             } else {
                 callback(data);
             }
         } else {
-            console.error(`Fehler beim Abrufen der Daten (${method} ${url}):`, response.status);
-            callback([]);
+            if(response.status === 401) {
+                navigation.replace('OnboardingStack', {screen: 'Anmelden'});
+            }
+            throw Error(response.status)
         }
     } catch (error) {
-        console.error(`Fehler beim Abrufen der Daten (${method} ${url}):`, error);
+        console.error(`Fehler beim Abrufen der Daten (${method} ${url}):`, error.message);
         window.alert('Fehler beim Abrufen der Daten');
         callback([]);
     }

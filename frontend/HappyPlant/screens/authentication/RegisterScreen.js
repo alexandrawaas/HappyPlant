@@ -40,7 +40,7 @@ const RegisterScreen = ({ navigation }) => {
                 pushNotificationToken: expoPushToken
             }
 
-            fetchURL('/auth/register', 'POST', payload, (data) => {
+            fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
                 if (data && data.status === 201) {
                     navigation.replace('RegisterSuccess');
                 } else {

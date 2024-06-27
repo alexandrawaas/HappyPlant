@@ -1,7 +1,5 @@
 import { StyleSheet, ScrollView } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import SingleRoomGrid from "./SingleRoomGrid";
-import SingleRoomInventory from "./SingleRoomInventoryLegacy";
 import SingleRoomWarnings from "./SingleRoomWarnings";
 import { useCallback, useEffect, useState } from "react";
 import VerticalPlaceholder from "../../../utils/styles/VerticalPlaceholder";
@@ -15,7 +13,7 @@ export default function SingleRoomScreen({ navigation }) {
     const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
-        fetchURL(`/rooms/${id}`, 'GET', null, setRoom)
+        fetchURL(`/rooms/${id}`, 'GET', null, navigation, setRoom)
     }, [])
 
     useEffect(() => {
@@ -42,7 +40,7 @@ export default function SingleRoomScreen({ navigation }) {
                 onDrag={setIsDragging}
                 navigation={navigation}
             />
-            <SingleRoomWarnings room={room}/>
+            <SingleRoomWarnings room={room} navigation={navigation}/>
             <VerticalPlaceholder size={120}/>
         </ScrollView>
     );

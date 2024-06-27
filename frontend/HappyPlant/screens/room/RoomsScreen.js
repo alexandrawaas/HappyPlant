@@ -15,11 +15,11 @@ export default function RoomsScreen({ navigation }) {
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        fetchURL('/rooms', 'GET', null, setRooms)
+        fetchURL('/rooms', 'GET', null, navigation, setRooms)
     }, [isFocused])
 
     useEffect(() => {
-        fetchURL(`/rooms?search=${searchQuery}`, 'GET', null, setRooms)
+        fetchURL(`/rooms?search=${searchQuery}`, 'GET', null, navigation, setRooms)
     }, [searchQuery])
 
 

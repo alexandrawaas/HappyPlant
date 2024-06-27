@@ -25,7 +25,7 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
             setData(newData)
             setDropZones(newData.map(i => React.createRef(null)))
         }
-        fetchURL(`/inventory`, 'GET', null, setInventory);
+        fetchURL(`/inventory`, 'GET', null, navigation, setInventory);
     }, [room])
 
     const addMeasures = (m, i) => {
@@ -36,11 +36,11 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
     const processDrop = useCallback((receivedMeasures, item) => {
         const pixelIndex = findMeasureInArray(measures, receivedMeasures)
         const coords = {x: data[pixelIndex].item.x, y: data[pixelIndex].item.y}
-        fetchURL(`/rooms/${room.id}/plants/${item.id}`, 'PATCH', coords, onRoomUpdate)
+        fetchURL(`/rooms/${room.id}/plants/${item.id}`, 'PATCH', coords, navigation, onRoomUpdate)
     }, [room, measures])
 
     const handlePlantDelete = useCallback((plant) => {
-        fetchURL(`/rooms/${room.id}/plants/${plant?.id}`, 'DELETE', null, onRoomUpdate)
+        fetchURL(`/rooms/${room.id}/plants/${plant?.id}`, 'DELETE', null, navigation, onRoomUpdate)
     }, [room])
 
 

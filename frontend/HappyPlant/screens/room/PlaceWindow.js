@@ -14,7 +14,7 @@ export default function PlaceWindow({ navigation }) {
     useEffect(() => {
         const handleDone = () => {
             const pixelValues = pixels?.map(p => p.item) ?? [];
-            fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, () => {
+            fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, navigation, () => {
                 navigation.navigate('Räume');
             });
         };
@@ -37,7 +37,7 @@ export default function PlaceWindow({ navigation }) {
     }, [route])
 
     const backAction = (id, goBack = true) => {
-        fetchURL(`/rooms/${id}`, 'DELETE')
+        fetchURL(`/rooms/${id}`, 'DELETE', null, navigation)
         if (goBack)
             navigation.goBack(route.params.go_back_key);
     }

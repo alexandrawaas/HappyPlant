@@ -41,7 +41,7 @@ const LoginScreen = ({ navigation }) => {
                 password: password
             };
     
-            fetchURL('/auth/login', 'POST', payload, async (data) => {
+            fetchURL('/auth/login', 'POST', payload, null, async (data) => {
                 if (data && data.authToken) {
                     const authToken = data.authToken;
                     await saveAuthToken(authToken);
