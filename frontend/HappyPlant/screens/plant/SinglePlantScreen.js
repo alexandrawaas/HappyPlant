@@ -23,6 +23,9 @@ export default function SinglePlantScreen({ navigation }) {
     const route = useRoute();
     const { id } = route.params;
     const [plant, setPlant] = useState({});
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedAssignmentType, setSelectedAssignmentType] = useState(null);
     
     useEffect(() => {
         fetchURL(`/plants/${id}`, 'GET', null, navigation, setPlant)
@@ -56,6 +59,37 @@ export default function SinglePlantScreen({ navigation }) {
         )
     }
 
+    const showDatePicker = (assignmentType) => {
+        setSelectedAssignmentType(assignmentType);
+        setDatePickerVisibility(true);
+    }
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+        setSelectedAssignmentType(null);
+    }
+
+    const handleDateChange = (event, date) => {
+        if (date !== undefined) {
+            setSelectedDate(date);
+            if (Platform.OS === 'android') {
+                handleConfirm(date);
+            }
+        }
+    }
+
+    const handleConfirm = (date) => {
+        const updatedAssignment = {
+            assignmentType: selectedAssignmentType,
+            lastDone: date,
+        };
+
+        fetchURL(`/plants/${id}/assignments`, 'PATCH', updatedAssignment, navigation, () => {
+            // handle data ?
+        });
+        
+        hideDatePicker();
+    }
 
     return (
         <ScrollView style={styles.scrollview}>
@@ -101,6 +135,13 @@ export default function SinglePlantScreen({ navigation }) {
                                 <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
                                     <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[it.assignmentType]}</Text>
                                     {calculateDates(it)}
+                                    <TouchableOpacity onPress={() => showDatePicker(it.assignmentType)}>
+                                        <MaterialCommunityIcons 
+                                            name="checkbox-marked-circle-outline"
+                                            size={24}
+                                            color='#000000'
+                                        />
+                                    </TouchableOpacity> 
                                 </LinearGradient>
                             </View> : null
                         ) : null }

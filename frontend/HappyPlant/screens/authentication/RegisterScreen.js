@@ -69,7 +69,7 @@ const RegisterScreen = ({ navigation }) => {
             }
 
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
-                if (data && data.status === 201) {
+                if (data) {
                     navigation.replace('RegisterSuccess');
                 } else {
                     Alert.alert('Fehler', data.message || 'Registrierung fehlgeschlagen');

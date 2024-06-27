@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, ScrollView, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { getAuthToken, removeAuthToken } from '../../utils/AuthTokenUtil';
+import { removeAuthToken } from '../../utils/AuthTokenUtil';
 import { fetchURL } from '../../utils/ApiService'
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import VerticalPlaceholder from '../../utils/styles/VerticalPlaceholder';
 
 export default function SettingsScreen({ navigation }) {
@@ -42,31 +43,42 @@ export default function SettingsScreen({ navigation }) {
     };
 
     const updateNotificationSettings = async () => {
-        await registerForPushNotificationsAsync()
-        .then(
-            (token) => { setExpoPushToken(token); }
-        );
+        try {
+            await registerForPushNotificationsAsync()
+            .then(
+                (token) => { setExpoPushToken(token); }
+            );
 
-        const payload = {
-            receivePushNotifications: remindersEnabled,
-            pushNotificationsTime: notificationTime.toISOString().substring(11, 16),
-            pushNotificationToken: expoPushToken
-        };
-        fetchURL('/user', 'PATCH', payload, navigation, (data) => {
-            if (!data) {
-                console.error('Fehler beim Aktualisieren der Benachrichtigungseinstellungen');
-            }
-        });
+            const hours = notificationTime.getHours().toString().padStart(2, '0');
+            const minutes = notificationTime.getMinutes().toString().padStart(2, '0');
+            const seconds = notificationTime.getSeconds().toString().padStart(2, '0');
+
+            const payload = {
+                receivePushNotifications: remindersEnabled,
+                pushNotificationToken: expoPushToken,
+                pushNotificationsTime: `${hours}:${minutes}:${seconds}`
+            };
+
+            fetchURL('/user', 'PATCH', payload, navigation, () => {});
+        } catch (error) {
+            console.error('Fehler beim Registrieren der Push-Benachrichtigungen:', error);
+        }
+
+
     };
     
     const handleAction = async (endpoint, method, successMessage) => {
-        fetchURL(endpoint, method, null, navigation, async () => {
-            await removeAuthToken();
-            await AsyncStorage.removeItem('rememberMe');
-            Alert.alert('Erfolg', successMessage);
-            navigation.replace('OnboardingStack', { screen: 'Anmelden' });
+        try {
+            fetchURL(endpoint, method, null, navigation, async () => {
+                await removeAuthToken();
+                await AsyncStorage.removeItem('rememberMe');
+                Alert.alert('Erfolg', successMessage);
+                navigation.replace('OnboardingStack', { screen: 'Anmelden' });
+            });
+        } catch (error) {
+            console.error('Fehler:', error);
+            Alert.alert('Fehler', 'Es ist ein Fehler aufgetreten.');
         }
-        setIsLoggingOut(false);
     };
 
     const confirmAction = (action, handleAction) => {

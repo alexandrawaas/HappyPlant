@@ -27,16 +27,17 @@ export const fetchURL = async (url, method = 'GET', payload = null, navigation, 
     try {
         const response = await getResponse(url, method, payload, needsAuth)
 
-        if (response.ok) {
-            if (response.status === 204) {
-                callback();
-                return;
-            }
-            const data = await response.json();
-            if (data.error) {
-                throw Error(data.error)
+        if (response.ok || response.status === 200 || response.status === 201) {
+            const responseText = await response.text();
+            if (responseText && responseText !== 'Logout successful') {
+                const data = JSON.parse(responseText);
+                if (data.error) {
+                    throw Error(data.error);
+                } else {
+                    callback(data);
+                }
             } else {
-                callback(data);
+                callback(null);
             }
         } else {
             if(response.status === 401) {

@@ -29,13 +29,9 @@ const LoginScreen = ({ navigation }) => {
         setPassword('');
     };
 
-    // useEffect(() =>{
-    //     handleLogin()
-    // },[])
-
     useEffect(() => {
         setIsValidEmail(validateEmail(email));
-    }, [email, password]);
+    }, [email]);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', handleBlur);
