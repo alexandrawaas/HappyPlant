@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, Platform} from "react-native";
 import {useIsFocused, useRoute} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
@@ -67,6 +67,7 @@ export default function SinglePlantScreen({ navigation }) {
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
         setSelectedAssignmentType(null);
+        setSelectedDate(new Date());
     }
 
     const handleDateChange = (event, date) => {
@@ -85,7 +86,12 @@ export default function SinglePlantScreen({ navigation }) {
         };
 
         fetchURL(`/plants/${id}/assignments`, 'PATCH', updatedAssignment, navigation, () => {
-            // handle data ?
+            const updatedAssignments = plant.assignments.map(assignment =>
+                assignment.assignmentType === updatedAssignment.assignmentType
+                ? { ...assignment, lastDone: date }
+                : assignment
+            );
+            setPlant({ ...plant, assignments: updatedAssignments });
         });
         
         hideDatePicker();
@@ -133,7 +139,9 @@ export default function SinglePlantScreen({ navigation }) {
                             it => plant.needs.intervals[it.assignmentType] !== undefined && plant.needs.intervals[it.assignmentType] !== -1 ?
                             <View style={styles.boxContainer} key={it.id}>
                                 <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
-                                    <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[it.assignmentType]}</Text>
+                                    <View style={styles.assignmentTextContainer}>
+                                        <Text style={[styles.text, styles.boldText]}>{AssignmentTypeTranslations[it.assignmentType]}</Text>
+                                    </View>
                                     {calculateDates(it)}
                                     <TouchableOpacity onPress={() => showDatePicker(it.assignmentType)}>
                                         <MaterialCommunityIcons 
@@ -160,8 +168,9 @@ export default function SinglePlantScreen({ navigation }) {
                             <DateTimePicker
                                 value={selectedDate}
                                 mode="date"
-                                display="inline"
+                                display="spinner"
                                 onChange={handleDateChange}
+                                maximumDate={new Date()}
                             />
                             <View style={styles.iosButtonsContainer}>
                                 <TouchableOpacity onPress={hideDatePicker} style={styles.iosCancelButton}>
@@ -181,6 +190,7 @@ export default function SinglePlantScreen({ navigation }) {
                             mode="date"
                             display="spinner"
                             onChange={handleDateChange}
+                            maximumDate={new Date()}
                         />
                     </View>
                 )}
@@ -283,43 +293,46 @@ const styles = StyleSheet.create({
         elevation: 1,
         backgroundColor: "#fdfbef",
     },
+    assignmentTextContainer: {
+        width: 100,
+    },
     iosDateTimePickerContainer: {
         backgroundColor: '#ffffff',
         position: 'absolute',
-        bottom: '25%',  // Positionierung auf etwa 25% von unten
+        bottom: '25%',
         left: 0,
         right: 0,
-        transform: [{ translateY: -50 }],  // Vertikale Zentrierung
+        transform: [{ translateY: -50 }],
         zIndex: 1000,
     },
     iosDateTimePickerInnerContainer: {
-        flexDirection: 'column',  // Anordnung der Kinder in einer vertikalen Spalte
-        alignItems: 'center',  // Zentrierung der Inhalte horizontal
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     iosButtonsContainer: {
-        flexDirection: 'row',  // Anordnung der Kinder in einer horizontalen Reihe
-        justifyContent: 'center',  // Zentrierung der Inhalte horizontal
-        marginTop: 10,  // Abstand zwischen DatePicker und Buttons
+        flexDirection: 'row',
+        justifyContent: 'center',
+        margin: 15,
     },
     iosConfirmButton: {
         backgroundColor: '#5C724F',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
-        marginHorizontal: 5,  // Horizontaler Abstand zwischen den Buttons
-        width: 100,  // Breite des Bestätigen-Buttons
+        marginHorizontal: 5,
+        width: 100,
     },
     iosConfirmButtonText: {
         color: 'white',
         fontSize: 16,
     },
     iosCancelButton: {
-        backgroundColor: 'red',  // Farbe für den Abbruch-Button
+        backgroundColor: 'red',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
-        marginHorizontal: 5,  // Horizontaler Abstand zwischen den Buttons
-        width: 100,  // Breite des Abbrechen-Buttons
+        marginHorizontal: 5,
+        width: 100,
     },
     iosCancelButtonText: {
         color: 'white',
