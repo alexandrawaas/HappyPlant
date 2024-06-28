@@ -25,18 +25,22 @@ export default function EditPlantScreen({ navigation }) {
     const [newNotes, setNewNotes] = useState(null);
     const [intervals, setIntervals] = useState(new Map());
 
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const updateMap = (text, k) => {
         const numericValue = text.replace(/[^0-9]/g, "");
         setIntervals(new Map(intervals.set(k.toUpperCase(), numericValue)));
     }
 
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', null, navigation, (data) => {
-            setPlant(data)
-            chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
-            if (newNotes == null) setNewNotes(plant.notes);
-        })
-    }, [plant])
+        if (!isDeleting) {
+            fetchURL(`/plants/${id}`, 'GET', null, navigation, (data) => {
+                setPlant(data)
+                chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
+                if (newNotes == null) setNewNotes(plant.notes);
+            })        
+        }
+    }, [plant, isDeleting])
 
     useEffect(() => {
         navigation.setOptions({
@@ -59,9 +63,15 @@ export default function EditPlantScreen({ navigation }) {
                 style: 'cancel',
             },
             {
-                text: 'Löschen', onPress: () => fetchURL(`/plants/${id}`, 'DELETE', null, () => {
-                    navigation.navigate("Meine Pflanzen")
-                })
+                text: 'Löschen', onPress: () => {
+                    setIsDeleting(true);
+                    fetchURL(`/plants/${id}`, 'DELETE', null, navigation, () => {
+                        navigation.replace("Meine Pflanzen")
+                    }).catch((error) => {
+                        setIsDeleting(false);
+                        console.error('Fehler beim Löschen der Pflanze:', error);
+                    });
+                }
             },
         ]);
 
