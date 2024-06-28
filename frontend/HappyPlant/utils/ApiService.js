@@ -28,6 +28,10 @@ export const fetchURL = async (url, method = 'GET', payload = null, navigation, 
         const response = await getResponse(url, method, payload, needsAuth)
 
         if (response.ok || response.status === 200 || response.status === 201) {
+            if (response.status === 204) {
+                callback();
+                return;
+            }
             const responseText = await response.text();
             if (responseText && responseText !== 'Logout successful') {
                 const data = JSON.parse(responseText);
