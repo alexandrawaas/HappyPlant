@@ -25,18 +25,23 @@ export default function EditPlantScreen({ navigation }) {
     const [newNotes, setNewNotes] = useState(null);
     const [intervals, setIntervals] = useState(new Map());
 
+    const [isDeleting, setIsDeleting] = useState(false);
+
+
     const updateMap = (text, k) => {
         const numericValue = text.replace(/[^0-9]/g, "");
         setIntervals(new Map(intervals.set(k.toUpperCase(), numericValue)));
     }
 
     useEffect(() => {
-        fetchURL(`/plants/${id}`, 'GET', null, navigation, (data) => {
-            setPlant(data)
-            chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
-            if (newNotes == null) setNewNotes(plant.notes);
-        })
-    }, [plant])
+        if (!isDeleting) {
+            fetchURL(`/plants/${id}`, 'GET', null, navigation, (data) => {
+                setPlant(data)
+                chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
+                if (newNotes == null) setNewNotes(plant.notes);
+            })
+        }
+    }, [plant, isDeleting])
 
     useEffect(() => {
         navigation.setOptions({
@@ -52,10 +57,6 @@ export default function EditPlantScreen({ navigation }) {
         })
     }, [navigation, plant, imageData])
 
-    const deletePlantAction = () => {
-        fetchURL(`/plants/${id}`, 'DELETE', null, null, navigation.navigate("Meine Pflanzen", {reload: 1}))
-    }
-
     const createTwoButtonAlert = () =>
         Alert.alert('Pflanze löschen', 'Bist du sicher, dass du diese Pflanze löschen möchtest? Sie wird automatisch aus allen Räumen entfernt. Alle Daten und Aufgaben werden nicht mehr einsehbar sein.', [
             {
@@ -63,7 +64,15 @@ export default function EditPlantScreen({ navigation }) {
                 style: 'cancel',
             },
             {
-                text: 'Löschen', onPress: deletePlantAction
+                text: 'Löschen', onPress: () => {
+                    setIsDeleting(true);
+                    fetchURL(`/plants/${id}`, 'DELETE', null, navigation, () => {
+                        navigation.replace("Meine Pflanzen", {reload: 1})
+                    }).catch((error) => {
+                        setIsDeleting(false);
+                        console.error('Fehler beim Löschen der Pflanze:', error);
+                    });
+                }
 
             },
         ]);
