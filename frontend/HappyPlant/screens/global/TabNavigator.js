@@ -32,6 +32,7 @@ const TabNavigator = () => {
         <Tab.Navigator
             screenOptions={{
                 tabBarShowLabel: false,
+                lazy: false,
                 tabBarStyle: {
                     position: 'absolute',
                     bottom: Platform.OS === 'ios' ? 30 : 25,
