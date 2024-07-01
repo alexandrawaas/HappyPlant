@@ -178,10 +178,10 @@ export default function SinglePlantScreen({ navigation }) {
                             />
                             <View style={styles.iosButtonsContainer}>
                                 <TouchableOpacity onPress={hideDatePicker} style={[styles.iosCancelButton, commonStyles.shadow]}>
-                                    <Text style={styles.iosButtonText}>abbrechen</Text>
+                                    <Text style={styles.iosButtonText}>Abbrechen</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => handleConfirm(selectedDate)} style={[styles.iosConfirmButton, commonStyles.shadow]}>
-                                    <Text style={styles.iosButtonText}>bestätigen</Text>
+                                    <Text style={styles.iosButtonText}>Bestätigen</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -195,6 +195,8 @@ export default function SinglePlantScreen({ navigation }) {
                             display="spinner"
                             onChange={handleDateChange}
                             maximumDate={new Date()}
+                            positiveButton={{ label: 'Bestätigen', textColor: '#5C724F' }}
+                            negativeButton={{ label: 'Abbrechen', textColor: '#FFAAAA' }}
                         />
                     </View>
                 )}
@@ -305,7 +307,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     iosDatePickerOuterContainer: {
-        backgroundColor: '#fdfbef',
+        backgroundColor: '#ffffff',
         position: 'absolute',
         bottom: '30%',
         left: 0,
@@ -313,12 +315,8 @@ const styles = StyleSheet.create({
         transform: [{ translateY: -50 }],
         zIndex: 1000,
         borderRadius: 20,
-        borderColor: '#5C724F',
-        borderWidth: 1,
-        // shadowOffset: { width: 1, height: 1 },
-        // shadowOpacity: 0.4,
-        // shadowRadius: 3,
-        // elevation: 5,
+        // borderColor: '#5C724F',
+        // borderWidth: 1,
     },
     iosDatePickerInnerContainer: {
         flexDirection: 'column',
