@@ -66,12 +66,16 @@ export default function SinglePlantScreen({ navigation }) {
     }
 
     const hideDatePicker = () => {
+        setSelectedDate(new Date());
         setDatePickerVisibility(false);
         setSelectedAssignmentType(null);
-        setSelectedDate(new Date());
     }
 
     const handleDateChange = (event, date) => {
+        if (event.type === 'dismissed') {
+            hideDatePicker();
+            return;
+        }
         if (date !== undefined) {
             setSelectedDate(date);
             if (Platform.OS === 'android') {
@@ -167,7 +171,7 @@ export default function SinglePlantScreen({ navigation }) {
                 </ScrollView>
                  {isDatePickerVisible && Platform.OS === 'ios' && (
                     <View style={[styles.iosDatePickerOuterContainer, commonStyles.shadow]}>
-                        <View style={styles.iosDatePickerInnerContainer}>
+                        <View style={styles.datePickerContainer}>
                             <DateTimePicker
                                 value={selectedDate}
                                 mode="date"
@@ -188,7 +192,7 @@ export default function SinglePlantScreen({ navigation }) {
                     </View>
                 )}
                 {isDatePickerVisible && Platform.OS === 'android' && (
-                    <View style={styles.androidDatePickerContainer}>
+                    <View style={styles.datePickerContainer}>
                         <DateTimePicker
                             value={selectedDate}
                             mode="date"
@@ -302,7 +306,7 @@ const styles = StyleSheet.create({
     assignmentTextContainer: {
         width: 100,
     },
-    androidDatePickerContainer: {
+    datePickerContainer: {
         flexDirection: 'column',
         alignItems: 'center',
     },
@@ -315,12 +319,6 @@ const styles = StyleSheet.create({
         transform: [{ translateY: -50 }],
         zIndex: 1000,
         borderRadius: 20,
-        // borderColor: '#5C724F',
-        // borderWidth: 1,
-    },
-    iosDatePickerInnerContainer: {
-        flexDirection: 'column',
-        alignItems: 'center',
     },
     iosButtonsContainer: {
         flexDirection: 'row',
