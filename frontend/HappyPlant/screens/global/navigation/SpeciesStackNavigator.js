@@ -1,8 +1,8 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SpeciesScreen from '../species/SpeciesScreen'
-import SingleSpeciesScreen from '../species/SingleSpeciesScreen'
-import GlobalLayout from './GlobalLayout';
-import headerStyleOptions from './HeaderStyle';
+import SpeciesScreen from '../../species/SpeciesScreen'
+import SingleSpeciesScreen from '../../species/SingleSpeciesScreen'
+import GlobalLayout from '../GlobalLayout';
+import headerStyleOptions from '../HeaderStyle';
 
 const SpeciesStack = createNativeStackNavigator();
 

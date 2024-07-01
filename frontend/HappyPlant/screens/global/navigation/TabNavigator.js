@@ -6,7 +6,7 @@ import PlantStackNavigator from './PlantStackNavigator';
 import AssignmentStackNavigator from './AssignmentStackNavigator';
 import SpeciesStackNavigator from './SpeciesStackNavigator';
 import SettingStackNavigator from './SettingsStackNavigator';
-import { commonStyles } from '../../utils/styles/CommonStyles';
+import { commonStyles } from '../../../utils/styles/CommonStyles';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,27 +49,27 @@ const TabNavigator = () => {
             <Tab.Screen
                 name="assignments"
                 children={AssignmentStackNavigator}
-                options={getOptionsForIcon(require('../../assets/TabNav Icons/checkliste.png'), require('../../assets/TabNav Icons/checklistegrey.png'))}
+                options={getOptionsForIcon(require('../../../assets/TabNav Icons/checkliste.png'), require('../../../assets/TabNav Icons/checklistegrey.png'))}
             />
             <Tab.Screen
                 name="rooms"
                 component={RoomStackNavigator}
-                options={getOptionsForIcon(require('../../assets/TabNav Icons/room.png'), require('../../assets/TabNav Icons/roomgrey.png'))}
+                options={getOptionsForIcon(require('../../../assets/TabNav Icons/room.png'), require('../../../assets/TabNav Icons/roomgrey.png'))}
             />
             <Tab.Screen
                 name="plants"
                 children={PlantStackNavigator}
-                options={getOptionsForIcon(require('../../assets/TabNav Icons/plant.png'), require('../../assets/TabNav Icons/plantgrey.png'))}
+                options={getOptionsForIcon(require('../../../assets/TabNav Icons/plant.png'), require('../../../assets/TabNav Icons/plantgrey.png'))}
             />
             <Tab.Screen
                 name="species"
                 children={SpeciesStackNavigator}
-                options={getOptionsForIcon(require('../../assets/TabNav Icons/book.png'), require('../../assets/TabNav Icons/bookgrey.png'))}
+                options={getOptionsForIcon(require('../../../assets/TabNav Icons/book.png'), require('../../../assets/TabNav Icons/bookgrey.png'))}
             />
             <Tab.Screen
                 name="settings"
                 children={SettingStackNavigator}
-                options={getOptionsForIcon(require('../../assets/TabNav Icons/settings.png'), require('../../assets/TabNav Icons/settingsgrey.png'))}
+                options={getOptionsForIcon(require('../../../assets/TabNav Icons/settings.png'), require('../../../assets/TabNav Icons/settingsgrey.png'))}
             />
         </Tab.Navigator>
     );

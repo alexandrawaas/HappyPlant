@@ -1,10 +1,10 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import GlobalLayout from './GlobalLayout';
-import headerStyleOptions from './HeaderStyle';
-import SettingsScreen from '../settings/SettingsScreen';
-import PrivacyScreen from '../settings/PrivacyScreen';
-import ImprintScreen from '../settings/ImprintScreen';
-import ResetPasswordScreen from '../authentication/ResetPasswordScreen';
+import GlobalLayout from '../GlobalLayout';
+import headerStyleOptions from '../HeaderStyle';
+import SettingsScreen from '../../settings/SettingsScreen';
+import PrivacyScreen from '../../settings/PrivacyScreen';
+import ImprintScreen from '../../settings/ImprintScreen';
+import ResetPasswordScreen from '../../authentication/ResetPasswordScreen';
 
 const SettingStack = createNativeStackNavigator();
 
