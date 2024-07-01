@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,17 +11,19 @@ export default function AssignmentsScreen({ navigation }) {
     const [completedAssignments, setCompletedAssignments] = useState({});
     const [updatedAssignments, setUpdatedAssignments] = useState([]);
 
-    const fetchAssignments = () => {
+    const fetchAssignments = useCallback(() => {
         setLoading(true);
         fetchURL('/assignments', 'GET', null, navigation, data => {
             setAssignments(data);
             setLoading(false);
         });
-    };
+    }, [navigation]);
 
     useEffect(() => {
         fetchAssignments();
+    }, [])
 
+    useEffect(() => {
         const unsubscribeFocus = navigation.addListener('focus', () => {
             fetchAssignments();
         });
@@ -33,9 +35,7 @@ export default function AssignmentsScreen({ navigation }) {
                     lastDone: new Date()
                 };
 
-                fetchURL(`/plants/${assignment.plantId}/assignments`, 'PATCH', updatedAssignment, navigation, (data) => {
-                    // handle data ?
-                });
+                fetchURL(`/plants/${assignment.plantId}/assignments`, 'PATCH', updatedAssignment, navigation);
             });
         });
 
@@ -130,7 +130,7 @@ export default function AssignmentsScreen({ navigation }) {
                         style={[styles.assignmentsContainer, commonStyles.shadow]}
                     >
                         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                            {Object.keys(groupedAssignments).map((type, index) => (
+                            {Object.keys(groupedAssignments).sort((a, b) => b.localeCompare(a)).map((type, index) => (
                                 <View key={type} style={styles.categoryContainer}>
                                     {index !== 0 && <View style={styles.separator} />}
                                     <Text style={styles.categoryText}>{translateAssignmentType(type)}</Text>
