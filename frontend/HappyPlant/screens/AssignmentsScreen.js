@@ -79,13 +79,15 @@ export default function AssignmentsScreen({ navigation }) {
         const isCompleted = completedAssignments[item.id];
         const translatedType = translateAssignmentType(item.assignmentType);
         const due = isDue(item.lastDone);
-        const formattedDate = `${('0' + new Date(item.lastDone).getDate()).slice(-2)}.${('0' + (new Date(item.lastDone).getMonth() + 1)).slice(-2)}.${new Date(item.lastDone).getFullYear()}`;
+        const formattedDate = item.lastDone === null?
+            "zum ersten Mal"
+            : "seit "+`${('0' + new Date(item.lastDone).getDate()).slice(-2)}.${('0' + (new Date(item.lastDone).getMonth() + 1)).slice(-2)}.${new Date(item.lastDone).getFullYear()}`;
 
         return (
             <View style={[styles.listItem, isCompleted ? styles.itemCompleted : due ? styles.itemDue : null]}>
                 <View style={styles.itemTextContainer}>
                     <Text style={styles.itemText}>{`${item.plantName} ${translatedType.toLowerCase()}`}</Text>
-                    {due && !isCompleted && <Text style={styles.itemDueText}>{`seit ${formattedDate}`}</Text>}
+                    {due && !isCompleted && <Text style={styles.itemDueText}>{formattedDate}</Text>}
                 </View>
                 <TouchableOpacity onPress={() => toggleAssignmentCompletion(item)}>
                     <MaterialCommunityIcons 
