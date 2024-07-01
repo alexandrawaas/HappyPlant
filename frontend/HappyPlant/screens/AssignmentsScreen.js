@@ -21,7 +21,9 @@ export default function AssignmentsScreen({ navigation }) {
 
     useEffect(() => {
         fetchAssignments();
+    }, [])
 
+    useEffect(() => {
         const unsubscribeFocus = navigation.addListener('focus', () => {
             fetchAssignments();
         });
