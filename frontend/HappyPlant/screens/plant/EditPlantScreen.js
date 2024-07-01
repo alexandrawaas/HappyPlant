@@ -1,5 +1,5 @@
 
-import { View, Text, StyleSheet, Button, ScrollView, TouchableOpacity, TextInput, Alert, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Pressable, ActivityIndicator } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
 import RoundPictureNameComponent from "../species/RoundPictureNameComponent";
@@ -102,8 +102,8 @@ export default function EditPlantScreen({ navigation }) {
             <View style={styles.container}>
                 <Pressable onPress={showActionSheet}>
                     {imageData
-                        ? <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} raw={true} imageData={imageData}></RoundPictureNameComponent>
-                        : <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} imageId={plant.imageId}></RoundPictureNameComponent>
+                        ? <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} raw={true} imageData={imageData} isEditable={true}></RoundPictureNameComponent>
+                        : <RoundPictureNameComponent header={plant?.name} subHeader={plant?.species?.name} imageId={plant.imageId} isEditable={true}></RoundPictureNameComponent>
                     }
                 </Pressable>
                 <VerticalPlaceholder size={20} />

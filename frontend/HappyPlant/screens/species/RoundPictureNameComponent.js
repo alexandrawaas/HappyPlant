@@ -3,13 +3,15 @@ import {LinearGradient} from "expo-linear-gradient";
 import ImageComponent from "../global/ImageComponent";
 import { commonStyles } from "../../utils/styles/CommonStyles";
 
-export default function RoundPictureNameComponent({header, subHeader, isListItem, imageId, raw = false, imageData}) {
+export default function RoundPictureNameComponent({header, subHeader, isListItem, imageId, raw = false, imageData, isEditable = false}) {
     return <>
         <View style={styles.topContainer}>
             <View style={[styles.imageContainer, commonStyles.shadow]}>
-                <LinearGradient colors={["#fdfbef", "#fef1ed"]}>
-                    <ImageComponent style={styles.image} imageId={imageId} raw={raw} imageData={imageData}/>
-                </LinearGradient>
+                {isEditable
+                    ?<Image source={require('../../assets/TabNav Icons/camera_icon.png')} style={{...styles.image, position: 'absolute', top: 0, left: 0, zIndex:2 }}></Image>
+                    :<></>
+                }
+                 <ImageComponent style={styles.image} imageId={imageId} raw={raw} imageData={imageData}/>
             </View>
             <Text numberOfLines={1} style={[styles.header, isListItem ? styles.listItemTextFormat : {}]}>{header}</Text>
             <Text numberOfLines={1} style={[styles.subHeader, isListItem ? styles.listItemTextFormat : {}]}>{subHeader}</Text>
