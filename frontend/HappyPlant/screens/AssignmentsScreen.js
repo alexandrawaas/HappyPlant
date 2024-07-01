@@ -130,7 +130,7 @@ export default function AssignmentsScreen({ navigation }) {
                         style={[styles.assignmentsContainer, commonStyles.shadow]}
                     >
                         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                            {Object.keys(groupedAssignments).map((type, index) => (
+                            {Object.keys(groupedAssignments).sort((a, b) => b.localeCompare(a)).map((type, index) => (
                                 <View key={type} style={styles.categoryContainer}>
                                     {index !== 0 && <View style={styles.separator} />}
                                     <Text style={styles.categoryText}>{translateAssignmentType(type)}</Text>
