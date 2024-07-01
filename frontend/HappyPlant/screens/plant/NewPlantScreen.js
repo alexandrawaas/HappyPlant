@@ -84,8 +84,8 @@ export default function NewPlantScreen({ navigation }) {
         <View style={styles.container}>
                 <Pressable onPress={showActionSheet}>
                     {imageData
-                        ? <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} raw={true} imageData={imageData}></RoundPictureNameComponent>
-                        : <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} ></RoundPictureNameComponent>
+                        ? <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} raw={true} imageData={imageData} isEditable={true}></RoundPictureNameComponent>
+                        : <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} isEditable={true}></RoundPictureNameComponent>
                     }
                 </Pressable>
                 <Text style={styles.sectionTitle}>Name der Pflanze</Text>
