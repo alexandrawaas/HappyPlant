@@ -68,9 +68,7 @@ export default function EditPlantScreen({ navigation }) {
                     setIsDeleting(true);
                     fetchURL(`/plants/${id}`, 'DELETE', null, navigation, () => {
                         navigation.replace("Meine Pflanzen", {reload: 1})
-                    }).catch((error) => {
                         setIsDeleting(false);
-                        console.error('Fehler beim Löschen der Pflanze:', error);
                     });
                 }
 
