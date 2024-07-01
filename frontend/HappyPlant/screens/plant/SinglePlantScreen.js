@@ -16,6 +16,7 @@ import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { fetchURL } from '../../utils/ApiService'
+import { commonStyles } from "../../utils/styles/CommonStyles";
 
 
 export default function SinglePlantScreen({ navigation }) {
@@ -98,6 +99,7 @@ export default function SinglePlantScreen({ navigation }) {
     }
 
     return (
+        <View style={styles.screenContainer}>
         <ScrollView style={styles.scrollview}>
             <View style={styles.container}>
                 <RoundPictureNameComponent header={plant?.name} imageId={plant?.imageId} subHeader={plant?.species?.name}></RoundPictureNameComponent>
@@ -162,29 +164,31 @@ export default function SinglePlantScreen({ navigation }) {
                      </View>
                  </View>
                  <VerticalPlaceholder size={150}/>
+                </ScrollView>
                  {isDatePickerVisible && Platform.OS === 'ios' && (
-                    <View style={styles.iosDateTimePickerContainer}>
-                        <View style={styles.iosDateTimePickerInnerContainer}>
+                    <View style={[styles.iosDatePickerOuterContainer, commonStyles.shadow]}>
+                        <View style={styles.iosDatePickerInnerContainer}>
                             <DateTimePicker
                                 value={selectedDate}
                                 mode="date"
                                 display="spinner"
                                 onChange={handleDateChange}
                                 maximumDate={new Date()}
+                                locale="ger"
                             />
                             <View style={styles.iosButtonsContainer}>
-                                <TouchableOpacity onPress={hideDatePicker} style={styles.iosCancelButton}>
-                                    <Text style={styles.iosCancelButtonText}>abbrechen</Text>
+                                <TouchableOpacity onPress={hideDatePicker} style={[styles.iosCancelButton, commonStyles.shadow]}>
+                                    <Text style={styles.iosButtonText}>abbrechen</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleConfirm(selectedDate)} style={styles.iosConfirmButton}>
-                                    <Text style={styles.iosConfirmButtonText}>bestätigen</Text>
+                                <TouchableOpacity onPress={() => handleConfirm(selectedDate)} style={[styles.iosConfirmButton, commonStyles.shadow]}>
+                                    <Text style={styles.iosButtonText}>bestätigen</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 )}
                 {isDatePickerVisible && Platform.OS === 'android' && (
-                    <View style={styles.iosDateTimePickerInnerContainer}>
+                    <View style={styles.androidDatePickerContainer}>
                         <DateTimePicker
                             value={selectedDate}
                             mode="date"
@@ -194,7 +198,7 @@ export default function SinglePlantScreen({ navigation }) {
                         />
                     </View>
                 )}
-             </ScrollView>
+             </View>
         );
 }
 
@@ -296,46 +300,56 @@ const styles = StyleSheet.create({
     assignmentTextContainer: {
         width: 100,
     },
-    iosDateTimePickerContainer: {
-        backgroundColor: '#ffffff',
+    androidDatePickerContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    iosDatePickerOuterContainer: {
+        backgroundColor: '#fdfbef',
         position: 'absolute',
-        bottom: '25%',
+        bottom: '30%',
         left: 0,
         right: 0,
         transform: [{ translateY: -50 }],
         zIndex: 1000,
+        borderRadius: 20,
+        borderColor: '#5C724F',
+        borderWidth: 1,
+        // shadowOffset: { width: 1, height: 1 },
+        // shadowOpacity: 0.4,
+        // shadowRadius: 3,
+        // elevation: 5,
     },
-    iosDateTimePickerInnerContainer: {
+    iosDatePickerInnerContainer: {
         flexDirection: 'column',
         alignItems: 'center',
     },
     iosButtonsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        margin: 15,
+        marginTop: 10,
+        marginBottom: 25,
     },
     iosConfirmButton: {
-        backgroundColor: '#5C724F',
-        padding: 10,
-        borderRadius: 5,
+        backgroundColor: '#BEF5B5',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 50,
         alignItems: 'center',
-        marginHorizontal: 5,
-        width: 100,
-    },
-    iosConfirmButtonText: {
-        color: 'white',
-        fontSize: 16,
+        marginHorizontal: 10,
+        width: 120,
     },
     iosCancelButton: {
-        backgroundColor: 'red',
-        padding: 10,
-        borderRadius: 5,
+        backgroundColor: '#FFAAAA',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 50,
         alignItems: 'center',
-        marginHorizontal: 5,
-        width: 100,
+        marginHorizontal: 10,
+        width: 120,
     },
-    iosCancelButtonText: {
-        color: 'white',
+    iosButtonText: {
+        color: '#233D0C',
         fontSize: 16,
     },
 });
