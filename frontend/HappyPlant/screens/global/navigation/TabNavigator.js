@@ -13,6 +13,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
     const { width, height } = useWindowDimensions();
     const isLargeScreen = width >= 376;
+    const isIOS = Platform.OS === 'ios';
 
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -33,8 +34,18 @@ const TabNavigator = () => {
     const getOptionsForIcon = (activeIcon, greyIcon) => {
         const circleSize = isLargeScreen ? width * 0.19 : width * 0.18;
         const iconSize = isLargeScreen ? width * 0.075 : width * 0.07;
-        const bottomOffset = isLargeScreen ? height * 0.055 : height * 0.03;
-        const marginBottom = isLargeScreen ? height * 0.03 : height * 0.01;
+        let bottomOffset, marginBottom;
+
+        if (isLargeScreen && !isIOS) {
+            bottomOffset = height * 0.022;
+            marginBottom = height * 0.001;
+        } else if (isLargeScreen && isIOS) {
+            bottomOffset = height * 0.055;
+            marginBottom = height * 0.03;
+        } else {
+            bottomOffset = height * 0.03;
+            marginBottom = height * 0.01;
+        }
 
         return {
             tabBarIcon: ({ focused }) => (
@@ -69,7 +80,7 @@ const TabNavigator = () => {
                 lazy: false,
                 tabBarStyle: {
                     position: 'absolute',
-                    bottom: Platform.OS === 'ios' ? height * 0.03 : height * 0.02,
+                    bottom: isIOS ? height * 0.03 : height * 0.04,
                     left: width * 0.05,
                     right: width * 0.05,
                     backgroundColor: '#FFFFFF',
