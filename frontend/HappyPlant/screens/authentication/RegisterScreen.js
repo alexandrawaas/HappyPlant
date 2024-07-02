@@ -11,6 +11,23 @@ const RegisterScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [expoPushToken, setExpoPushToken] = useState();
+    const [isValidEmail, setIsValidEmail] = useState(false);
+    const [isValidPassword, setIsValidPassword] = useState(false);
+
+    const validateEmail = (inputEmail) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(inputEmail).toLowerCase());
+    }
+
+    const validatePassword = (inputPassword) => {
+        const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\- ]).{8,}$/;
+        return re.test(String(inputPassword));
+    };
+
+    useEffect(() => {
+        setIsValidEmail(validateEmail(email));
+        setIsValidPassword(validatePassword(password));
+    }, [email, password]);
 
     const handleBlur = () => {
         setEmail('');
@@ -25,6 +42,16 @@ const RegisterScreen = ({ navigation }) => {
 
     const handleRegister = useCallback(async () => {
         try {
+            if (!isValidEmail) {
+                Alert.alert('Fehler', 'Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+                return;
+            }
+
+            if (!isValidPassword) {
+                Alert.alert('Fehler', 'Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.');
+                return;
+            }
+
             if (password !== confirmPassword) {
                 Alert.alert('Fehler', 'Passwort und Bestätigungspasswort stimmen nicht überein.');
                 return;
@@ -42,7 +69,7 @@ const RegisterScreen = ({ navigation }) => {
             }
 
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
-                if (data && data.status === 201) {
+                if (data) {
                     navigation.replace('RegisterSuccess');
                 } else {
                     Alert.alert('Fehler', data.message || 'Registrierung fehlgeschlagen');

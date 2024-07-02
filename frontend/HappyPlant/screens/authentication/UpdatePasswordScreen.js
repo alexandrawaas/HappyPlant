@@ -21,9 +21,9 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
                 resetPasswordCode: resetPasswordCode,
                 newPassword: newPassword
             });
-            if (response.ok) {
+            if (response.status === 200) {
                 Alert.alert('Erfolgreich', 'Passwort erfolgreich aktualisiert.');
-                navigation.navigate('Anmelden');
+                navigation.replace('Anmelden');
             } else {
                 Alert.alert('Fehler', response.data);
             }

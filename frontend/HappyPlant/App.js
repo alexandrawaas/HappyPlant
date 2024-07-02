@@ -8,6 +8,8 @@ import LoginScreen from "./screens/authentication/LoginScreen";
 import RegisterScreen from "./screens/authentication/RegisterScreen";
 import TabNavigator from "./screens/global/navigation/TabNavigator";
 import ResetPasswordScreen from "./screens/authentication/ResetPasswordScreen";
+import RegisterSuccess from './screens/authentication/RegisterSuccess';
+import UpdatePasswordScreen from './screens/authentication/UpdatePasswordScreen';
 
 const RootStack = createNativeStackNavigator();
 export default function App() {
@@ -32,6 +34,8 @@ const OnboardingStack = () => {
       <OnboardingStack.Screen name="Anmelden" component={LoginScreen} options={{headerTransparent: true, headerTitle:''}}/>
       <OnboardingStack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen} options={headerStyleOptions}/>
       <OnboardingStack.Screen name="Registrieren" component={RegisterScreen} options={{headerTransparent: true, headerTitle:''}}/>
+      <OnboardingStack.Screen name="RegisterSuccess" component={RegisterSuccess} options={{headerTransparent: true, headerTitle:''}}/>
+      <OnboardingStack.Screen name="Passwort ändern" component={UpdatePasswordScreen} options={{headerTransparent: true, headerTitle:''}}/>
     </OnboardingStack.Navigator>
   );
 };
