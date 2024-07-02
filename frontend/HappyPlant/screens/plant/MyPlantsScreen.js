@@ -6,12 +6,17 @@ import {useEffect, useState} from "react";
 import { fetchURL } from '../../utils/ApiService'
 import {Searchbar} from "react-native-paper";
 import { commonStyles } from "../../utils/styles/CommonStyles";
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused, useRoute} from '@react-navigation/native';
+import {waitFor} from "@babel/core/lib/gensync-utils/async";
 
 export default function MyPlantsScreen({ navigation }) {
     const isFocused = useIsFocused();
     const [searchQuery, setSearchQuery] = useState("");
     const [plants, setPlants] = useState([]);
+
+    const route = useRoute();
+    const { reload } = route.params? route.params : 0;
+    let currReload = reload;
 
     useEffect(() => {
         fetchURL('/plants', 'GET', null, navigation, setPlants)
@@ -26,12 +31,22 @@ export default function MyPlantsScreen({ navigation }) {
         navigation.navigate('Neue Pflanze erstellen', {id: null})
     }
 
+    useEffect(() => {
+
+            setTimeout(function () {
+                if (currReload === 1) {
+                    console.log("reloading")
+                    fetchURL('/plants', 'GET', null, navigation, setPlants).then(() => currReload = 0);
+                }
+            }, 100);
+    }, [currReload])
+
     return (
         <View>
             <View style={styles.toolContainer}>
                 <View style={[styles.searchContainer, commonStyles.shadow]}>
                     <Searchbar style={styles.searchBar}
-                               placeholder="Suche nach einer Pflanze..." onChangeText={setSearchQuery} value={searchQuery}
+                               placeholder={"Suche nach einer Pflanze..."} onChangeText={setSearchQuery} value={searchQuery}
                     />
                 </View>
             </View>

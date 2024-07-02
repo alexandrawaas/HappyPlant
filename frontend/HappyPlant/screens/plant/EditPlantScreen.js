@@ -27,6 +27,7 @@ export default function EditPlantScreen({ navigation }) {
 
     const [isDeleting, setIsDeleting] = useState(false);
 
+
     const updateMap = (text, k) => {
         const numericValue = text.replace(/[^0-9]/g, "");
         setIntervals(new Map(intervals.set(k.toUpperCase(), numericValue)));
@@ -38,7 +39,7 @@ export default function EditPlantScreen({ navigation }) {
                 setPlant(data)
                 chosenLighting == null && plant.needs !== undefined ? setChosenLighting(LightingTypeTranslations[plant?.needs.lightingType] ?? LightingTypeTranslations[0]) : null;
                 if (newNotes == null) setNewNotes(plant.notes);
-            })        
+            })
         }
     }, [plant, isDeleting])
 
@@ -66,12 +67,11 @@ export default function EditPlantScreen({ navigation }) {
                 text: 'Löschen', onPress: () => {
                     setIsDeleting(true);
                     fetchURL(`/plants/${id}`, 'DELETE', null, navigation, () => {
-                        navigation.replace("Meine Pflanzen")
-                    }).catch((error) => {
+                        navigation.replace("Meine Pflanzen", {reload: 1})
                         setIsDeleting(false);
-                        console.error('Fehler beim Löschen der Pflanze:', error);
                     });
                 }
+
             },
         ]);
 
