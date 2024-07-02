@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Image, Platform, useWindowDimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Image, Platform, useWindowDimensions, Keyboard } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RoomStackNavigator from './RoomStackNavigator';
 import PlantStackNavigator from './PlantStackNavigator';
@@ -13,12 +13,39 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
     const { width, height } = useWindowDimensions();
     const isLargeScreen = width >= 376;
+    const isIOS = Platform.OS === 'ios';
+
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setKeyboardVisible(true);
+        });
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardVisible(false);
+        });
+
+        return () => {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
 
     const getOptionsForIcon = (activeIcon, greyIcon) => {
         const circleSize = isLargeScreen ? width * 0.19 : width * 0.18;
         const iconSize = isLargeScreen ? width * 0.075 : width * 0.07;
-        const bottomOffset = isLargeScreen ? height * 0.055 : height * 0.03;
-        const marginBottom = isLargeScreen ? height * 0.03 : height * 0.01;
+        let bottomOffset, marginBottom;
+
+        if (isLargeScreen && !isIOS) {
+            bottomOffset = height * 0.022;
+            marginBottom = height * 0.001;
+        } else if (isLargeScreen && isIOS) {
+            bottomOffset = height * 0.055;
+            marginBottom = height * 0.03;
+        } else {
+            bottomOffset = height * 0.03;
+            marginBottom = height * 0.01;
+        }
 
         return {
             tabBarIcon: ({ focused }) => (
@@ -53,15 +80,17 @@ const TabNavigator = () => {
                 lazy: false,
                 tabBarStyle: {
                     position: 'absolute',
-                    bottom: Platform.OS === 'ios' ? height * 0.03 : height * 0.02,
+                    bottom: isIOS ? height * 0.03 : height * 0.04,
                     left: width * 0.05,
                     right: width * 0.05,
                     backgroundColor: '#FFFFFF',
                     borderRadius: width * 0.1,
                     height: isLargeScreen ? height * 0.08 : height * 0.09,
+                    marginBottom: isKeyboardVisible ? -50 : 0,
                     ...commonStyles.shadow,
                 },
                 headerShown: false,
+                tabBarHideOnKeyboard: true,
             }}
         >
             <Tab.Screen
