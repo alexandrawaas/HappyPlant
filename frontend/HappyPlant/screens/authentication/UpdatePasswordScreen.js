@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, TouchableOpacity, Alert, Text, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '../../config';
@@ -17,9 +17,24 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
     const [resetPasswordCode, setResetPasswordCode] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [isValidPassword, setIsValidPassword] = useState(false);
+
+    const validatePassword = (inputPassword) => {
+        const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\- ]).{8,}$/;
+        return re.test(String(inputPassword));
+    };
+
+    useEffect(() => {
+        setIsValidPassword(validatePassword(newPassword));
+    }, [newPassword])
 
     const handleUpdatePassword = async () => {
         try {
+            if (!isValidPassword) {
+                Alert.alert('Fehler', 'Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.');
+                return;
+            }
+            
             if (newPassword !== confirmPassword) {
                 Alert.alert('Fehler', 'Passwort und Bestätigungspasswort stimmen nicht überein.');
                 return;
