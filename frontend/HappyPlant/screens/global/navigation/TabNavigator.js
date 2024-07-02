@@ -86,7 +86,7 @@ const TabNavigator = () => {
                     backgroundColor: '#FFFFFF',
                     borderRadius: width * 0.1,
                     height: isLargeScreen ? height * 0.08 : height * 0.09,
-                    marginBottom: isKeyboardVisible ? -20 : 0,
+                    marginBottom: isKeyboardVisible ? -50 : 0,
                     ...commonStyles.shadow,
                 },
                 headerShown: false,
