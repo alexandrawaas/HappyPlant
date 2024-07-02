@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Image, Platform, useWindowDimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Image, Platform, useWindowDimensions, Keyboard } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RoomStackNavigator from './RoomStackNavigator';
 import PlantStackNavigator from './PlantStackNavigator';
@@ -13,6 +13,22 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
     const { width, height } = useWindowDimensions();
     const isLargeScreen = width >= 376;
+
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+            setKeyboardVisible(true);
+        });
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardVisible(false);
+        });
+
+        return () => {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
 
     const getOptionsForIcon = (activeIcon, greyIcon) => {
         const circleSize = isLargeScreen ? width * 0.19 : width * 0.18;
@@ -59,9 +75,11 @@ const TabNavigator = () => {
                     backgroundColor: '#FFFFFF',
                     borderRadius: width * 0.1,
                     height: isLargeScreen ? height * 0.08 : height * 0.09,
+                    marginBottom: isKeyboardVisible ? -20 : 0,
                     ...commonStyles.shadow,
                 },
                 headerShown: false,
+                tabBarHideOnKeyboard: true,
             }}
         >
             <Tab.Screen
