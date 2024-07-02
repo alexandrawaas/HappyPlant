@@ -34,7 +34,7 @@ const OnboardingStack = () => {
       <OnboardingStack.Screen name="Anmelden" component={LoginScreen} options={{headerTransparent: true, headerTitle:''}}/>
       <OnboardingStack.Screen name="Passwort zurücksetzen" component={ResetPasswordScreen} options={headerStyleOptions}/>
       <OnboardingStack.Screen name="Registrieren" component={RegisterScreen} options={{headerTransparent: true, headerTitle:''}}/>
-      <OnboardingStack.Screen name="RegisterSuccess" component={RegisterSuccess} options={{headerTransparent: true, headerTitle:''}}/>
+      <OnboardingStack.Screen name="RegisterSuccess" component={RegisterSuccess} options={{headerTransparent: true, headerTitle:'Fast geschafft!', headerLeft: () => null, ...headerStyleOptions}}/>
       <OnboardingStack.Screen name="Passwort ändern" component={UpdatePasswordScreen} options={{headerTransparent: true, headerTitle:''}}/>
     </OnboardingStack.Navigator>
   );
