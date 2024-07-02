@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, Platform } from 'react-native';
+import { StyleSheet, View, Image, Platform, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RoomStackNavigator from './RoomStackNavigator';
 import PlantStackNavigator from './PlantStackNavigator';
@@ -11,22 +11,40 @@ import { commonStyles } from '../../../utils/styles/CommonStyles';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+    const { width, height } = useWindowDimensions();
+    const isLargeScreen = width >= 376;
+
     const getOptionsForIcon = (activeIcon, greyIcon) => {
-        // cannot make it more generic, because the string passed to require() must be final -.-
+        const circleSize = isLargeScreen ? width * 0.19 : width * 0.18;
+        const iconSize = isLargeScreen ? width * 0.075 : width * 0.07;
+        const bottomOffset = isLargeScreen ? height * 0.055 : height * 0.03;
+        const marginBottom = isLargeScreen ? height * 0.03 : height * 0.01;
+
         return {
             tabBarIcon: ({ focused }) => (
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <View style={{ position: 'absolute' }}>
-                        <View style={[styles.selectedCircle, focused ? styles.focused : styles.unfocused]} />
-                        <Image
-                            source={focused ? activeIcon : greyIcon}
-                            style={styles.tabIcon}
+                    {focused && (
+                        <View
+                            style={[
+                                styles.selectedCircle,
+                                {
+                                    width: circleSize,
+                                    height: circleSize,
+                                    borderRadius: circleSize / 2,
+                                    bottom: -bottomOffset,
+                                    backgroundColor: '#FFFFFF',
+                                },
+                            ]}
                         />
-                    </View>
+                    )}
+                    <Image
+                        source={focused ? activeIcon : greyIcon}
+                        style={[styles.tabIcon, { width: iconSize, height: iconSize, marginBottom: -marginBottom }]}
+                    />
                 </View>
             ),
-        }
-    }
+        };
+    };
 
     return (
         <Tab.Navigator
@@ -35,17 +53,17 @@ const TabNavigator = () => {
                 lazy: false,
                 tabBarStyle: {
                     position: 'absolute',
-                    bottom: Platform.OS === 'ios' ? 30 : 25,
-                    left: 20,
-                    right: 20,
+                    bottom: Platform.OS === 'ios' ? height * 0.03 : height * 0.02,
+                    left: width * 0.05,
+                    right: width * 0.05,
                     backgroundColor: '#FFFFFF',
-                    borderRadius: 50,
-                    height: Platform.OS === 'ios' ? 80 : 70,
+                    borderRadius: width * 0.1,
+                    height: isLargeScreen ? height * 0.08 : height * 0.09,
                     ...commonStyles.shadow,
                 },
                 headerShown: false,
-            }
-            }>
+            }}
+        >
             <Tab.Screen
                 name="assignments"
                 children={AssignmentStackNavigator}
@@ -73,30 +91,22 @@ const TabNavigator = () => {
             />
         </Tab.Navigator>
     );
-}
+};
 
 const styles = StyleSheet.create({
     tabIcon: {
-        width: 35, 
-        height: 35, 
-        bottom: Platform.OS === 'ios' ? -14 : 0
+        marginBottom: 0,
     },
     selectedCircle: {
-        position: 'absolute', 
-        bottom: Platform.OS === 'ios' ? -25 : -17, 
-        left: Platform.OS === 'ios' ? -20 : -22,
-        width: 80, 
-        height: 80, 
-        borderRadius: 35, 
+        position: 'absolute',
+        backgroundColor: '#FFFFFF',
     },
     focused: {
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
     },
     unfocused: {
-        backgroundColor: 'transparent'
-    }
-    
-})
+        backgroundColor: 'transparent',
+    },
+});
 
 export default TabNavigator;
-
