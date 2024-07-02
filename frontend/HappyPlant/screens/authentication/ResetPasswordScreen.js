@@ -3,6 +3,7 @@ import {View, TextInput, TouchableOpacity, Alert, Text, StyleSheet, Platform} fr
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import axios from 'axios';
 import { API_URL } from '../../config';
+import Feather from "react-native-vector-icons/Feather";
 
 const ResetPasswordScreen = ({ navigation, route }) => {
     const [email, setEmail] = useState('');
@@ -18,18 +19,30 @@ const ResetPasswordScreen = ({ navigation, route }) => {
             const response = await axios.post(`${API_URL}/auth/password/reset`, {
                 email: email
             });
-            if (response.ok) {
+            if (response.status === 200) {
                 const resetPasswordToken = response.data.resetPasswordToken;
                 navigation.navigate('Passwort ändern', { resetPasswordToken });
-                navigation.replace('ResetPasswordSuccess');
+                //navigation.replace('ResetPasswordSuccess');
             } else {
-                Alert.alert('Fehler', response.data);
+                Alert.alert('Fehler', response.status.toString() || 'Unbekannter Fehler');
             }
         } catch (error) {
             console.error('Fehler beim Zurücksetzen des Passworts:', error);
             Alert.alert('Fehler', 'Es ist ein Fehler beim Zurücksetzen des Passworts aufgetreten.');
         }
     };
+
+    useEffect(() => {
+        navigation.setOptions({
+            ...navigation.options,
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.backButton, Platform.OS === 'android' ? null : styles.backButton2]}>
+                    <Feather name={Platform.OS === 'android' ? "arrow-left" : "chevron-left"} color="black" size={30}/>
+                    <Text style={{fontSize: 18}}>{Platform.OS === 'android' ? "" : "Einstellungen"}</Text>
+                </TouchableOpacity>
+            )
+        })
+    });
 
     return (
         <View style={commonStyles.container}>
@@ -40,8 +53,10 @@ const ResetPasswordScreen = ({ navigation, route }) => {
                     placeholder=""
                     value={email}
                     onChangeText={setEmail}
+                    autoCorrect={false}
+                    autoCapitalize="none"
                 />
-                <TouchableOpacity onPress={() => navigation.navigate('Registrieren')}>
+                <TouchableOpacity onPress={() => navigation.replace('Registrieren')}>
                     <Text style={styles.button2Text}>Konto erstellen</Text>
                 </TouchableOpacity>
             </View>
@@ -118,6 +133,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
+    backButton: {
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    backButton2: {
+        marginLeft: -15,
+    }
 });
 export default ResetPasswordScreen;

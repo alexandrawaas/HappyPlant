@@ -3,6 +3,8 @@ package com.happyplant.backend.service
 import com.happyplant.backend.datatransfer.user.NotificationSettingsDtoRequest
 import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.datatransfer.user.asDto
+import com.happyplant.backend.datatransfer.user.asDtoWithNS
+import com.happyplant.backend.datatransfer.user.UserWithNSDto
 import com.happyplant.backend.model.User
 import com.happyplant.backend.repository.*
 import com.happyplant.backend.utility.AuthTokenUtil
@@ -54,11 +56,11 @@ class UserService (
     fun getUser(userId: UUID): User? =
         db.findById(userId).orElse(null)
 
-    fun getCurrentUser(authHeader: String): UserDto {
+    fun getCurrentUser(authHeader: String): UserWithNSDto {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
         return userId?.let { id ->
             val user: Optional<User> = db.findById(id)
-            user.orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "User not found") }.asDto()
+            user.orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "User not found") }.asDtoWithNS()
         } ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User-ID not found in token")
     }
 

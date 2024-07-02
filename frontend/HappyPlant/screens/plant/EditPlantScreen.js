@@ -132,7 +132,7 @@ export default function EditPlantScreen({ navigation }) {
                             </LinearGradient>
                         </CollapsibleBar>
                     </View>
-                    <Tooltip height={150} width={280} backgroundColor="#cef2c8" popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
+                    <Tooltip height={150} width={280} backgroundColor="#cef2c8"skipAndroidStatusBar={true}  popover={<Text>Der Lichtwert, bei dem sich die Pflanze am wohlsten fühlt. Es wird empfohlen, diesen zu beachten, er kann jedoch auch angepasst werden, da weitere Faktoren wie z.B. die Jahreszeit das Wohlbefinden der Pflanze beeinflussen können.</Text>}>
                         <Feather name="info" color="grey" size={25} />
                     </Tooltip>
                 </View>

@@ -4,7 +4,6 @@ import {useRoute} from '@react-navigation/native';
 import {API_URL} from "../../config";
 import NeedLabelWithIcon from "./NeedLabelWithIcon";
 import {LinearGradient} from 'expo-linear-gradient';
-import AddSpeciesAsPlantButton from "../global/AddSpeciesAsPlantButton";
 import RoundPictureNameComponent from "./RoundPictureNameComponent";
 import { commonStyles } from "../../utils/styles/CommonStyles";
 import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";

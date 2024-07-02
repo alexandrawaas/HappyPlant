@@ -4,6 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { removeAuthToken } from '../../utils/AuthTokenUtil';
 import { fetchURL } from '../../utils/ApiService'
 import { registerForPushNotificationsAsync } from '../../utils/registerForPushNotificationsAsync';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import VerticalPlaceholder from '../../utils/styles/VerticalPlaceholder';
 
 export default function SettingsScreen({ navigation }) {
@@ -12,20 +13,17 @@ export default function SettingsScreen({ navigation }) {
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [user, setUser] = useState(null);
     const [expoPushToken, setExpoPushToken] = useState();
+    const [isInitialLoading, setIsInitialLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-            e.preventDefault();
-            updateNotificationSettings();
-            navigation.dispatch(e.data.action);
-        });
-
         fetchUserData();
-
-        return () => {
-            unsubscribe();
-        };
     }, []);
+
+    useEffect(() => {
+        if (!isInitialLoading) {
+            updateNotificationSettings();
+        }
+    }, [remindersEnabled, notificationTime]);
 
 
     const fetchUserData = async () => {
@@ -33,38 +31,54 @@ export default function SettingsScreen({ navigation }) {
             if (data) {
                 setUser(data);
                 setRemindersEnabled(data.receivePushNotifications);
-                const time = new Date(data.pushNotificationsTime);
+                const [hours, minutes, seconds] = data.pushNotificationsTime.split(':').map(Number);
+                const time = new Date();
+                time.setHours(hours, minutes, seconds, 0);
                 if (!isNaN(time.getTime())) {
                     setNotificationTime(time);
                 }
+                setIsInitialLoading(false);
             }
         });
     };
 
     const updateNotificationSettings = async () => {
-        await registerForPushNotificationsAsync()
-        .then(
-            (token) => { setExpoPushToken(token); }
-        );
+        try {
+            await registerForPushNotificationsAsync()
+            .then(
+                (token) => { setExpoPushToken(token); }
+            );
 
-        const payload = {
-            receivePushNotifications: remindersEnabled,
-            pushNotificationsTime: notificationTime.toISOString().substring(11, 16),
-            pushNotificationToken: expoPushToken
-        };
-        fetchURL('/user', 'PATCH', payload, navigation, (data) => {
-            if (!data) {
-                console.error('Fehler beim Aktualisieren der Benachrichtigungseinstellungen');
-            }
-        });
+            const hours = notificationTime.getHours().toString().padStart(2, '0');
+            const minutes = notificationTime.getMinutes().toString().padStart(2, '0');
+            const seconds = notificationTime.getSeconds().toString().padStart(2, '0');
+
+            const payload = {
+                receivePushNotifications: remindersEnabled,
+                pushNotificationToken: expoPushToken,
+                pushNotificationsTime: `${hours}:${minutes}:${seconds}`
+            };
+
+            fetchURL('/user', 'PATCH', payload, navigation, () => {});
+        } catch (error) {
+            console.error('Fehler beim Registrieren der Push-Benachrichtigungen:', error);
+        }
+
+
     };
     
     const handleAction = async (endpoint, method, successMessage) => {
-        fetchURL(endpoint, method, null, navigation, async () => {
-            await removeAuthToken();
-            navigation.replace('OnboardingStack', { screen: 'Anmelden' });
-            Alert.alert('Erfolg', successMessage);
-        });
+        try {
+            fetchURL(endpoint, method, null, navigation, async () => {
+                await removeAuthToken();
+                await AsyncStorage.removeItem('rememberMe');
+                Alert.alert('Erfolg', successMessage);
+                navigation.replace('OnboardingStack', { screen: 'Anmelden' });
+            });
+        } catch (error) {
+            console.error('Fehler:', error);
+            Alert.alert('Fehler', 'Es ist ein Fehler aufgetreten.');
+        }
     };
 
     const confirmAction = (action, handleAction) => {

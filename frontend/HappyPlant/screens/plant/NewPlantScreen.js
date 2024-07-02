@@ -82,7 +82,6 @@ export default function NewPlantScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.scrollview}>
                 <Pressable onPress={showActionSheet}>
                     {imageData
                         ? <RoundPictureNameComponent header={name} subHeader={chosenSpecies?.name} raw={true} imageData={imageData}></RoundPictureNameComponent>
@@ -115,7 +114,7 @@ export default function NewPlantScreen({ navigation }) {
                                 {species?.map(item =>
                                     <View key={item.id}>
                                         <TouchableOpacity onPress={() => setChosenSpecies(item)}>
-                                            <Text numberOfLines={1}>{item.name}</Text>
+                                            <Text style={styles.dropdownText} numberOfLines={1}>{item.name}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 )}
@@ -125,7 +124,6 @@ export default function NewPlantScreen({ navigation }) {
                     </CollapsibleBar>
                 </View>
                 <VerticalPlaceholder size={120} />
-            </ScrollView>
         </View>
     );
 }
@@ -150,6 +148,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "top",
+        padding: 10,
     },
     containerHorizontal: {
         marginTop: 16,
@@ -183,7 +182,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-
     },
     textInputInnerContainer: {
         display: "flex",
@@ -224,6 +222,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowColor: "#000",
+        height: '30%'
     },
     detailContainer: {
         borderRadius: 15,
@@ -233,11 +232,17 @@ const styles = StyleSheet.create({
     },
     scrollDropdown: {
         padding: 10,
-        maxHeight: 300,
+        paddingTop: 6,
+        height: 90,
     },
     dropdownContainer: {
         width: '100%',
         backgroundColor: '#fdfbef',
         borderRadius: 15,
+    },
+    dropdownText: {
+        fontSize: 16,
+        color: "black",
+        marginBottom: 15,
     },
 });
