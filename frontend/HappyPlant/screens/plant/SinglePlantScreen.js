@@ -66,25 +66,30 @@ export default function SinglePlantScreen({ navigation }) {
     }
 
     const hideDatePicker = () => {
-        setSelectedDate(new Date());
         setDatePickerVisibility(false);
+        setSelectedDate(new Date());
         setSelectedAssignmentType(null);
     }
 
     const handleDateChange = (event, date) => {
-        if (event.type === 'dismissed') {
-            hideDatePicker();
-            return;
-        }
-        if (date !== undefined) {
-            setSelectedDate(date);
-            if (Platform.OS === 'android') {
+        if (Platform.OS === 'android') {
+            if (event.type === 'dismissed') {
+                hideDatePicker();
+                return;
+            }
+            if (event.type === 'set' && date !== undefined) {
                 handleConfirm(date);
             }
+        }
+
+        if (Platform.OS === 'ios' && date !== undefined) {
+            setSelectedDate(date);      
         }
     }
 
     const handleConfirm = (date) => {
+        hideDatePicker();
+        
         const updatedAssignment = {
             assignmentType: selectedAssignmentType,
             lastDone: date,
@@ -98,8 +103,6 @@ export default function SinglePlantScreen({ navigation }) {
             );
             setPlant({ ...plant, assignments: updatedAssignments });
         });
-        
-        hideDatePicker();
     }
 
     return (
