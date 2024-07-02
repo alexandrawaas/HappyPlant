@@ -3,6 +3,7 @@ import {View, TextInput, TouchableOpacity, Alert, Text, StyleSheet, Platform} fr
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import axios from 'axios';
 import { API_URL } from '../../config';
+import Feather from "react-native-vector-icons/Feather";
 
 const ResetPasswordScreen = ({ navigation, route }) => {
     const [email, setEmail] = useState('');
@@ -30,6 +31,18 @@ const ResetPasswordScreen = ({ navigation, route }) => {
             Alert.alert('Fehler', 'Es ist ein Fehler beim Zurücksetzen des Passworts aufgetreten.');
         }
     };
+
+    useEffect(() => {
+        navigation.setOptions({
+            ...navigation.options,
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.backButton, Platform.OS === 'android' ? null : styles.backButton2]}>
+                    <Feather name={Platform.OS === 'android' ? "arrow-left" : "chevron-left"} color="black" size={30}/>
+                    <Text style={{fontSize: 18}}>{Platform.OS === 'android' ? "" : "Einstellungen"}</Text>
+                </TouchableOpacity>
+            )
+        })
+    });
 
     return (
         <View style={commonStyles.container}>
@@ -120,6 +133,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
+    backButton: {
+        display: "flex",
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    backButton2: {
+        marginLeft: -15,
+    }
 });
 export default ResetPasswordScreen;
