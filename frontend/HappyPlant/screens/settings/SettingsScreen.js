@@ -111,16 +111,25 @@ export default function SettingsScreen({ navigation }) {
     };
 
     const onTimeChange = (event, selectedTime) => {
-        if (event.type === 'dismissed') {
-            setShowTimePicker(false);
-            return;
-        }
         const currentTime = selectedTime || notificationTime;
-        if (!isNaN(currentTime.getTime())) {
+        if (Platform.OS === 'android') {
+            if (event.type === 'dismissed') {
+                setShowTimePicker(false);
+                return;
+            }
+            if (event.type === 'set' && !isNaN(currentTime.getTime())) {
+                setShowTimePicker(false);
+                setNotificationTime(currentTime);
+            }
+        }
+
+        if (Platform.OS === 'ios') {
+            if (!isNaN(currentTime.getTime())) {
+                setNotificationTime(currentTime);
+            }
+            setShowTimePicker(true);
             setNotificationTime(currentTime);
         }
-        setShowTimePicker(Platform.OS === 'ios');
-        setNotificationTime(currentTime);
     };
 
     const showPicker = () => {
