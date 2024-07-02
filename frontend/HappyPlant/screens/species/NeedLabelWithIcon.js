@@ -7,7 +7,7 @@ import { StyleSheet,View, Text } from "react-native";
 export default function NeedLabelWithIcon({assignmentType, value}) {
     return (
         <View style={styles.singleNeedContainer}>
-            <Tooltip backgroundColor="#cef2c8" popover={<Text>{AssignmentTypeTranslations[assignmentType]}</Text>}>
+            <Tooltip backgroundColor="#cef2c8" skipAndroidStatusBar={true} popover={<Text>{AssignmentTypeTranslations[assignmentType]}</Text>}>
                 {AssignmentTypeIcons[assignmentType]}
             </Tooltip>
             {assignmentType === "LIGHTING" 
