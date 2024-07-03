@@ -19,20 +19,14 @@ data class User(
         @Column(name = "email_verified", nullable = false)
         var emailVerified: Boolean = false,
 
-        @Column(name = "email_verification_token", nullable = true)
-        var emailVerificationToken: String? = null,
+        @Column(name = "multi_token", nullable = true)
+        var multiToken: String? = null,
 
-        @Column(name = "email_verification_expires", nullable = true)
-        var emailVerificationExpires: Long? = null,
+        @Column(name = "multi_expires", nullable = true)
+        var multiExpires: Long? = null,
 
-        @Column(name = "reset_password_token", nullable = true)
-        var resetPasswordToken: String? = null,
-
-        @Column(name = "reset_password_expires", nullable = true)
-        var resetPasswordExpires: Long? = null,
-
-        @Column(name = "reset_password_code", nullable = true)
-        var resetPasswordCode: Int? = null,
+        @Column(name = "multi_otp", nullable = true)
+        var multiOtp: Int? = null,
 
         @Column(name = "receive_push_notifications")
         var receivePushNotifications: Boolean,

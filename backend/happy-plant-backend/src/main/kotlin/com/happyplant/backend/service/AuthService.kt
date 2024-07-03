@@ -34,12 +34,14 @@ class AuthService(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already exists")
         }
 
+        val verifyEmailCode = Random().nextInt(10000, 100000)
         val newUser = User (
             email = user.email.lowercase(),
             passwordHash = hashPassword(user.password),
             emailVerified = false,
-            emailVerificationToken = UUID.randomUUID().toString(),
-            emailVerificationExpires = System.currentTimeMillis() + 600000,
+            multiToken = UUID.randomUUID().toString(),
+            multiExpires = System.currentTimeMillis() + 600000,
+            multiOtp = verifyEmailCode,
             receivePushNotifications = true,
             pushNotificationToken = user.pushNotificationToken,
             pushNotificationsTime = LocalTime.of(10, 0), //TODO Standard
@@ -48,9 +50,26 @@ class AuthService(
         )
         userRepository.save(newUser)
 
-        emailService.sendEmailVerificationEmail(newUser, newUser.emailVerificationToken!!)
+        emailService.sendEmailVerificationEmail(newUser, verifyEmailCode)
 
         return newUser.asDto()
+    }
+
+    fun verifyEmail(verifyEmailToken: String): UserDto {
+        val user = userRepository.findByEmailVerificationToken(verifyEmailToken)
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email verification token")
+
+        if (user.multiExpires != null && user.multiExpires!! < System.currentTimeMillis()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Email verification token has expired")
+        }
+
+        user.emailVerified = true
+        user.multiToken = null
+        user.multiExpires = null
+        user.multiOtp = null
+        userRepository.save(user)
+
+        return user.asDto()
     }
 
     fun login(user: CredentialsDto): Map<String, Any> {
@@ -84,10 +103,10 @@ class AuthService(
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email does not exist")
 
         val resetPasswordToken = UUID.randomUUID().toString()
-        user.resetPasswordToken = resetPasswordToken
-        user.resetPasswordExpires = System.currentTimeMillis() + 600000
+        user.multiToken = resetPasswordToken
+        user.multiExpires = System.currentTimeMillis() + 600000
         val resetPasswordCode = Random().nextInt(10000, 100000)
-        user.resetPasswordCode = resetPasswordCode
+        user.multiOtp = resetPasswordCode
         userRepository.save(user)
 
         emailService.sendResetPasswordEmail(user, resetPasswordCode)
@@ -99,35 +118,19 @@ class AuthService(
         val user = userRepository.findByResetPasswordToken(request.resetPasswordToken)
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password token")
 
-        if (user.resetPasswordExpires!! < System.currentTimeMillis()) {
+        if (user.multiExpires!! < System.currentTimeMillis()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset password token has expired")
         }
 
-        if (user.resetPasswordCode != request.resetPasswordCode) {
+        if (user.multiOtp != request.resetPasswordCode) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password code")
         }
 
         user.passwordHash = hashPassword(request.newPassword)
-        user.resetPasswordToken = null
-        user.resetPasswordExpires = null
-        user.resetPasswordCode = null
+        user.multiToken = null
+        user.multiExpires = null
+        user.multiOtp = null
         userRepository.save(user)
-    }
-
-    fun verifyEmail(verifyEmailToken: String): UserDto {
-        val user = userRepository.findByEmailVerificationToken(verifyEmailToken)
-            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email verification token")
-
-        if (user.emailVerificationExpires != null && user.emailVerificationExpires!! < System.currentTimeMillis()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Email verification token has expired")
-        }
-
-        user.emailVerified = true
-        user.emailVerificationToken = null
-        user.emailVerificationExpires = null
-        userRepository.save(user)
-
-        return user.asDto()
     }
 
     private fun extractTokenFromRequest(request: HttpServletRequest): String? {
