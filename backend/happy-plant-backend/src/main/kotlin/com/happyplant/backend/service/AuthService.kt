@@ -12,6 +12,7 @@ import com.happyplant.backend.utility.AuthTokenBlacklist
 import com.happyplant.backend.datatransfer.auth.CredentialsDto
 import com.happyplant.backend.datatransfer.auth.ResetPasswordDto
 import com.happyplant.backend.datatransfer.auth.UpdatePasswordDto
+import com.happyplant.backend.datatransfer.auth.VerifyEmailDto
 import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.datatransfer.user.asDto
 import com.happyplant.backend.model.User
@@ -55,12 +56,16 @@ class AuthService(
         return newUser.asDto()
     }
 
-    fun verifyEmail(verifyEmailToken: String): UserDto {
-        val user = userRepository.findByEmailVerificationToken(verifyEmailToken)
+    fun verifyEmail(request: VerifyEmailDto): UserDto {
+        val user = userRepository.findByMultiToken(request.verifyEmailToken)
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email verification token")
 
         if (user.multiExpires != null && user.multiExpires!! < System.currentTimeMillis()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Email verification token has expired")
+        }
+
+        if (user.multiOtp != request.verifyEmailCode) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password code")
         }
 
         user.emailVerified = true
@@ -115,7 +120,7 @@ class AuthService(
     }
 
     fun updatePassword(request: UpdatePasswordDto) {
-        val user = userRepository.findByResetPasswordToken(request.resetPasswordToken)
+        val user = userRepository.findByMultiToken(request.resetPasswordToken)
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password token")
 
         if (user.multiExpires!! < System.currentTimeMillis()) {

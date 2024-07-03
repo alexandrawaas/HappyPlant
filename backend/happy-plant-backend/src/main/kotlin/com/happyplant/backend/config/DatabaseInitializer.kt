@@ -661,8 +661,9 @@ class DatabaseInitializer {
                 email = "example.user@test.com",
                 passwordHash = hashPassword("s3cur3P455w0rd"),
                 emailVerified = true,
-                emailVerificationToken = UUID.randomUUID().toString(),
-                emailVerificationExpires = System.currentTimeMillis() + 600000,
+                multiToken = UUID.randomUUID().toString(),
+                multiExpires = System.currentTimeMillis() + 600000,
+                multiOtp = null,
                 receivePushNotifications = true,
                 pushNotificationsTime = LocalTime.of(17, 46),
                 pushNotificationToken = "ExponentPushToken[Wx9b-UKX5NSxWFpCb8ke4f]", //Ralf Handy for Testing
