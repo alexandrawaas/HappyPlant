@@ -161,10 +161,11 @@ export default function SettingsScreen({ navigation }) {
                                     is24Hour={true}
                                     display="default"
                                     onChange={onTimeChange}
+                                    locale="ger"
                                 />
                             ) : (
                                 <TouchableOpacity onPress={showPicker}>
-                                    <Text style={styles.settingText}>{notificationTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                                    <Text style={styles.settingText}>{notificationTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}</Text>
                                 </TouchableOpacity>
                             )}
                             {showTimePicker && Platform.OS === 'android' && (
@@ -174,6 +175,8 @@ export default function SettingsScreen({ navigation }) {
                                     is24Hour={true}
                                     display="spinner"
                                     onChange={onTimeChange}
+                                    positiveButton={{ label: 'Bestätigen', textColor: '#5C724F' }}
+                                    negativeButton={{ label: 'Abbrechen', textColor: '#FFAAAA' }}
                                 />
                             )}
                         </View>
