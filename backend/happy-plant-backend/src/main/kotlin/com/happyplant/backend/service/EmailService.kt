@@ -41,11 +41,9 @@ class EmailService {
         mailSender.send(message)
     }
 
-    fun sendEmailVerificationEmail(user: User, emailVerificationToken: String) {
+    fun sendEmailVerificationEmail(user: User, verifyEmailCode: Int) {
         val recipientAddress = user.email.lowercase()
         val subject = "Email-Adresse verifizieren"
-        val encodedToken = URLEncoder.encode(emailVerificationToken, "UTF-8")
-        val verificationUrl = "$apiUrl/auth/verify?token=$encodedToken"
 
         val message = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true, "UTF-8")
@@ -55,7 +53,7 @@ class EmailService {
         val htmlContent = """
             <p>Vielen Dank, dass Sie sich einen Account bei uns angelegt haben!</p>
             <p>Bitte klicken Sie auf den folgenden Link oder kopieren Sie ihn in Ihren Browser, um Ihre Email-Adresse zu verifizieren:</p>
-            <a href="$verificationUrl">Email-Adresse verifizieren</a>
+            <h>$verifyEmailCode</h>
         """.trimIndent()
 
         helper.setText(htmlContent, true)
