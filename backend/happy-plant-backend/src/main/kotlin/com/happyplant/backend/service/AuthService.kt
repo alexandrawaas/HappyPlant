@@ -16,6 +16,8 @@ import com.happyplant.backend.datatransfer.auth.VerifyEmailDto
 import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.datatransfer.user.asDto
 import com.happyplant.backend.model.User
+import com.happyplant.backend.model.VerifyEmailOtp
+import com.happyplant.backend.model.ResetPasswordOtp
 import java.time.LocalTime
 
 @Service
@@ -36,19 +38,23 @@ class AuthService(
         }
 
         val verifyEmailCode = Random().nextInt(10000, 100000)
+        val verifyEmailOtp = VerifyEmailOtp (
+            expires = System.currentTimeMillis() + 600000,
+            otp = verifyEmailCode,
+        )
         val newUser = User (
             email = user.email.lowercase(),
             passwordHash = hashPassword(user.password),
             emailVerified = false,
-            multiToken = UUID.randomUUID().toString(),
-            multiExpires = System.currentTimeMillis() + 600000,
-            multiOtp = verifyEmailCode,
             receivePushNotifications = true,
             pushNotificationToken = user.pushNotificationToken,
             pushNotificationsTime = LocalTime.of(10, 0), //TODO Standard
+            reset_password_otp_id = null,
+            verify_email_otp_id = verifyEmailOtp.id,
             plants = mutableListOf(),
             rooms = mutableListOf()
         )
+
         userRepository.save(newUser)
 
         emailService.sendEmailVerificationEmail(newUser, verifyEmailCode)

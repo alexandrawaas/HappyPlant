@@ -19,15 +19,6 @@ data class User(
         @Column(name = "email_verified", nullable = false)
         var emailVerified: Boolean = false,
 
-        @Column(name = "multi_token", nullable = true)
-        var multiToken: String? = null,
-
-        @Column(name = "multi_expires", nullable = true)
-        var multiExpires: Long? = null,
-
-        @Column(name = "multi_otp", nullable = true)
-        var multiOtp: Int? = null,
-
         @Column(name = "receive_push_notifications")
         var receivePushNotifications: Boolean,
 
@@ -36,6 +27,14 @@ data class User(
 
         @Column(name = "push_notifications_time")
         var pushNotificationsTime: LocalTime? = LocalTime.of(10,  0),
+
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "reset_password_otp_id", referencedColumnName = "id")
+        var resetPasswordOtp: ResetPasswordOtp? = null,
+    
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "verify_email_otp_id", referencedColumnName = "id")
+        var verifyEmailOtp: VerifyEmailOtp? = null,
 
         @OneToMany (cascade= [CascadeType.ALL], mappedBy = "user", orphanRemoval = true)
         private var plants: MutableList<Plant>,
