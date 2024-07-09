@@ -31,9 +31,7 @@ export const registerForPushNotificationsAsync = async() => {
       token = await Notifications.getExpoPushTokenAsync({
         projectId: Constants.expoConfig?.extra?.eas?.projectId,
       });
-
-      //TODO remove log
-      console.log(token);
+      
       return token;
 
     } else {

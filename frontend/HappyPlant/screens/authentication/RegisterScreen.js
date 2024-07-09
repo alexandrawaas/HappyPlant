@@ -40,6 +40,16 @@ const RegisterScreen = ({ navigation }) => {
         return unsubscribe;
     }, [navigation]);
 
+    useEffect(() =>{
+        if(!expoPushToken){
+            registerForPushNotificationsAsync()
+            .then(
+                (token) => { setExpoPushToken(token); }
+            );
+            console.log("done")
+        }
+    }, [])
+
     const handleRegister = useCallback(async () => {
         try {
             if (!isValidEmail) {
@@ -56,18 +66,13 @@ const RegisterScreen = ({ navigation }) => {
                 Alert.alert('Fehler', 'Passwort und Bestätigungspasswort stimmen nicht überein.');
                 return;
             }
-
-            await registerForPushNotificationsAsync()
-                .then(
-                    (token) => { setExpoPushToken(token); }
-                );
                 
             const payload = {
                 email: email,
                 password: password,
-                pushNotificationToken: expoPushToken
+                pushNotificationToken: expoPushToken.data
             }
-
+            
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
                 if (data) {
                     navigation.replace('RegisterSuccess');
