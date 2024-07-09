@@ -4,9 +4,11 @@ import { registerForPushNotificationsAsync } from '../../utils/registerForPushNo
 import { fetchURL } from '../../utils/ApiService';
 import LoginRegisterTemplate from './LoginRegisterTemplate';
 import LoginRegiserInputField from './LoginRegisterInputField';
+import {useIsFocused} from '@react-navigation/native';
 
 
 const RegisterScreen = ({ navigation }) => {
+    const isFocused = useIsFocused();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -41,14 +43,13 @@ const RegisterScreen = ({ navigation }) => {
     }, [navigation]);
 
     useEffect(() =>{
-        if(!expoPushToken){
+        if(!expoPushToken && isFocused){
             registerForPushNotificationsAsync()
             .then(
                 (token) => { setExpoPushToken(token); }
             );
-            console.log("done")
         }
-    }, [])
+    }, [isFocused])
 
     const handleRegister = useCallback(async () => {
         try {
@@ -70,8 +71,10 @@ const RegisterScreen = ({ navigation }) => {
             const payload = {
                 email: email,
                 password: password,
-                pushNotificationToken: expoPushToken.data
+                pushNotificationToken: expoPushToken?.data
             }
+
+            //console.log(payload)
             
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
                 if (data) {
