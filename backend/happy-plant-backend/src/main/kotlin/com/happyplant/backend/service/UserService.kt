@@ -1,10 +1,8 @@
 package com.happyplant.backend.service
 
 import com.happyplant.backend.datatransfer.user.NotificationSettingsDtoRequest
-import com.happyplant.backend.datatransfer.user.UserDto
-import com.happyplant.backend.datatransfer.user.asDto
-import com.happyplant.backend.datatransfer.user.asDtoWithNS
 import com.happyplant.backend.datatransfer.user.UserWithNSDto
+import com.happyplant.backend.datatransfer.user.asDtoWithNS
 import com.happyplant.backend.model.User
 import com.happyplant.backend.repository.*
 import com.happyplant.backend.utility.AuthTokenUtil
@@ -50,7 +48,6 @@ class UserService (
             TODO("Set Error returncode")
         }
     }
-    fun getDummyUser() = db.findByEmail("example.user@test.com") ?: throw IllegalArgumentException("Dummy User not found")
 
 
     fun getUser(userId: UUID): User? =

@@ -43,26 +43,14 @@ data class User(
         private var rooms: MutableList<Room>
 )
 {
-        companion object {
-                val DUMMY_USER = User(
-                        id = UUID.fromString("f789034b-737d-46e4-a3a4-72924b2138b7"),
-                        email = "foo@bar.com",
-                        passwordHash = "12345",
-                        receivePushNotifications = true,
-                        pushNotificationToken = "ExponentPushToken[Wx9b-UKX5NSxWFpCb8ke4f]",
-                        pushNotificationsTime = LocalTime.of(17, 47),
-                        plants = mutableListOf(),
-                        rooms = mutableListOf(),
-                )
-        }
-
-
         // Methods
 
         fun getActiveAssignments(): List<Assignment>
         {
                 val activeAssignments = ArrayList<Assignment>()
-                //TODO: Implement
+                for(plant in plants){
+                        activeAssignments.addAll(plant.getActiveAssignments().values)
+                }
                 return activeAssignments
         }
 

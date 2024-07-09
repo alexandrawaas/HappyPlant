@@ -6,6 +6,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -13,12 +14,14 @@ import java.net.http.HttpResponse
 import java.time.LocalTime
 
 @Component
+@Transactional
 class ScheduledNotifier( private val userService: UserService) {
 
     @Scheduled(cron = "0 0/15 * * * *")
      fun sendNotifications() = runBlocking {
         var current = LocalTime.now()
 
+        //userService.getAllUsers().forEach{user -> println(user.email + " - " + user.receivePushNotifications + " - " + user.pushNotificationToken)}
 
         var pushNotificationDTOs = userService.getAllUsers().filter { user ->
             user.receivePushNotifications
@@ -28,6 +31,7 @@ class ScheduledNotifier( private val userService: UserService) {
 
 
         val sizedArrays: MutableList<Array<PushNotificationDTO>> = ArrayList()
+        //println(pushNotificationDTOs.size)
 
         if(pushNotificationDTOs.size > 100){
             for(i in 0..(pushNotificationDTOs.size)/100){
