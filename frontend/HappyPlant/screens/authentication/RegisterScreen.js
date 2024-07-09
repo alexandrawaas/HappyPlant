@@ -4,6 +4,7 @@ import { registerForPushNotificationsAsync } from '../../utils/registerForPushNo
 import { fetchURL } from '../../utils/ApiService';
 import LoginRegisterTemplate from './LoginRegisterTemplate';
 import LoginRegiserInputField from './LoginRegisterInputField';
+import {useIsFocused} from '@react-navigation/native';
 
 const RegisterScreen = ({ navigation, route }) => {
     const [email, setEmail] = useState('');
@@ -65,8 +66,10 @@ const RegisterScreen = ({ navigation, route }) => {
             const payload = {
                 email: email,
                 password: password,
-                pushNotificationToken: expoPushToken.data
+                pushNotificationToken: expoPushToken?.data
             }
+
+            //console.log(payload)
             
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
                 if (data) {
