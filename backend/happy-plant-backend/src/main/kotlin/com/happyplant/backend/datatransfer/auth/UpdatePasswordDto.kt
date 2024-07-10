@@ -4,11 +4,11 @@ import jakarta.validation.constraints.*
 
 data class UpdatePasswordDto(
     
-    @field:NotBlank(message = "Reset password token is required")
-    val resetPasswordToken: String,
+    @field:NotBlank(message = "Email address is required")
+    val email: String,
 
-    @field:NotBlank(message = "Reset password code is required")
-    val resetPasswordCode: Int,
+    @field:NotBlank(message = "OTP is required")
+    val resetPasswordOtp: String,
 
     @field:NotBlank(message = "New password is required")
     @field:Pattern(

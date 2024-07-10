@@ -9,15 +9,9 @@ data class ResetPasswordOtp(
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     var id: UUID = UUID.randomUUID(),
 
-    @Column(name = "token", nullable = true)
-    var token: String? = null,
-
     @Column(name = "expires", nullable = true)
     var expires: Long? = null,
 
     @Column(name = "otp", nullable = true)
-    var otp: Int? = null,
-
-    @OneToOne(mappedBy = "resetPasswordOtp")
-    var user: User? = null
+    var otp: String? = null,
 )

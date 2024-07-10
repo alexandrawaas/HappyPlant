@@ -13,8 +13,5 @@ data class VerifyEmailOtp(
     var expires: Long? = null,
 
     @Column(name = "otp", nullable = true)
-    var otp: Int? = null,
-
-    @OneToOne(mappedBy = "verifyEmailOtp")
-    var user: User? = null
+    var otp: String? = null,
 )

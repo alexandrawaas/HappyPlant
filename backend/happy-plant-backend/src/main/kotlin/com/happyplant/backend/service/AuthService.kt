@@ -19,6 +19,7 @@ import com.happyplant.backend.model.User
 import com.happyplant.backend.model.VerifyEmailOtp
 import com.happyplant.backend.model.ResetPasswordOtp
 import java.time.LocalTime
+import kotlin.concurrent.thread
 
 @Service
 class AuthService(
@@ -37,7 +38,7 @@ class AuthService(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already exists")
         }
 
-        val verifyEmailCode = Random().nextInt(10000, 100000)
+        val verifyEmailCode = Random().nextInt(100000, 1000000).toString().padStart(6, '0')
         val verifyEmailOtp = VerifyEmailOtp (
             expires = System.currentTimeMillis() + 600000,
             otp = verifyEmailCode,
@@ -46,11 +47,11 @@ class AuthService(
             email = user.email.lowercase(),
             passwordHash = hashPassword(user.password),
             emailVerified = false,
+            verify_email_otp = verifyEmailOtp,
+            reset_password_otp = null,
             receivePushNotifications = true,
             pushNotificationToken = user.pushNotificationToken,
             pushNotificationsTime = LocalTime.of(10, 0), //TODO Standard
-            reset_password_otp_id = null,
-            verify_email_otp_id = verifyEmailOtp.id,
             plants = mutableListOf(),
             rooms = mutableListOf()
         )
@@ -63,21 +64,25 @@ class AuthService(
     }
 
     fun verifyEmail(request: VerifyEmailDto): UserDto {
-        val user = userRepository.findByMultiToken(request.verifyEmailToken)
-            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email verification token")
+        val user = userRepository.findByEmail(request.email.lowercase())
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email address")
 
-        if (user.multiExpires != null && user.multiExpires!! < System.currentTimeMillis()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Email verification token has expired")
+        val verifyEmailOtp = user.verifyEmailOtp
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No email verification code found")
+
+        if (verifyEmailOtp.expires!! < System.currentTimeMillis()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Email verification code has expired")
         }
 
-        if (user.multiOtp != request.verifyEmailCode) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password code")
+        Thread.sleep(1000)
+
+        if (verifyEmailOtp.otp != request.verifyEmailOtp) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email verification code")
         }
 
         user.emailVerified = true
-        user.multiToken = null
-        user.multiExpires = null
-        user.multiOtp = null
+        user.verifyEmailOtp = null
+        verifyEmailOtpRepository.delete(verifyEmailOtp)
         userRepository.save(user)
 
         return user.asDto()
@@ -113,11 +118,13 @@ class AuthService(
         val user = userRepository.findByEmail(request.email.lowercase())
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email does not exist")
 
-        val resetPasswordToken = UUID.randomUUID().toString()
-        user.multiToken = resetPasswordToken
-        user.multiExpires = System.currentTimeMillis() + 600000
-        val resetPasswordCode = Random().nextInt(10000, 100000)
-        user.multiOtp = resetPasswordCode
+        val resetPasswordCode = Random().nextInt(100000, 1000000).toString().padStart(6, '0')
+        val resetPasswordOtp = ResetPasswordOtp(
+            expires = System.currentTimeMillis() + 600000,
+            otp = resetPasswordCode
+        )
+
+        user.resetPasswordOtp = resetPasswordOtp
         userRepository.save(user)
 
         emailService.sendResetPasswordEmail(user, resetPasswordCode)
@@ -126,21 +133,25 @@ class AuthService(
     }
 
     fun updatePassword(request: UpdatePasswordDto) {
-        val user = userRepository.findByMultiToken(request.resetPasswordToken)
-            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password token")
+        val user = userRepository.findByEmail(request.email.lowercase())
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email address")
 
-        if (user.multiExpires!! < System.currentTimeMillis()) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset password token has expired")
+        val resetPasswordOtp = user.resetPasswordOtp
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No reset password code found")
+
+        if (resetPasswordOtp.expires!! < System.currentTimeMillis()) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset password code has expired")
         }
 
-        if (user.multiOtp != request.resetPasswordCode) {
+        Thread.sleep(1000)
+    
+        if (resetPasswordOtp.otp != request.resetPasswordOtp) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reset password code")
         }
 
         user.passwordHash = hashPassword(request.newPassword)
-        user.multiToken = null
-        user.multiExpires = null
-        user.multiOtp = null
+        user.resetPasswordOtp = null
+        resetPasswordOtpRepository.delete(resetPasswordOtp)
         userRepository.save(user)
     }
 

@@ -36,20 +36,20 @@ class AuthController(private val authService: AuthService) {
     }
 
     @PostMapping("/password/reset")
-    fun resetPassword(@RequestBody request: ResetPasswordDto): ResponseEntity<Map<String, String>> {
+    fun resetPassword(@Valid @RequestBody request: ResetPasswordDto): ResponseEntity<Map<String, String>> {
         val response = authService.resetPassword(request)
         return ResponseEntity.ok(response)
     }
 
     @PostMapping("/password/update")
-    fun updatePassword(@RequestBody request: UpdatePasswordDto): ResponseEntity<String> {
+    fun updatePassword(@Valid @RequestBody request: UpdatePasswordDto): ResponseEntity<String> {
         authService.updatePassword(request)
         return ResponseEntity.ok("Password updated successfully")
     }
 
     @GetMapping("/verify")
-    fun verifyEmail(@RequestParam("token") verifyEmailToken: String): ResponseEntity<UserDto> {
-        val response = authService.verifyEmail(verifyEmailToken)
+    fun verifyEmail(@Valid @RequestBody request: VerifyEmailDto): ResponseEntity<UserDto> {
+        val response = authService.verifyEmail(request)
         return ResponseEntity.ok(response)
     }
 }

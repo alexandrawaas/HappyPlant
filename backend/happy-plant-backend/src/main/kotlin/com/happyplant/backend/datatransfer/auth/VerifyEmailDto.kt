@@ -4,9 +4,9 @@ import jakarta.validation.constraints.*
 
 data class VerifyEmailDto(
     
-    @field:NotBlank(message = "Email verification token is required")
-    val verifyEmailToken: String,
+    @field:NotBlank(message = "Email address is required")
+    val email: String,
 
-    @field:NotBlank(message = "Email verification code is required")
-    val verifyEmailCode: Int,
+    @field:NotBlank(message = "OTP is required")
+    val verifyEmailOtp: String,
 )
