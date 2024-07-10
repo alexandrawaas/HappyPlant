@@ -41,8 +41,8 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
             }
 
             const response = await axios.post(`${API_URL}/auth/password/update`, {
-                resetPasswordToken: route.params.resetPasswordToken,
-                resetPasswordCode: resetPasswordCode,
+                email: route.params.email,
+                resetPasswordOtp: resetPasswordCode,
                 newPassword: newPassword
             });
             if (response.status === 200) {

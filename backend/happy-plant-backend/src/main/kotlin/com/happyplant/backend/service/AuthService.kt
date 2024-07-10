@@ -7,6 +7,8 @@ import java.util.*
 import java.security.MessageDigest
 import jakarta.servlet.http.HttpServletRequest
 import com.happyplant.backend.repository.UserRepository
+import com.happyplant.backend.repository.VerifyEmailOtpRepository
+import com.happyplant.backend.repository.ResetPasswordOtpRepository
 import com.happyplant.backend.utility.AuthTokenUtil
 import com.happyplant.backend.utility.AuthTokenBlacklist
 import com.happyplant.backend.datatransfer.auth.CredentialsDto
@@ -24,6 +26,8 @@ import kotlin.concurrent.thread
 @Service
 class AuthService(
     private val userRepository: UserRepository,
+    private val verifyEmailOtpRepository: VerifyEmailOtpRepository,
+    private val resetPasswordOtpRepository: ResetPasswordOtpRepository,
     private val emailService: EmailService,
     private val authTokenUtil: AuthTokenUtil
 ) {
@@ -40,15 +44,15 @@ class AuthService(
 
         val verifyEmailCode = Random().nextInt(100000, 1000000).toString().padStart(6, '0')
         val verifyEmailOtp = VerifyEmailOtp (
-            expires = System.currentTimeMillis() + 600000,
+            expires = System.currentTimeMillis() + 1800000,
             otp = verifyEmailCode,
         )
         val newUser = User (
             email = user.email.lowercase(),
             passwordHash = hashPassword(user.password),
             emailVerified = false,
-            verify_email_otp = verifyEmailOtp,
-            reset_password_otp = null,
+            verifyEmailOtp = verifyEmailOtp,
+            resetPasswordOtp = null,
             receivePushNotifications = true,
             pushNotificationToken = user.pushNotificationToken,
             pushNotificationsTime = LocalTime.of(10, 0), //TODO Standard
@@ -70,7 +74,8 @@ class AuthService(
         val verifyEmailOtp = user.verifyEmailOtp
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No email verification code found")
 
-        if (verifyEmailOtp.expires!! < System.currentTimeMillis()) {
+        val currentTime = System.currentTimeMillis()
+        if (verifyEmailOtp.expires!! < currentTime) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Email verification code has expired")
         }
 
@@ -114,7 +119,7 @@ class AuthService(
         }
     }
 
-    fun resetPassword(request: ResetPasswordDto): Map<String, String> {
+    fun resetPassword(request: ResetPasswordDto) {
         val user = userRepository.findByEmail(request.email.lowercase())
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email does not exist")
 
@@ -128,8 +133,6 @@ class AuthService(
         userRepository.save(user)
 
         emailService.sendResetPasswordEmail(user, resetPasswordCode)
-
-        return mapOf("resetPasswordToken" to resetPasswordToken)
     }
 
     fun updatePassword(request: UpdatePasswordDto) {
@@ -139,7 +142,8 @@ class AuthService(
         val resetPasswordOtp = user.resetPasswordOtp
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "No reset password code found")
 
-        if (resetPasswordOtp.expires!! < System.currentTimeMillis()) {
+        val currentTime = System.currentTimeMillis()
+        if (resetPasswordOtp.expires!! < currentTime) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Reset password code has expired")
         }
 

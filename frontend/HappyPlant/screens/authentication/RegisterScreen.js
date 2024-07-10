@@ -6,7 +6,7 @@ import LoginRegisterTemplate from './LoginRegisterTemplate';
 import LoginRegiserInputField from './LoginRegisterInputField';
 
 
-const RegisterScreen = ({ navigation }) => {
+const RegisterScreen = ({ navigation, route }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -40,6 +40,12 @@ const RegisterScreen = ({ navigation }) => {
         return unsubscribe;
     }, [navigation]);
 
+    useEffect(() => {
+        if (route.params && route.params.email) {
+            setEmail(route.params.email);
+        }
+    }, [route.params]);
+
     const handleRegister = useCallback(async () => {
         try {
             if (!isValidEmail) {
@@ -70,7 +76,7 @@ const RegisterScreen = ({ navigation }) => {
 
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
                 if (data) {
-                    navigation.replace('RegisterSuccess');
+                    navigation.navigate('RegisterSuccess', { email });
                 } else {
                     Alert.alert('Fehler', data.message || 'Registrierung fehlgeschlagen');
                 }

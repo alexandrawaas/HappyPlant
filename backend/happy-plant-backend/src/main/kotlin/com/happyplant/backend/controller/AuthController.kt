@@ -10,6 +10,7 @@ import com.happyplant.backend.service.AuthService
 import com.happyplant.backend.datatransfer.auth.CredentialsDto
 import com.happyplant.backend.datatransfer.auth.ResetPasswordDto
 import com.happyplant.backend.datatransfer.auth.UpdatePasswordDto
+import com.happyplant.backend.datatransfer.auth.VerifyEmailDto
 import com.happyplant.backend.datatransfer.user.UserDto
 
 @RestController
@@ -36,9 +37,9 @@ class AuthController(private val authService: AuthService) {
     }
 
     @PostMapping("/password/reset")
-    fun resetPassword(@Valid @RequestBody request: ResetPasswordDto): ResponseEntity<Map<String, String>> {
-        val response = authService.resetPassword(request)
-        return ResponseEntity.ok(response)
+    fun resetPassword(@Valid @RequestBody request: ResetPasswordDto): ResponseEntity<String> {
+        authService.resetPassword(request)
+        return ResponseEntity.ok("Reset password email sent successfully")
     }
 
     @PostMapping("/password/update")
@@ -47,7 +48,7 @@ class AuthController(private val authService: AuthService) {
         return ResponseEntity.ok("Password updated successfully")
     }
 
-    @GetMapping("/verify")
+    @PostMapping("/verify")
     fun verifyEmail(@Valid @RequestBody request: VerifyEmailDto): ResponseEntity<UserDto> {
         val response = authService.verifyEmail(request)
         return ResponseEntity.ok(response)

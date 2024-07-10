@@ -20,8 +20,7 @@ const ResetPasswordScreen = ({ navigation, route }) => {
                 email: email
             });
             if (response.status === 200) {
-                const resetPasswordToken = response.data.resetPasswordToken;
-                navigation.navigate('Passwort ändern', { resetPasswordToken });
+                navigation.navigate('Passwort ändern', { email });
                 //navigation.replace('ResetPasswordSuccess');
             } else {
                 Alert.alert('Fehler', response.status.toString() || 'Unbekannter Fehler');
