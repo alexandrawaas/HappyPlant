@@ -20,3 +20,4 @@
     - prefix messages with `feat:` (new feature), `refac:` (refactoring change), `fix:` (bug fix), `styles:` (cosmetic changes), `docs:` (documentation tasks)
     - example: "feat: implemented plant", "refac: optimized plant structure", "fix: correctly store new plant on user", ...
 - when task is finished, create merge request in GitLab Web Interface and select a reviewer
+    - if necessary rebase on main and force push the rebase results
