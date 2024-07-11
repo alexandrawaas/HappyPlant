@@ -1,23 +1,26 @@
 package com.happyplant.backend.utility
 
-import com.happyplant.backend.service.UserService
+import com.happyplant.backend.model.User
+import com.happyplant.backend.repository.UserRepository
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.stereotype.Component
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.time.LocalTime
 
 @Component
-class UserAutoDelete( private val userService: UserService) {
+class UserAutoDelete( private val userRepository: UserRepository) {
 
-    @Scheduled(cron = "0 0/15 * * * *")
-     fun autoDeleteUser() = runBlocking {
+    @Scheduled(cron = "0 0 0/1 * * *")
+    @Transactional
+    fun deleteUnverifiedUsers() {
+        val currentDateTime = System.currentTimeMillis()
 
+        val unverifiedUsers = userRepository.findAllUnverifiedUsersWithExpiredOtp(currentDateTime)
+
+        unverifiedUsers.forEach { user ->
+            userRepository.delete(user)
+            println("User ${user.email} deleted due to unverified email within expiration period.")
+        }
     }
 
 }

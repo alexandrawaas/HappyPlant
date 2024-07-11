@@ -44,7 +44,7 @@ class AuthService(
 
         val verifyEmailCode = Random().nextInt(100000, 1000000).toString().padStart(6, '0')
         val verifyEmailOtp = VerifyEmailOtp (
-            expires = System.currentTimeMillis() + 1800000,
+            expires = System.currentTimeMillis() + 120000,
             otp = verifyEmailCode,
         )
         val newUser = User (
