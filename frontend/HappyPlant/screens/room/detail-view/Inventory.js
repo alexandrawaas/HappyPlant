@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native";
 import { commonStyles } from "../../../utils/styles/CommonStyles";
 import Entypo from "react-native-vector-icons/Entypo";
 
-export default function Inventory({ measures, processDrop, plants, onAddPlantPress, onDrag }) {
+export default function Inventory({ measures, processDrop, plants, onAddPlantPress, onDrag, notifySnap }) {
     const [isCollapsed, setIsCollapsed] = useState(plants.length != 0)
 
     return (
@@ -22,7 +22,7 @@ export default function Inventory({ measures, processDrop, plants, onAddPlantPre
             {!isCollapsed && <View style={styles.detailContainer} >
                 <View style={styles.plantsContainer}>
                     {plants.map((item, i) =>
-                        <Draggable2 dropZoneMeasures={measures} color={item} key={i} onSuccesfulDrop={processDrop} onDrag={onDrag}>
+                        <Draggable2 dropZoneMeasures={measures} color={item} key={i} onSuccesfulDrop={processDrop} onDrag={onDrag} snapBack={notifySnap}>
                             <InventoryItem plant={item} />
                         </Draggable2>
                     )}

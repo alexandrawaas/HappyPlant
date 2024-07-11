@@ -42,6 +42,7 @@ export default function SingleRoomScreen({ navigation }) {
                 onInventoryAdd={handleAddPlantToInventoryPress} 
                 onDrag={setIsDragging}
                 navigation={navigation}
+                clickable={!isDragging}
             />
             <SingleRoomWarnings room={room} navigation={navigation}/>
             <DeleteRoom room={room} navigation={navigation}/>

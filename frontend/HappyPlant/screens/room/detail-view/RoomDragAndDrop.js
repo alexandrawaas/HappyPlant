@@ -7,12 +7,13 @@ import { findMeasureInArray, calculateCellSize } from "../../../utils/windowMeas
 import Inventory from "./Inventory";
 import { fetchURL } from "../../../utils/ApiService";
 
-export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInventoryAdd, onDrag }) {
+export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInventoryAdd, onDrag, clickable }) {
     const { width, height } = useWindowDimensions();
     const [data, setData] = useState([])
     const [dropZones, setDropZones] = useState([])
     const [measures, setMeasures] = useState([])
     const [inventory, setInventory] = useState([]);
+    const [notifySnap, setNotifySnap] = useState(false)
 
     useEffect(() => {
         if (room) {
@@ -34,9 +35,11 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
     }
 
     const processDrop = useCallback((receivedMeasures, item) => {
+        setNotifySnap(true)
         const pixelIndex = findMeasureInArray(measures, receivedMeasures)
         const coords = {x: data[pixelIndex].item.x, y: data[pixelIndex].item.y}
         fetchURL(`/rooms/${room.id}/plants/${item.id}`, 'PATCH', coords, navigation, onRoomUpdate)
+        setNotifySnap(false)
     }, [room, measures])
 
     const handlePlantDelete = useCallback((plant) => {
@@ -47,7 +50,12 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
     const renderItem = useCallback(({ item, index }) => {
         return (
             <DropZone2 ref={dropZones[index]} addMeasures={addMeasures} key={index} index={index}>
-                <RoomPixel item={item} cellSize={calculateCellSize(width, height, room)} navigation={navigation} onPlantDelete={handlePlantDelete} />
+                <RoomPixel 
+                    item={item}  navigation={navigation} 
+                    cellSize={calculateCellSize(width, height, room)}
+                    onPlantDelete={handlePlantDelete}
+                    clickable={clickable}
+                />
             </DropZone2>
         )
     }, [dropZones, addMeasures, navigation, width, height, room])
@@ -70,6 +78,7 @@ export default function RoomDragAndDrop({ navigation, room, onRoomUpdate, onInve
                 processDrop={processDrop} 
                 onAddPlantPress={onInventoryAdd} 
                 onDrag={onDrag} 
+                notifySnap={notifySnap}
             />
         </View>
     );

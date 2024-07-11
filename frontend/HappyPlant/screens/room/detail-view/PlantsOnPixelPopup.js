@@ -36,14 +36,6 @@ export default function PlantsOnPixelPopup({ roomId, pixel, visible, onClose, na
                                     onPress={() => handlePlantPress(plant.id)}
                                 >
                                     <Text style={styles.buttonText} numberOfLines={1}>{plant.name} ({plant.species.name}) </Text>
-                                    {/* <View style={styles.warningContainer}>
-                                        {!plant.hasOptimalLightingCondition
-                                            ? <WarnIcon/>
-                                            : null}
-                                        {plant.assignments.length !== 0
-                                            ? <AssignmentIcon/>
-                                            : null}
-                                    </View> */}
                                     <View style={styles.warningContainer}>
                                         <Feather name="trash-2" color="grey" size={14} onPress={() => onPlantDelete(plant)}/>
                                     </View>
