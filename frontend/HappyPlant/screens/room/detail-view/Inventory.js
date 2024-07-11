@@ -8,14 +8,14 @@ import { commonStyles } from "../../../utils/styles/CommonStyles";
 import Entypo from "react-native-vector-icons/Entypo";
 
 export default function Inventory({ measures, processDrop, plants, onAddPlantPress, onDrag }) {
-    const [isCollapsed, setIsCollapsed] = useState(true)
+    const [isCollapsed, setIsCollapsed] = useState(plants.length != 0)
 
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} >
                 <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.toggleContainer}>
                     <Text style={styles.containerTitle}>Inventar</Text>
-                    <Entypo name={true ? 'chevron-up' : 'chevron-down'} color={'#98948f'} size={20} />
+                    <Entypo name={!isCollapsed ? 'chevron-up' : 'chevron-down'} color={'#98948f'} size={20} />
                 </LinearGradient>
             </TouchableOpacity>
 
