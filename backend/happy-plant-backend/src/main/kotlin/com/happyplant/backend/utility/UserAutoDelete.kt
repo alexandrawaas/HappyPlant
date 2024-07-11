@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class UserAutoDelete( private val userRepository: UserRepository) {
 
-    @Scheduled(cron = "0 0 0/1 * * *")
+    @Scheduled(cron = "0 0/30 * * * *")
     @Transactional
     fun deleteUnverifiedUsers() {
         val currentDateTime = System.currentTimeMillis()

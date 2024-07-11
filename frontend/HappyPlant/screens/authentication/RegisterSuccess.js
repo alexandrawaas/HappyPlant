@@ -1,5 +1,5 @@
-import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState } from 'react';
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import axios from 'axios';
 import { API_URL } from '../../config';
@@ -8,8 +8,6 @@ const RegisterSuccess = ({ navigation, route }) => {
     const [verifyEmailCode, setVerifyEmailCode] = useState('');
 
     const handleEmailVerification = async () => {
-        console.log(route.params.email)
-        console.log(verifyEmailCode)
         try {
             const response = await axios.post(`${API_URL}/auth/verify`, {
                 email: route.params.email,
@@ -27,27 +25,32 @@ const RegisterSuccess = ({ navigation, route }) => {
         }
     }
 
-    return (
-        <View style={commonStyles.container}>
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    }
 
-            <View style={styles.background}>
-                <Text style={styles.text}>
-                    Bitte überprüfe Dein E-Mail-Postfach und gib den Code aus der Verifizierungs-E-Mail ein, um Deine E-Mail-Adresse zu verifizieren und die Registrierung abzuschließen.
-                </Text>
-                <TextInput
-                    placeholder="Code"
-                    value={verifyEmailCode}
-                    onChangeText={setVerifyEmailCode}
-                    style={styles.input}
-                />
+    return (
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={commonStyles.container}>
+                <View style={styles.background}>
+                    <Text style={styles.text}>
+                        Bitte überprüfe Dein E-Mail-Postfach und gib den Code aus der Verifizierungs-E-Mail ein, um Deine E-Mail-Adresse zu verifizieren und die Registrierung abzuschließen.
+                    </Text>
+                    <TextInput
+                        placeholder="Code"
+                        value={verifyEmailCode}
+                        onChangeText={setVerifyEmailCode}
+                        style={styles.input}
+                    />
+                </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleEmailVerification}
+                >
+                    <Text style={styles.buttonText}>Verifizieren</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={handleEmailVerification}
-            >
-                <Text style={styles.buttonText}>Verifizieren</Text>
-            </TouchableOpacity>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 

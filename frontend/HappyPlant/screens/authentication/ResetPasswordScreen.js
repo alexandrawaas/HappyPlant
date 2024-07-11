@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {View, TextInput, TouchableOpacity, Alert, Text, StyleSheet, Platform} from 'react-native';
+import {View, TextInput, TouchableOpacity, Alert, Text, StyleSheet, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { commonStyles } from '../../utils/styles/CommonStyles';
 import axios from 'axios';
 import { API_URL } from '../../config';
@@ -43,7 +43,12 @@ const ResetPasswordScreen = ({ navigation, route }) => {
         })
     });
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    }
+
     return (
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <View style={commonStyles.container}>
             <View style={styles.background}>
                 <Text style={styles.text}> Gib hier deine E-Mail Adresse ein, um dein Passwort zurückzusetzen. </Text>
@@ -63,6 +68,7 @@ const ResetPasswordScreen = ({ navigation, route }) => {
                 <Text style={styles.buttonText}>Passwort zurücksetzen</Text>
             </TouchableOpacity>
         </View>
+        </TouchableWithoutFeedback>
     );
 };
 

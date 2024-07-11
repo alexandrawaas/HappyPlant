@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Alert,
     Switch,
-    StyleSheet,
+    StyleSheet
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveAuthToken } from '../../utils/AuthTokenUtil';
