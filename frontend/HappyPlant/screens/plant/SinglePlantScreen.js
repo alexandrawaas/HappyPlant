@@ -115,7 +115,7 @@ export default function SinglePlantScreen({ navigation }) {
                     <Text style={styles.link} title={"AllRoomsButton"} onPress={() => { navigation.navigate('rooms', {screen: 'Räume'})}}>
                         zu allen Räumen →</Text>
                      </View>
-                <TouchableOpacity style={styles.boxContainer}  onPress={() => { navigation.navigate('rooms', {screen: 'Einzelner Raum', params: {id: plant.room.id}})}}>
+                <TouchableOpacity style={styles.boxContainer} onPress={plant.room?.name ? () => { navigation.navigate('rooms', {screen: 'Einzelner Raum', params: {id: plant.room.id}})} : () => {}}>
                     <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer} >
                         <View style={styles.roomContainer}>
                             { plant.room != null ? <View style={styles.roomIcon}>{RoomTypeIcons[plant.room.category]}</View>: null}
