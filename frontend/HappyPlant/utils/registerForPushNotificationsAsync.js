@@ -32,8 +32,6 @@ export const registerForPushNotificationsAsync = async() => {
         projectId: Constants.expoConfig?.extra?.eas?.projectId,
       });
 
-      //TODO remove log
-      console.log(token);
       return token;
 
     } else {
