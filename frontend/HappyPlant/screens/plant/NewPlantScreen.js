@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Pressable, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useEffect, useState } from "react";
 import { API_URL } from "../../config";
 import { useRoute } from "@react-navigation/native";
@@ -79,8 +79,12 @@ export default function NewPlantScreen({ navigation }) {
         }
     }, [species])
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    }
 
     return (
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <View style={styles.container}>
                 <Pressable onPress={showActionSheet}>
                     {imageData
@@ -125,6 +129,7 @@ export default function NewPlantScreen({ navigation }) {
                 </View>
                 <VerticalPlaceholder size={120} />
         </View>
+        </TouchableWithoutFeedback>
     );
 }
 
