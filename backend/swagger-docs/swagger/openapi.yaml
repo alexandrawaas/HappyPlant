@@ -23,6 +23,8 @@ tags:
     description: Endpoints for assignment
   - name: user
     description: Endpoint for user
+  - name: auth
+    description: Endpoints for authentication
 
 paths:
   /plants:
@@ -49,8 +51,6 @@ paths:
                   $ref: '#/components/schemas/PlantDtoResponse'
         '204':
           description: No content
-        '400':
-          description: Bad Request
         '401':
           description: Not authorized
     post:
@@ -76,8 +76,6 @@ paths:
           description: Bad Request
         '401':
           description: Not authorized
-        '422':
-          description: Validation exception
 
   /plants/{plantId}:
     get:
@@ -128,6 +126,12 @@ paths:
       responses:
         '200':
           description: plant successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlantDtoResponse'
+        '400':
+          description: Bad Request
         '401':
           description: Not authorized
         '404':
@@ -177,6 +181,12 @@ paths:
       responses:
         '200':
           description: plant assignment successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlantDtoResponse'
+        '400':
+          description: Bad Request
         '401':
           description: Not authorized
         '404':
@@ -228,8 +238,6 @@ paths:
                   $ref: '#/components/schemas/SpeciesDtoResponse'
         '204':
           description: No content
-        '404':
-          description: Not found
 
   /species/{speciesId}:
     get:
@@ -253,10 +261,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SpeciesDtoResponse'
-        '400':
-          description: Invalid ID supplied
-        '401':
-          description: Not authorized
         '404':
           description: Species not found
 
@@ -284,8 +288,8 @@ paths:
                   $ref: '#/components/schemas/RoomDtoResponse'
         '204':
           description: No content
-        '400':
-          description: Bad Request
+        '401':
+          description: Not authorized
     post:
       tags:
         - room
@@ -309,9 +313,6 @@ paths:
           description: Bad Request
         '401':
           description: Not authorized
-        '422':
-          description: Validation exception
-
 
   /rooms/{roomId}:
     get:
@@ -387,6 +388,10 @@ paths:
       responses:
         '200':
           description: windows successfully saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomDtoResponse'
         '400':
           description: Bad Request
         '401':
@@ -400,6 +405,15 @@ paths:
         - room
       summary: Get a list of all the plants in a room
       operationId: getPlantsInRoom
+      parameters:
+        - name: roomId
+          in: path
+          description: ID of room to look in
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "e386941f-d52a-46d3-b23a-9ccab3158220"
       responses:
         '200':
           description: Successful operation
@@ -446,6 +460,12 @@ paths:
       responses:
         '200':
           description: plant placement successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomDtoResponse'
+        '400':
+          description: Bad Request
         '401':
           description: Not authorized
         '404':
@@ -472,8 +492,12 @@ paths:
             type: string
             format: uuid
       responses:
-        '204':
+        '200':
           description: Plant successfully deleted from the room
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomDtoResponse'
         '401':
           description: Not authorized
         '404':
@@ -513,7 +537,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDto'
+                $ref: '#/components/schemas/UserWithNSDto'
         '401':
           description: Not authorized
         '404':
@@ -553,7 +577,7 @@ paths:
   /register:
     post:
       tags:
-        - user
+        - auth
       summary: Register a new user
       description: Creates a new user account
       operationId: registerUser
@@ -566,6 +590,10 @@ paths:
       responses:
         '201':
           description: Account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
         '400':
           description: Invalid input
         '422':
@@ -574,7 +602,7 @@ paths:
   /login:
     post:
       tags:
-        - user
+        - auth
       summary: Log in a user
       description: Creates a new session token to log in a user
       operationId: loginUser
@@ -595,13 +623,13 @@ paths:
   /logout:
     post:
       tags:
-        - user
+        - auth
       summary: Log out a user
       description: Deletes an existing session token to log out a user
       operationId: logoutUser
       responses:
         '200':
-          description: Logged out successfully
+          description: Logout successful
         '401':
           description: Not authorized
         '404':
@@ -610,7 +638,7 @@ paths:
   /password/reset:
     post:
       tags:
-        - user
+        - auth
       summary: Request a password reset
       description: Sends an email with a reset code to the user
       operationId: resetPassword
@@ -624,14 +652,14 @@ paths:
         '200':
           description: Reset code sent successfully
         '400':
-          description: Invalid input
+          description: Bad Request
         '404':
           description: User not found
 
   /password/update:
     post:
       tags:
-        - user
+        - auth
       summary: Update a user's password
       description: Updates the user's password
       operationId: updatePassword
@@ -645,38 +673,33 @@ paths:
         '200':
           description: Password updated successfully
         '400':
-          description: Invalid input
+          description: Bad Request
         '404':
           description: User not found
 
   /verify:
     post:
       tags:
-        - user
+        - auth
       summary: Verify a user's email
       description: Verifies the user's email
       operationId: verifyEmail
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                token:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-        required: true
+      parameters:
+        - name: token
+          in: query
+          description: verify email token
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Email verified successfully
-        '400':
-          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
         '404':
           description: User not found
-
-
-
-
 
 
 
@@ -696,9 +719,10 @@ components:
         latinName:
           type: string
           example: phalaenopsis
-        picturePath:
+        imageId:
           type: string
-          example: /assets/pictures/abcdefg.jpg
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         family:
           type: string
           example: orchids
@@ -724,23 +748,23 @@ components:
             key:
               $ref: '#/components/schemas/AssignmentType'
             value:
-              type: string
+              type: integer
               example: 7
 
     NeedsDtoRequest:
-        type: object
-        properties:
-          intervals:
-            type: object
-            description: Intervals in days for repeating assignments
-            properties:
-              key:
-                $ref: '#/components/schemas/AssignmentType'
-              value:
-                type: string
-                example: 7
-          lightingType:
-            $ref: '#/components/schemas/LightingType'
+      type: object
+      properties:
+        intervals:
+          type: object
+          description: Intervals in days for repeating assignments
+          properties:
+            key:
+              $ref: '#/components/schemas/AssignmentType'
+            value:
+              type: integer
+              example: 7
+        lightingType:
+          $ref: '#/components/schemas/LightingType'
 
     AssignmentType:
       type: string
@@ -749,7 +773,6 @@ components:
         - cutting
         - fertilizing
         - repotting
-        - repositioning
 
     LightingType:
       type: string
@@ -775,45 +798,37 @@ components:
 
     AssignmentDtoRequest:
       type: object
-      description: a hash map with assignment types as keys and last done dates as values
       properties:
-        key:
+        assignmentType:
           $ref: '#/components/schemas/AssignmentType'
-        value:
-          type: object
-          properties:
-            lastDone:
-              type: string
-              format: date-time
-              example: 2024-03-20T09:12:28Z
+        lastDone:
+          type: string
+          format: date-time
+          example: 2024-03-20T09:12:28Z
 
     AssignmentDtoResponse:
-        type: object
-        properties:
-            id:
-              type: string
-              format: uuid
-              example: "e386941f-d52a-46d3-b23a-9ccab3158220"
-            assignmentType:
-                $ref: '#/components/schemas/AssignmentType'
-            lastDone:
-              type: string
-              format: date-time
-              example: 2024-03-20T09:12:28Z
-            plantId:
-              type: string
-              format: uuid
-              example: "e386941f-d52a-46d3-b23a-9ccab3158220"
-            plantName:
-              type: string
-              example: Bob
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
+        assignmentType:
+          $ref: '#/components/schemas/AssignmentType'
+        lastDone:
+          type: string
+          format: date-time
+          example: 2024-03-20T09:12:28Z
+        plantId:
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
+        plantName:
+          type: string
+          example: Bob
 
     RoomDtoResponse:
       type: object
-      required:
-        - id
-        - name
-        - grid
       properties:
         id:
           type: string
@@ -824,37 +839,45 @@ components:
           example: living room
         category:
           $ref: '#/components/schemas/RoomCategory'
+        x:
+          type: integer
+          example: 5
+        y:
+          type: integer
+          example: 4
         grid:
           type: array
           items:
             type: array
             items:
               $ref: '#/components/schemas/PixelDtoResponse'
+        numberOfPlants:
+          type: integer
+          example: 3
+        numberOfWarnings:
+          type: integer
+          example: 2
+        numberOfAssignments:
+          type: integer
+          example: 5
 
     RoomDtoRequest:
       type: object
-      required:
-        - name
-        - ratioValueX
-        - ratioValueY
       properties:
         name:
           type: string
-          example: living room
+          example: anna's office
         category:
           $ref: '#/components/schemas/RoomCategory'
         ratioValueX:
-          type: string
+          type: integer
           example: 5
         ratioValueY:
-          type: string
+          type: integer
           example: 4
 
     RoomDtoResponseShort:
       type: object
-      required:
-        - id
-        - name
       properties:
         id:
           type: string
@@ -866,12 +889,7 @@ components:
         category:
           $ref: '#/components/schemas/RoomCategory'
 
-
     PlantDtoResponse:
-      required:
-        - id
-        - name
-        - species
       type: object
       properties:
         id:
@@ -891,16 +909,18 @@ components:
         assignments:
           type: array
           items:
-              $ref: '#/components/schemas/AssignmentDtoResponse'
+            $ref: '#/components/schemas/AssignmentDtoResponse'
         room:
           $ref: '#/components/schemas/RoomDtoResponseShort'
-        picturePath:
+        hasOptimalLightingCondition:
+          type: boolean
+          example: true
+        imageId:
           type: string
-          example: /assets/pictures/abcdefg.jpg
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
 
     PlantDtoRequest:
-      required:
-        - name
       type: object
       properties:
         name:
@@ -915,13 +935,6 @@ components:
           example: Present from my grandma, lost many leaves due to cold
         needs:
           $ref: '#/components/schemas/NeedsDtoRequest'
-        assignments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssignmentDtoRequest'
-        picturePath:
-          type: string
-          example: /assets/pictures/abcdefg.jpg
 
     PixelDtoResponse:
       type: object
@@ -931,9 +944,11 @@ components:
           format: uuid
           example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         x:
-          type: string
+          type: integer
+          example: 5
         y:
-          type: string
+          type: integer
+          example: 4
         isWindow:
           type: boolean
           example: false
@@ -956,9 +971,11 @@ components:
           format: uuid
           example: "e386941f-d52a-46d3-b23a-9ccab3158220"
         x:
-          type: string
+          type: integer
+          example: 5
         y:
-          type: string
+          type: integer
+          example: 4
         isWindow:
           type: boolean
           example: false
@@ -975,27 +992,22 @@ components:
 
     CoordinatesDtoRequest:
       type: object
-      required:
-        - x
-        - y
       properties:
         x:
-          type: string
+          type: integer
+          example: 5
         y:
-          type: string
+          type: integer
+          example: 4
 
     UpdatePasswordDto:
       type: object
-      required:
-        - resetPasswordToken
-        - resetPasswordCode
-        - newPassword
       properties:
         resetPasswordToken:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
         resetPasswordCode:
-          type: string
+          type: integer
           example: 123456
         newPassword:
           type: string
@@ -1003,8 +1015,6 @@ components:
 
     ResetPasswordDto:
       type: object
-      required:
-        - email
       properties:
         email:
           type: string
@@ -1012,9 +1022,6 @@ components:
 
     CredentialsDto:
       type: object
-      required:
-        - email
-        - password
       properties:
         email:
           type: string
@@ -1022,6 +1029,9 @@ components:
         password:
           type: string
           example: Password123!
+        pushNotificationToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
 
     UserDto:
       type: object
@@ -1036,8 +1046,6 @@ components:
 
     NotificationSettingsDtoRequest:
       type: object
-      required:
-        - receivePushNotifications
       properties:
         receivePushNotifications:
           type: boolean
@@ -1046,3 +1054,27 @@ components:
           type: string
           format: time
           example: 09:00:00
+        pushNotificationToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+    UserWithNSDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "e386941f-d52a-46d3-b23a-9ccab3158220"
+        email:
+          type: string
+          example: m.mustermann@test.com
+        receivePushNotifications:
+          type: boolean
+          example: true
+        pushNotificationsTime:
+          type: string
+          format: time
+          example: 09:00:00
+        pushNotificationToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
