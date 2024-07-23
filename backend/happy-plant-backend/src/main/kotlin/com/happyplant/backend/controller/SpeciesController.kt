@@ -31,7 +31,7 @@ class SpeciesController (private val service: SpeciesService){
 
     @GetMapping("/{speciesId}")
     @ResponseBody
-    fun getPlant(@PathVariable speciesId: UUID): EntityModel<SpeciesDtoResponse> {
+    fun getSingleSpecies(@PathVariable speciesId: UUID): EntityModel<SpeciesDtoResponse> {
         val speciesDtoResponse: SpeciesDtoResponse = service.getSpecies(speciesId).asDtoResponse()
         return EntityModel.of(
             speciesDtoResponse,
