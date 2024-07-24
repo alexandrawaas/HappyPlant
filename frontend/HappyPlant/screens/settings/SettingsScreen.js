@@ -19,12 +19,12 @@ export default function SettingsScreen({ navigation }) {
         fetchUserData();
     }, []);
 
+
     useEffect(() => {
         if (!isInitialLoading) {
             updateNotificationSettings();
         }
     }, [remindersEnabled, notificationTime]);
-
 
     const fetchUserData = async () => {
         fetchURL('/user', 'GET', null, navigation, (data) => {
@@ -44,21 +44,25 @@ export default function SettingsScreen({ navigation }) {
 
     const updateNotificationSettings = async () => {
         try {
-            await registerForPushNotificationsAsync()
-            .then(
-                (token) => { setExpoPushToken(token); }
-            );
-
             const hours = notificationTime.getHours().toString().padStart(2, '0');
             const minutes = notificationTime.getMinutes().toString().padStart(2, '0');
             const seconds = notificationTime.getSeconds().toString().padStart(2, '0');
 
+            var token = null;
+            if(!expoPushToken){
+                token = await registerForPushNotificationsAsync();
+                setExpoPushToken(token);
+            }
+
+            console.log(expoPushToken?.data)
+            console.log(token?.data)
+
             const payload = {
                 receivePushNotifications: remindersEnabled,
-                pushNotificationToken: expoPushToken,
+                pushNotificationToken: expoPushToken?expoPushToken.data:token?.data,
                 pushNotificationsTime: `${hours}:${minutes}:${seconds}`
             };
-
+            
             fetchURL('/user', 'PATCH', payload, navigation, () => {});
         } catch (error) {
             console.error('Fehler beim Registrieren der Push-Benachrichtigungen:', error);

@@ -10,7 +10,6 @@ const RegisterScreen = ({ navigation, route }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [expoPushToken, setExpoPushToken] = useState();
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [isValidPassword, setIsValidPassword] = useState(false);
 
@@ -62,14 +61,17 @@ const RegisterScreen = ({ navigation, route }) => {
                 Alert.alert('Fehler', 'Passwort und Bestätigungspasswort stimmen nicht überein.');
                 return;
             }
-                
+
+            var token = null;
+            token = await registerForPushNotificationsAsync();
+
+            console.log(token?.data)
+               
             const payload = {
                 email: email,
                 password: password,
-                pushNotificationToken: expoPushToken?.data
+                pushNotificationToken: token?.data
             }
-
-            //console.log(payload)
             
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
                 if (data) {

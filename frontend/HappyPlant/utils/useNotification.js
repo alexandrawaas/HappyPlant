@@ -20,7 +20,6 @@ export const useNotification = () => {
         () => {
             responseListener.current =
             Notifications.addNotificationResponseReceivedListener((response) => {
-              //TODO navigate to activeAssignments page -> fires when user taps on notification
               console.log(response);
             });
 
