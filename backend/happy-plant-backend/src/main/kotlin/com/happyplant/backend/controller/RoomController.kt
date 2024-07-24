@@ -50,7 +50,7 @@ class RoomController (
         return room.asDtoResponse()
     }
 
-    @PutMapping("/{roomId}/windows")
+    @PatchMapping("/{roomId}/windows")
     @ResponseStatus(HttpStatus.OK)
     fun storeWindowsInRoom(
         @RequestHeader("Authorization") authHeader: String, 

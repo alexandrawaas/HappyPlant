@@ -14,7 +14,7 @@ export default function PlaceWindow({ navigation }) {
     useEffect(() => {
         const handleDone = () => {
             const pixelValues = pixels?.map(p => p.item) ?? [];
-            fetchURL(`/rooms/${room?.id}/windows`, 'PUT', pixelValues, navigation, () => {
+            fetchURL(`/rooms/${room?.id}/windows`, 'PATCH', pixelValues, navigation, () => {
                 navigation.navigate('Räume');
             });
         };
