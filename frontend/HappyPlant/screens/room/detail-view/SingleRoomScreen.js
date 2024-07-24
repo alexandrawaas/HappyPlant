@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import VerticalPlaceholder from "../../../utils/styles/VerticalPlaceholder";
 import { fetchURL } from '../../../utils/ApiService'
 import RoomDragAndDrop from "./RoomDragAndDrop";
+import DeleteRoom from "./DeleteRoom";
 
 export default function SingleRoomScreen({ navigation }) {
     const route = useRoute();
@@ -31,6 +32,8 @@ export default function SingleRoomScreen({ navigation }) {
         setRoom(item)
     }, [setRoom])
 
+
+
     return (
         <ScrollView style={styles.container} scrollEnabled={!isDragging}>
             <RoomDragAndDrop 
@@ -39,8 +42,10 @@ export default function SingleRoomScreen({ navigation }) {
                 onInventoryAdd={handleAddPlantToInventoryPress} 
                 onDrag={setIsDragging}
                 navigation={navigation}
+                clickable={!isDragging}
             />
             <SingleRoomWarnings room={room} navigation={navigation}/>
+            <DeleteRoom room={room} navigation={navigation}/>
             <VerticalPlaceholder size={120}/>
         </ScrollView>
     );

@@ -1,10 +1,10 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RoomsScreen from '../../room/RoomsScreen';
 import SingleRoomScreen from '../../room/detail-view/SingleRoomScreen';
-import PlaceWindow from '../../room/PlaceWindow';
+import PlaceWindow from '../../room/creation/PlaceWindow';
 import GlobalLayout from '../GlobalLayout';
 import headerStyleOptions from '../HeaderStyle';
-import RoomCreationScreen from '../../room/RoomCreationScreen';
+import RoomCreationScreen from '../../room/creation/RoomCreationScreen';
 
 const RoomStack = createNativeStackNavigator();
 

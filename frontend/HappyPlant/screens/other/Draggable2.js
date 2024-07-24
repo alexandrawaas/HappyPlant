@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, PanResponder } from 'react-native';
 import { getOverlapValue } from '../../utils/windowMeasureUtils';
 
-export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop, children, onDrag }) {
+export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop, children, onDrag, snapBack }) {
     const pan = useRef(new Animated.ValueXY()).current;
     const draggable = useRef(null)
 
@@ -45,6 +45,12 @@ export default function Draggable2({ dropZoneMeasures, color, onSuccesfulDrop, c
             })
         }
     })
+
+    useEffect(() => {
+        if(snapBack) {
+            pan.setValue({ x: 0, y: 0 })
+        }
+    }, [snapBack])
 
     return (
         <Animated.View

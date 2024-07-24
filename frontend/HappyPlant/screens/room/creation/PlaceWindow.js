@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, BackHandler, TouchableOpacity } from "react-native";
 import WindowSelectionGrid from "./WindowSelectionGrid";
 import { useEffect, useState } from "react";
-import { fetchURL } from "../../utils/ApiService";
+import { fetchURL } from "../../../utils/ApiService";
 import { useRoute } from "@react-navigation/native";
 import { HeaderBackButton } from '@react-navigation/elements';
 import Feather from "react-native-vector-icons/Feather";

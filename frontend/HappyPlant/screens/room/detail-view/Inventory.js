@@ -1,26 +1,28 @@
-import React, { useState } from "react";
+import {useState} from 'react';
 import { StyleSheet, View, Text } from "react-native";
 import Draggable2 from "../../other/Draggable2";
-import { useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { fetchURL } from "../../../utils/ApiService";
 import InventoryItem from "./InventoryItem";
 import { TouchableOpacity } from "react-native";
 import { commonStyles } from "../../../utils/styles/CommonStyles";
+import Entypo from "react-native-vector-icons/Entypo";
 
-export default function Inventory({ measures, processDrop, plants, onAddPlantPress, onDrag }) {
+export default function Inventory({ measures, processDrop, plants, onAddPlantPress, onDrag, notifySnap }) {
+    const [isCollapsed, setIsCollapsed] = useState(plants.length != 0)
+
     return (
         <View style={styles.container}>
-            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.toggleContainer}>
-                <Text style={styles.containerTitle}>Inventar</Text>
-                {/* <Entypo name={true ? 'chevron-up' : 'chevron-down'} color={'#98948f'} size={20} /> */}
-            </LinearGradient>
+            <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} >
+                <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.toggleContainer}>
+                    <Text style={styles.containerTitle}>Inventar</Text>
+                    <Entypo name={!isCollapsed ? 'chevron-up' : 'chevron-down'} color={'#98948f'} size={20} />
+                </LinearGradient>
+            </TouchableOpacity>
 
-            <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+            {!isCollapsed && <View style={styles.detailContainer} >
                 <View style={styles.plantsContainer}>
-
                     {plants.map((item, i) =>
-                        <Draggable2 dropZoneMeasures={measures} color={item} key={i} onSuccesfulDrop={processDrop} onDrag={onDrag}>
+                        <Draggable2 dropZoneMeasures={measures} color={item} key={i} onSuccesfulDrop={processDrop} onDrag={onDrag} snapBack={notifySnap}>
                             <InventoryItem plant={item} />
                         </Draggable2>
                     )}
@@ -32,7 +34,7 @@ export default function Inventory({ measures, processDrop, plants, onAddPlantPre
                         </LinearGradient>
                     </TouchableOpacity>
                 </View>
-            </LinearGradient>
+            </View>}
         </View>
     )
 }
@@ -47,7 +49,6 @@ const styles = StyleSheet.create({
     detailContainer: {
         borderRadius: 15,
         padding: 15,
-        zIndex: -1,
     },
     toggleContainer: {
         borderRadius: 15,
@@ -56,7 +57,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        zIndex: -2,
     },
     containerTitle: {
         fontSize: 16,

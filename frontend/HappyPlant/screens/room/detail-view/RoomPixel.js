@@ -4,7 +4,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import PlantsOnPixelPopup from "./PlantsOnPixelPopup";
 import AssignmentIcon from "../../other/AssignmentIcon";
 
-export default function RoomPixel({navigation, item, cellSize, onPlantDelete}) {
+export default function RoomPixel({navigation, item, cellSize, onPlantDelete, clickable}) {
     const [selectedPixel, setSelectedPixel] = useState(null);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
@@ -33,7 +33,7 @@ export default function RoomPixel({navigation, item, cellSize, onPlantDelete}) {
     }
 
     return (<>
-        {item.item.plants.length !== 0
+        {item.item.plants.length && clickable !== 0
             ? <>
                 <TouchableOpacity
                     style={pixelStyle(item.item)}

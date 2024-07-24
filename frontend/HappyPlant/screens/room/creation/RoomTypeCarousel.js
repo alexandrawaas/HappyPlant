@@ -2,7 +2,7 @@ import {View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import {  useState } from "react";
 import { FontAwesome5, Ionicons, MaterialIcons, MaterialCommunityIcons } from 'react-native-vector-icons';
 import Carousel from "react-native-reanimated-carousel";
-import { RoomTypeIcons, RoomTypeNames } from "../../utils/EnumIcons";
+import { RoomTypeIcons, RoomTypeNames } from "../../../utils/EnumIcons";
 import {LinearGradient} from "expo-linear-gradient";
 
 const roomTypes = Object.keys(RoomTypeIcons);

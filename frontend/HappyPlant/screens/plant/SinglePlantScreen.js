@@ -112,21 +112,17 @@ export default function SinglePlantScreen({ navigation }) {
                 <RoundPictureNameComponent header={plant?.name} imageId={plant?.imageId} subHeader={plant?.species?.name}></RoundPictureNameComponent>
                 <View style={styles.containerHorizontal}>
                     <Text style={styles.sectionTitle}>Raum</Text>
-                    <Text style={styles.link} title={"AllRoomsButton"} onPress={() => {
-                             try {navigation.navigate("rooms")}
-                             catch (e) {
-                             }
-                         }
-                         }>zu allen Räumen →</Text>
+                    <Text style={styles.link} title={"AllRoomsButton"} onPress={() => { navigation.navigate('rooms', {screen: 'Räume'})}}>
+                        zu allen Räumen →</Text>
                      </View>
-                <View style={styles.boxContainer}>
-                    <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>
+                <TouchableOpacity style={styles.boxContainer} onPress={plant.room?.name ? () => { navigation.navigate('rooms', {screen: 'Einzelner Raum', params: {id: plant.room.id}})} : () => {}}>
+                    <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer} >
                         <View style={styles.roomContainer}>
                             { plant.room != null ? <View style={styles.roomIcon}>{RoomTypeIcons[plant.room.category]}</View>: null}
                             <Text style={styles.text}>{plant.room?.name ?? "Noch nicht platziert"}</Text>
                         </View>
                     </LinearGradient>
-                </View>
+                </TouchableOpacity>
                 <Text style={styles.sectionTitle}>Bevorzugte Lichtverhältnisse</Text>
                 <View style={styles.boxContainer}>
                          <LinearGradient colors={['#fdfbef', '#fef1ed']} style={styles.detailContainer}>

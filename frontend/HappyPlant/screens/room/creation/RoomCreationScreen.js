@@ -1,11 +1,9 @@
-import {View, Text, TextInput, StyleSheet, ScrollView, Pressable, Platform, TouchableOpacity} from "react-native";
+import {View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import { useEffect, useState } from "react";
 import RoomTypeCarousel from "./RoomTypeCarousel";
-import { API_URL } from '../../config';
-import { fetchURL } from "../../utils/ApiService";
-import {AssignmentTypeTranslations} from "../../utils/EnumTranslations";
+import { fetchURL } from "../../../utils/ApiService";
 import {LinearGradient} from "expo-linear-gradient";
-import VerticalPlaceholder from "../../utils/styles/VerticalPlaceholder";
+import VerticalPlaceholder from "../../../utils/styles/VerticalPlaceholder";
 import Feather from "react-native-vector-icons/Feather";
 
 export default function RoomCreationScreen({ navigation }) {
