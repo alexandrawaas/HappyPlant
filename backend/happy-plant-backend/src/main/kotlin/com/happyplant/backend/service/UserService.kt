@@ -44,9 +44,6 @@ class UserService (
             }
             db.save(user)
         }
-        else{
-            TODO("Set Error returncode")
-        }
     }
 
 

@@ -49,7 +49,7 @@ data class Pixel(
         }
 
         fun placePlant(plant: Plant) : Boolean {
-                if(!plants.any { it.id == plant.id }) { // TODO: speed up performance by using a set
+                if(!plants.any { it.id == plant.id }) {
                         plants.add(plant)
                         plant.pixel = this
                 }
