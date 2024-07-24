@@ -53,35 +53,4 @@ data class User(
                 }
                 return activeAssignments
         }
-
-        fun getAllAssignments(): List<Assignment>
-        {
-                val allAssignments = ArrayList<Assignment>()
-                //TODO: Implement
-                return allAssignments
-        }
-
-        fun getAllPlants(): List<Plant>
-        {
-                //TODO: Implement
-                return plants
-        }
-
-        fun getAllRooms(): List<Room>
-        {
-                //TODO: Implement
-                return rooms
-        }
-
-        fun addPlant(plant: Plant)
-        {
-                //TODO: Implement
-                plants.add(plant)
-        }
-
-        fun addRoom(room: Room)
-        {
-                //TODO: Implement
-                rooms.add(room)
-        }
 }
