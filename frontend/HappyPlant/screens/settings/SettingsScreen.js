@@ -54,9 +54,6 @@ export default function SettingsScreen({ navigation }) {
                 setExpoPushToken(token);
             }
 
-            console.log(expoPushToken?.data)
-            console.log(token?.data)
-
             const payload = {
                 receivePushNotifications: remindersEnabled,
                 pushNotificationToken: expoPushToken?expoPushToken.data:token?.data,
