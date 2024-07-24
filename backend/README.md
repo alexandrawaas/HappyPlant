@@ -15,6 +15,7 @@
 
 ### Häufige Fehler
 - bei gradle build error nach erstem import in intellij runtime target vm auf java 17 setzen
+- bei h2 Driver Fehler in `build.gradle.kts` in `runtimeOnly` die aktuelle Version dazu angeben
 - tritt ein BeanCreation-Fehler im Db-Initializer auf, gibt es iwelche null-pointer-zugriffe o.ä. - Es liegt kein Konfigurations-Problem vor
 - tritt ein BeanCreation-Fehler in Services/Repositories auf, sind vermutlich Annotationen fehlerhaft
 
