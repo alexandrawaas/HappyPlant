@@ -1,21 +1,21 @@
 package com.happyplant.backend.service
 
-import org.springframework.http.HttpStatus
-import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
-import java.util.*
-import java.security.MessageDigest
-import jakarta.servlet.http.HttpServletRequest
-import com.happyplant.backend.repository.UserRepository
-import com.happyplant.backend.utility.AuthTokenUtil
-import com.happyplant.backend.utility.AuthTokenBlacklist
 import com.happyplant.backend.datatransfer.auth.CredentialsDto
 import com.happyplant.backend.datatransfer.auth.ResetPasswordDto
 import com.happyplant.backend.datatransfer.auth.UpdatePasswordDto
 import com.happyplant.backend.datatransfer.user.UserDto
 import com.happyplant.backend.datatransfer.user.asDto
 import com.happyplant.backend.model.User
+import com.happyplant.backend.repository.UserRepository
+import com.happyplant.backend.utility.AuthTokenBlacklist
+import com.happyplant.backend.utility.AuthTokenUtil
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
+import java.security.MessageDigest
 import java.time.LocalTime
+import java.util.*
 
 @Service
 class AuthService(
@@ -40,9 +40,9 @@ class AuthService(
             emailVerified = false,
             emailVerificationToken = UUID.randomUUID().toString(),
             emailVerificationExpires = System.currentTimeMillis() + 600000,
-            receivePushNotifications = true,
+            receivePushNotifications = user.pushNotificationToken != null,
             pushNotificationToken = user.pushNotificationToken,
-            pushNotificationsTime = LocalTime.of(10, 0), //TODO Standard
+            pushNotificationsTime = LocalTime.of(10, 0),
             plants = mutableListOf(),
             rooms = mutableListOf()
         )
