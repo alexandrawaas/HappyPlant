@@ -34,6 +34,6 @@ export const registerForPushNotificationsAsync = async() => {
       return token;
 
     } else {
-        console.log("ERROR: No physical device used")
+        console.error("ERROR: No physical device used")
     }
   }

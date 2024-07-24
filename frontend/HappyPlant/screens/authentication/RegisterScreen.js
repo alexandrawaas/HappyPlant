@@ -60,8 +60,6 @@ const RegisterScreen = ({ navigation }) => {
 
             var token = null;
             token = await registerForPushNotificationsAsync();
-
-            console.log(token?.data)
                
             const payload = {
                 email: email,
