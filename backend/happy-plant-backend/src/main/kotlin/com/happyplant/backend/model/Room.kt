@@ -48,7 +48,7 @@ data class Room(
         ) : this(UUID.randomUUID(), name, category, mutableListOf(), sizeX=ratioValueX, sizeY=ratioValueY, user) {
                 for (x in 0 until ratioValueX) {
                         for (y in 0 until ratioValueY) {
-                                grid.add(Pixel(this, x, y)) // TODO: change to actual logic
+                                grid.add(Pixel(this, x, y))
                         }
                 }
         }
