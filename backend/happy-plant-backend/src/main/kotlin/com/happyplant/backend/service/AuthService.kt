@@ -53,9 +53,9 @@ class AuthService(
             emailVerified = false,
             verifyEmailOtp = verifyEmailOtp,
             resetPasswordOtp = null,
-            receivePushNotifications = true,
+            receivePushNotifications = user.pushNotificationToken != null,
             pushNotificationToken = user.pushNotificationToken,
-            pushNotificationsTime = LocalTime.of(10, 0), //TODO Standard
+            pushNotificationsTime = LocalTime.of(10, 0),
             plants = mutableListOf(),
             rooms = mutableListOf()
         )
