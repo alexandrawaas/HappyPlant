@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, TouchableOpacity, Alert, Text, StyleSheet, Image } from 'react-native';
+import { View, TextInput, TouchableOpacity, Alert, Text, StyleSheet, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import axios from 'axios';
 import { API_URL } from '../../config';
 import * as PropTypes from "prop-types";
@@ -41,8 +41,8 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
             }
 
             const response = await axios.post(`${API_URL}/auth/password/update`, {
-                resetPasswordToken: route.params.resetPasswordToken,
-                resetPasswordCode: resetPasswordCode,
+                email: route.params.email,
+                resetPasswordOtp: resetPasswordCode,
                 newPassword: newPassword
             });
             if (response.status === 200) {
@@ -57,7 +57,12 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
         }
     };
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    }
+
     return (
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <View style={styles.container}>
             <View style={styles.background}>
                 <Image source={require('../../assets/Reset password-bro.png')} style={styles.image} resizeMode="contain" />
@@ -86,6 +91,7 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
             </View>
         </View>
+        </TouchableWithoutFeedback>
     );
 };
 

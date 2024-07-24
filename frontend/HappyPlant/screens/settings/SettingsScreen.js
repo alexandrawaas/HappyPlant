@@ -111,16 +111,25 @@ export default function SettingsScreen({ navigation }) {
     };
 
     const onTimeChange = (event, selectedTime) => {
-        if (event.type === 'dismissed') {
-            setShowTimePicker(false);
-            return;
-        }
         const currentTime = selectedTime || notificationTime;
-        if (!isNaN(currentTime.getTime())) {
+        if (Platform.OS === 'android') {
+            if (event.type === 'dismissed') {
+                setShowTimePicker(false);
+                return;
+            }
+            if (event.type === 'set' && !isNaN(currentTime.getTime())) {
+                setShowTimePicker(false);
+                setNotificationTime(currentTime);
+            }
+        }
+
+        if (Platform.OS === 'ios') {
+            if (!isNaN(currentTime.getTime())) {
+                setNotificationTime(currentTime);
+            }
+            setShowTimePicker(true);
             setNotificationTime(currentTime);
         }
-        setShowTimePicker(Platform.OS === 'ios');
-        setNotificationTime(currentTime);
     };
 
     const showPicker = () => {
@@ -152,10 +161,11 @@ export default function SettingsScreen({ navigation }) {
                                     is24Hour={true}
                                     display="default"
                                     onChange={onTimeChange}
+                                    locale="ger"
                                 />
                             ) : (
                                 <TouchableOpacity onPress={showPicker}>
-                                    <Text style={styles.settingText}>{notificationTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                                    <Text style={styles.settingText}>{notificationTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}</Text>
                                 </TouchableOpacity>
                             )}
                             {showTimePicker && Platform.OS === 'android' && (
@@ -165,6 +175,8 @@ export default function SettingsScreen({ navigation }) {
                                     is24Hour={true}
                                     display="spinner"
                                     onChange={onTimeChange}
+                                    positiveButton={{ label: 'Bestätigen', textColor: '#5C724F' }}
+                                    negativeButton={{ label: 'Abbrechen', textColor: '#FFAAAA' }}
                                 />
                             )}
                         </View>

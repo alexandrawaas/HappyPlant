@@ -10,6 +10,7 @@ import com.happyplant.backend.service.AuthService
 import com.happyplant.backend.datatransfer.auth.CredentialsDto
 import com.happyplant.backend.datatransfer.auth.ResetPasswordDto
 import com.happyplant.backend.datatransfer.auth.UpdatePasswordDto
+import com.happyplant.backend.datatransfer.auth.VerifyEmailDto
 import com.happyplant.backend.datatransfer.user.UserDto
 
 @RestController
@@ -36,20 +37,20 @@ class AuthController(private val authService: AuthService) {
     }
 
     @PostMapping("/password/reset")
-    fun resetPassword(@RequestBody request: ResetPasswordDto): ResponseEntity<Map<String, String>> {
-        val response = authService.resetPassword(request)
-        return ResponseEntity.ok(response)
+    fun resetPassword(@Valid @RequestBody request: ResetPasswordDto): ResponseEntity<String> {
+        authService.resetPassword(request)
+        return ResponseEntity.ok("Reset password email sent successfully")
     }
 
     @PostMapping("/password/update")
-    fun updatePassword(@RequestBody request: UpdatePasswordDto): ResponseEntity<String> {
+    fun updatePassword(@Valid @RequestBody request: UpdatePasswordDto): ResponseEntity<String> {
         authService.updatePassword(request)
         return ResponseEntity.ok("Password updated successfully")
     }
 
-    @GetMapping("/verify")
-    fun verifyEmail(@RequestParam("token") verifyEmailToken: String): ResponseEntity<UserDto> {
-        val response = authService.verifyEmail(verifyEmailToken)
+    @PostMapping("/verify")
+    fun verifyEmail(@Valid @RequestBody request: VerifyEmailDto): ResponseEntity<UserDto> {
+        val response = authService.verifyEmail(request)
         return ResponseEntity.ok(response)
     }
 }

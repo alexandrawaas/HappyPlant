@@ -1,23 +1,56 @@
-import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState } from 'react';
 import { commonStyles } from '../../utils/styles/CommonStyles';
+import axios from 'axios';
+import { API_URL } from '../../config';
 
-const RegisterSuccess = ({ navigation }) => {
+const RegisterSuccess = ({ navigation, route }) => {
+    const [verifyEmailCode, setVerifyEmailCode] = useState('');
+
+    const handleEmailVerification = async () => {
+        try {
+            const response = await axios.post(`${API_URL}/auth/verify`, {
+                email: route.params.email,
+                verifyEmailOtp: verifyEmailCode,
+            });
+            if (response.status === 200) {
+                Alert.alert('Erfolgreich', 'Deine E-Mail-Adresse wurde verifiziert.');
+                navigation.replace('Anmelden');
+            } else {
+                Alert.alert('Fehler', response.data);
+            }
+        } catch (error) {
+            console.error('Fehler beim Verifizieren der E-Mail-Adresse:', error);
+            Alert.alert('Fehler', 'Es ist ein Fehler beim Verifizieren der E-Mail-Adresse aufgetreten.');
+        }
+    }
+
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    }
+
     return (
-        <View style={commonStyles.container}>
-
-            <View style={styles.background}>
-                <Text style={styles.text}>
-                    Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink, um Ihre E-Mail-Adresse zu verifizieren und Ihre Registrierung abzuschließen.
-                </Text>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={commonStyles.container}>
+                <View style={styles.background}>
+                    <Text style={styles.text}>
+                        Bitte überprüfe Dein E-Mail-Postfach und gib den Code aus der Verifizierungs-E-Mail ein, um Deine E-Mail-Adresse zu verifizieren und die Registrierung abzuschließen.
+                    </Text>
+                    <TextInput
+                        placeholder="Code"
+                        value={verifyEmailCode}
+                        onChangeText={setVerifyEmailCode}
+                        style={styles.input}
+                    />
+                </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleEmailVerification}
+                >
+                    <Text style={styles.buttonText}>Verifizieren</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('Anmelden')}
-            >
-                <Text style={styles.buttonText}>OK</Text>
-            </TouchableOpacity>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -55,6 +88,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 30,
+    },
+    input: {
+        width: '80%',
+        marginTop: 5,
+        marginBottom: 10,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 12,
+        backgroundColor: '#FDFBEF',
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1,
+        elevation: 3,
     },
 });
 

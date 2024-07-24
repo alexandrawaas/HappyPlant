@@ -1,10 +1,21 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image, useWindowDimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, useWindowDimensions, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { commonStyles } from '../../utils/styles/CommonStyles';
 
 export default function LoginRegisterTemplate({ title, children, onSubmit, submitButtonText, imageSource }) {
     const {height} = useWindowDimensions()
     const imgDimension = 0.3 * height
+
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    }
+
     return (
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        >
         <View style={commonStyles.container}>
             <View style={getBackgroundElipsisStyle(height)} />
             <Image source={imageSource} style={{...styles.img, height: imgDimension, width: imgDimension }} />
@@ -16,8 +27,9 @@ export default function LoginRegisterTemplate({ title, children, onSubmit, submi
                 <Text style={styles.registerButtonText}>{submitButtonText}</Text>
             </TouchableOpacity>
         </View>
+        </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     );
-
 };
 
 

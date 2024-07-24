@@ -19,20 +19,13 @@ data class User(
         @Column(name = "email_verified", nullable = false)
         var emailVerified: Boolean = false,
 
-        @Column(name = "email_verification_token", nullable = true)
-        var emailVerificationToken: String? = null,
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "verify_email_otp", referencedColumnName = "id")
+        var verifyEmailOtp: VerifyEmailOtp? = null,
 
-        @Column(name = "email_verification_expires", nullable = true)
-        var emailVerificationExpires: Long? = null,
-
-        @Column(name = "reset_password_token", nullable = true)
-        var resetPasswordToken: String? = null,
-
-        @Column(name = "reset_password_expires", nullable = true)
-        var resetPasswordExpires: Long? = null,
-
-        @Column(name = "reset_password_code", nullable = true)
-        var resetPasswordCode: Int? = null,
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "reset_password_otp", referencedColumnName = "id")
+        var resetPasswordOtp: ResetPasswordOtp? = null,
 
         @Column(name = "receive_push_notifications")
         var receivePushNotifications: Boolean,

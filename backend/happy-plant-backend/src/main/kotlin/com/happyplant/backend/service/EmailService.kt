@@ -21,7 +21,7 @@ class EmailService {
     @Autowired
     private lateinit var mailSender: JavaMailSender
 
-    fun sendResetPasswordEmail(user: User, resetPasswordCode: Int) {
+    fun sendResetPasswordEmail(user: User, resetPasswordCode: String) {
         val recipientAddress = user.email.lowercase()
         val subject = "Passwort zurücksetzen oder ändern"
 
@@ -31,21 +31,19 @@ class EmailService {
         helper.setSubject(subject)
 
         val htmlContent = """
-            <p>Sie erhalten diese Nachricht, weil Sie (oder jemand anders) das Password für Ihren Account zurücksetzen oder ändern möchte.</p>
-            <p>Bitte geben Sie folgenden Code in der Happy-Plants-App ein, um Ihr Passwort zurückzusetzen oder zu ändern:</p>
+            <p>Du erhälst diese Nachricht, weil Du (oder jemand anders) das Password für Deinen Account zurücksetzen oder ändern möchte.</p>
+            <p>Bitte gib folgenden Code in der Happy-Plants-App ein, um Dein Passwort zurückzusetzen oder zu ändern:</p>
             <h2>$resetPasswordCode</h2>
-            <p>Wenn Sie Ihr Passwort nicht zurücksetzen oder ändern möchten, ignorieren Sie diese Email und Ihr Passwort bleibt unverändert.</p>
+            <p>Wenn Du Dein Passwort nicht zurücksetzen oder ändern möchten, ignoriere diese Email und Dein Passwort bleibt unverändert.</p>
         """.trimIndent()
 
         helper.setText(htmlContent, true)
         mailSender.send(message)
     }
 
-    fun sendEmailVerificationEmail(user: User, emailVerificationToken: String) {
+    fun sendEmailVerificationEmail(user: User, verifyEmailCode: String) {
         val recipientAddress = user.email.lowercase()
         val subject = "Email-Adresse verifizieren"
-        val encodedToken = URLEncoder.encode(emailVerificationToken, "UTF-8")
-        val verificationUrl = "$apiUrl/auth/verify?token=$encodedToken"
 
         val message = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true, "UTF-8")
@@ -53,9 +51,9 @@ class EmailService {
         helper.setSubject(subject)
 
         val htmlContent = """
-            <p>Vielen Dank, dass Sie sich einen Account bei uns angelegt haben!</p>
-            <p>Bitte klicken Sie auf den folgenden Link oder kopieren Sie ihn in Ihren Browser, um Ihre Email-Adresse zu verifizieren:</p>
-            <a href="$verificationUrl">Email-Adresse verifizieren</a>
+            <p>Vielen Dank, dass Du dir einen Account bei uns angelegt hast!</p>
+            <p>Bitte gib folgenden Code in das Eingabefeld in der Happy-Plant-App ein, um Deine Email-Adresse zu verifizieren:</p>
+            <h2>$verifyEmailCode</h2>
         """.trimIndent()
 
         helper.setText(htmlContent, true)
