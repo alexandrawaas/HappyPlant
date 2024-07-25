@@ -4,7 +4,6 @@ import { registerForPushNotificationsAsync } from '../../utils/registerForPushNo
 import { fetchURL } from '../../utils/ApiService';
 import LoginRegisterTemplate from './LoginRegisterTemplate';
 import LoginRegiserInputField from './LoginRegisterInputField';
-import {useIsFocused} from '@react-navigation/native';
 
 const RegisterScreen = ({ navigation, route }) => {
     const [email, setEmail] = useState('');
@@ -38,6 +37,7 @@ const RegisterScreen = ({ navigation, route }) => {
         const unsubscribe = navigation.addListener('blur', handleBlur);
         return unsubscribe;
     }, [navigation]);
+
 
     useEffect(() => {
         if (route.params && route.params.email) {

@@ -30,7 +30,7 @@ export const registerForPushNotificationsAsync = async() => {
       token = await Notifications.getExpoPushTokenAsync({
         projectId: Constants.expoConfig?.extra?.eas?.projectId,
       });
-
+      
       return token;
 
     } else {
