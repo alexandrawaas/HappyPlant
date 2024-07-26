@@ -15,12 +15,11 @@ export const registerForPushNotificationsAsync = async() => {
       }
 
       if (finalStatus !== 'granted') {
-        //handleRegistrationError('Permission not granted to get push token for push notification!');
         return;
       }
 
       if (Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default', {
+        await Notifications.setNotificationChannelAsync('default', {
           name: 'default',
           importance: Notifications.AndroidImportance.MAX,
           vibrationPattern: [0, 250, 250, 250],
@@ -31,10 +30,10 @@ export const registerForPushNotificationsAsync = async() => {
       token = await Notifications.getExpoPushTokenAsync({
         projectId: Constants.expoConfig?.extra?.eas?.projectId,
       });
-
+      
       return token;
 
     } else {
-        console.log("ERROR: No physical device used")
+        console.error("ERROR: No physical device used")
     }
   }

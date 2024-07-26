@@ -5,7 +5,7 @@ import { fetchURL } from "../../../utils/ApiService";
 import {LinearGradient} from "expo-linear-gradient";
 import VerticalPlaceholder from "../../../utils/styles/VerticalPlaceholder";
 import Feather from "react-native-vector-icons/Feather";
-import { commonStyles } from "../../utils/styles/CommonStyles";
+import { commonStyles } from "../../../utils/styles/CommonStyles";
 
 export default function RoomCreationScreen({ navigation }) {
     const [name, setName] = useState("")

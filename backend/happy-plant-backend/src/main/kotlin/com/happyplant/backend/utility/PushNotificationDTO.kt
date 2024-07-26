@@ -12,7 +12,7 @@ data class PushNotificationDTO(
 ) {
     companion object{
         fun userToPushNotificationDTO(user: User): PushNotificationDTO{
-            var body = "Heute gibt es nichts zu tun:)"
+            var body = "Heute gibt es nichts zu tun :)"
             val activeAssignments = user.getActiveAssignments()
             if(activeAssignments.size > 0){
                 body = "Es gibt offene Aufgaben für heute. \nDeine Pflanzen brauchen dich!"

@@ -1,12 +1,10 @@
 package com.happyplant.backend.service
 
 import com.happyplant.backend.datatransfer.user.NotificationSettingsDtoRequest
-import com.happyplant.backend.datatransfer.user.UserDto
-import com.happyplant.backend.datatransfer.user.asDto
-import com.happyplant.backend.datatransfer.user.asDtoWithNS
 import com.happyplant.backend.datatransfer.user.UserWithNSDto
+import com.happyplant.backend.datatransfer.user.asDtoWithNS
 import com.happyplant.backend.model.User
-import com.happyplant.backend.repository.*
+import com.happyplant.backend.repository.UserRepository
 import com.happyplant.backend.utility.AuthTokenUtil
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -18,12 +16,6 @@ import java.util.*
 class UserService (
     private val db: UserRepository,
     private val authTokenUtil: AuthTokenUtil,
-    private val plantRepository: PlantRepository,
-    private val assignmentRepository: AssignmentRepository,
-    private val needsRepository: NeedsRepository,
-    private val roomRepository: RoomRepository,
-    private val pixelRepository: PixelRepository,
-    private val imageRepository: ImageDataRepository
 ) {
     fun getUserById(id: UUID): User {
         return db.findById(id).get()
@@ -33,7 +25,7 @@ class UserService (
         return db.findAll()
     }
 
-    fun alterNotificationSettings(settings: NotificationSettingsDtoRequest, authHeader: String): Unit {
+    fun alterNotificationSettings(settings: NotificationSettingsDtoRequest, authHeader: String) {
         val userId = authTokenUtil.getUserIdFromToken(authHeader)
         if(userId != null) {
             val user: User = db.findById(userId).get()
@@ -46,11 +38,7 @@ class UserService (
             }
             db.save(user)
         }
-        else{
-            TODO("Set Error returncode")
-        }
     }
-    fun getDummyUser() = db.findByEmail("example.user@test.com") ?: throw IllegalArgumentException("Dummy User not found")
 
 
     fun getUser(userId: UUID): User? =

@@ -9,7 +9,6 @@ const RegisterScreen = ({ navigation, route }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [expoPushToken, setExpoPushToken] = useState();
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [isValidPassword, setIsValidPassword] = useState(false);
 
@@ -39,6 +38,7 @@ const RegisterScreen = ({ navigation, route }) => {
         return unsubscribe;
     }, [navigation]);
 
+
     useEffect(() => {
         if (route.params && route.params.email) {
             setEmail(route.params.email);
@@ -62,17 +62,15 @@ const RegisterScreen = ({ navigation, route }) => {
                 return;
             }
 
-            await registerForPushNotificationsAsync()
-                .then(
-                    (token) => { setExpoPushToken(token); }
-                );
-                
+            var token = null;
+            token = await registerForPushNotificationsAsync();
+               
             const payload = {
                 email: email,
                 password: password,
-                pushNotificationToken: expoPushToken
+                pushNotificationToken: token?.data
             }
-
+            
             fetchURL('/auth/register', 'POST', payload, navigation, (data) => {
                 if (data) {
                     navigation.navigate('RegisterSuccess', { email });

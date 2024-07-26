@@ -663,7 +663,7 @@ class DatabaseInitializer {
                 emailVerified = true,
                 verifyEmailOtp = null,
                 resetPasswordOtp = null,
-                receivePushNotifications = true,
+                receivePushNotifications = false,
                 pushNotificationsTime = LocalTime.of(17, 46),
                 pushNotificationToken = "ExponentPushToken[Wx9b-UKX5NSxWFpCb8ke4f]", //Ralf Handy for Testing
                 plants = mutableListOf(),
