@@ -1,23 +1,17 @@
-# happy-plant
+# Description
 
-## Checkout
-### Generate Personal Access Token
-- https://gitlab.hof-university.de/-/user_settings/personal_access_tokens
-- add new token, save it somewhere (you only see it on creation)
+HappyPlant is an App created using React-Native (JavaScript) and Spring Boot (Kotlin). The App can be used to manage plant care at home, including customizable reminders and help for plant placement. It was programmed for the university module "Interdisciplinary Software Engineering Project" in a team of 5.
 
-### Clone the repository
-- repository url: `https://<user>@gitlab.hof-university.de/kreiner/happy-plant.git`
-    - Command Line (e.g. in VS Code): `git clone <repository url>`
-    - Sublime Merge: File > Clone Repository > Source Url = repository url
-- Windows Git Credential Manager will ask for Access Token
+# Impressions
 
-## Git Usage
-- fetch from origin, switch on main and pull
-- create a new branch from main 
-    - naming conventions: lower-case-foo-branch
-- checkout this branch and publish it (happens automatically on pushes)
-- use conventional commit messages:
-    - prefix messages with `feat:` (new feature), `refac:` (refactoring change), `fix:` (bug fix), `styles:` (cosmetic changes), `docs:` (documentation tasks)
-    - example: "feat: implemented plant", "refac: optimized plant structure", "fix: correctly store new plant on user", ...
-- when task is finished, create merge request in GitLab Web Interface and select a reviewer
-    - if necessary rebase on main and force push the rebase results
+
+
+# Collaborators
+I would like to say Thank You to my fellow team members:
+- Katharina Reiner
+- [Marina Waller](https://github.com/marinaWaller)
+- Ralf Manig
+- Moritz Süß
+
+# Contact
+If you have any questions about this project, feel free to contact me. I will answer as fast as I can.
